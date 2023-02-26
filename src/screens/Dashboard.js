@@ -23,7 +23,7 @@ export default function Dashboard({ navigation }) {
           })
         }
       >
-        Logout
+        Start
       </Button>
     </Background>
   )
