@@ -6,22 +6,69 @@ import Header from "../components/Header";
 import BackButton from "../components/BackButton";
 import { theme } from '../core/theme'
 import TextInput from "../components/TextInputKandang";
+import Manageexpense from "../helpers/contohInput";
+import { pembantu } from "../helpers/pembantu";
+import { useState,useContext } from "react";
 
-function BuatKandang ({navigation}){
+
+function BuatKandang ({route,navigation}){
+  const expensecontext=useContext(pembantu);
+
+  const edit=route.params?.expenseId;
+  const isEdit=!!edit;
+
+  const selected=expensecontext.expenses.find(
+    (expense)=> expense.id === edit
+  );
+  function confirm(expenseData){
+    // if(isEdit){expensecontext.addExpense(expenseData);}
+    expensecontext.addExpense({
+      description:'tesgh'
+    })
+      
+      //navigation.goBack();
+  }
+  function oncalcel(){
     
+    navigation.goBack();
+  }
+  
+  
+   
+
+
     return (
-        
+    <ScrollView style={style.ssss}>
     <View style={style.View}>
         <BackButton goBack={navigation.goBack}/>
         <Header >BUAT KANDANG</Header>
-        <Text style={style.Text}>Nama Kandang</Text>
+        
+        <Manageexpense
+        onSubmit={confirm}
+        oncacel={oncalcel}
+        submitButtonHandler={isEdit? 'Add':'d'}
+        
+        onPress={() =>
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Dashboard' }],
+          })
+        }
+        //defaultValues={selected}
+        />
+
+        {/* <Text style={style.Text}>Nama Kandang</Text>
+       
         <TextInput
          label='Masukkan Nama Kandang'
+         
         />
         <Text style={style.Text} >Kapasitas Kandang</Text>
         <TextInput
-        label='Bisa input perkiraan'/>
-        <Text style={style.Text}>Total Biaya</Text>
+        label='Bisa input perkiraan'
+        value
+        /> */}
+        {/* <Text style={style.Text}>Total Biaya</Text>
         <TextInput
         label='Biaya Pembuatan Kandang'/>
         <Text style={style.Text}>Tanggal Mulai Operasi</Text>
@@ -51,12 +98,23 @@ function BuatKandang ({navigation}){
                     routes: [{ name: 'Dashboard' }],
                   })
                 }
-            >Kembali</Button>
+            >Kembali</Button> */}
+            <Button
+        mode='contained'
+        style={{ marginTop: 4 }}
+        onPress={() =>
+            navigation.reset({
+              index: 0,
+              routes: [{ name: 'ListKandang' }],
+            })
+          }
+        ></Button>
     </View>
-        
+    </ScrollView>
 
     )
 }
+
 export default BuatKandang;
  const style= StyleSheet.create({
     Text:{
@@ -75,7 +133,7 @@ export default BuatKandang;
     
     },
     View:{
-        flex: 1,
+    flex: 1,
     width: '100%',
     backgroundColor: theme.colors.backgroundColor,
     padding: 20,
@@ -87,6 +145,15 @@ export default BuatKandang;
   },
   style1:{
     textAlign:'center',
+  },
+  ssss:{
+    flex:1,
+    backgroundColor:theme.colors.backgroundColor,
+    marginBottom:1,
+    marginTop:30
+  },
+  input:{
+    flex:1
   }
     
 
