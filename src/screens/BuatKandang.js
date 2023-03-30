@@ -12,26 +12,26 @@ import { useState,useContext } from "react";
 
 
 function BuatKandang ({route,navigation}){
-  const expensecontext=useContext(pembantu);
+  // const expensecontext=useContext(pembantu);
 
-  const edit=route.params?.expenseId;
-  const isEdit=!!edit;
+  // const edit=route.params?.expenseId;
+  // const isEdit=!!edit;
 
-  const selected=expensecontext.expenses.find(
-    (expense)=> expense.id === edit
-  );
-  function confirm(expenseData){
-    // if(isEdit){expensecontext.addExpense(expenseData);}
-    expensecontext.addExpense({
-      description:'tesgh'
-    })
+  // const selected=expensecontext.expenses.find(
+  //   (expense)=> expense.id === edit
+  // );
+  // function confirm(expenseData){
+  //   // if(isEdit){expensecontext.addExpense(expenseData);}
+  //   expensecontext.addExpense({
+  //     description:'tesgh'
+  //   })
       
-      //navigation.goBack();
-  }
-  function oncalcel(){
+  //     //navigation.goBack();
+  // }
+  // function oncalcel(){
     
-    navigation.goBack();
-  }
+  //   navigation.goBack();
+  // }
   
   
    
@@ -43,7 +43,7 @@ function BuatKandang ({route,navigation}){
         <BackButton goBack={navigation.goBack}/>
         <Header >BUAT KANDANG</Header>
         
-        <Manageexpense
+        {/* <Manageexpense
         onSubmit={confirm}
         oncacel={oncalcel}
         submitButtonHandler={isEdit? 'Add':'d'}
@@ -55,9 +55,9 @@ function BuatKandang ({route,navigation}){
           })
         }
         //defaultValues={selected}
-        />
+        /> */}
 
-        {/* <Text style={style.Text}>Nama Kandang</Text>
+        <Text style={style.Text}>Nama Kandang</Text>
        
         <TextInput
          label='Masukkan Nama Kandang'
@@ -67,8 +67,8 @@ function BuatKandang ({route,navigation}){
         <TextInput
         label='Bisa input perkiraan'
         value
-        /> */}
-        {/* <Text style={style.Text}>Total Biaya</Text>
+        />
+        <Text style={style.Text}>Total Biaya</Text>
         <TextInput
         label='Biaya Pembuatan Kandang'/>
         <Text style={style.Text}>Tanggal Mulai Operasi</Text>
@@ -98,17 +98,8 @@ function BuatKandang ({route,navigation}){
                     routes: [{ name: 'Dashboard' }],
                   })
                 }
-            >Kembali</Button> */}
-            <Button
-        mode='contained'
-        style={{ marginTop: 4 }}
-        onPress={() =>
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'ListKandang' }],
-            })
-          }
-        ></Button>
+            >Kembali</Button>
+            
     </View>
     </ScrollView>
 

@@ -47,6 +47,7 @@ export default function RegisterScreen({ navigation }) {
         error={!!name.error}
         errorText={name.error}
       />
+      <TextInput label="Nomer Telepon"/>
       <TextInput
         label="Email"
         returnKeyType="next"
@@ -76,7 +77,7 @@ export default function RegisterScreen({ navigation }) {
         Daftar
       </Button>
       <View style={styles.row}>
-        <Text>Already have an account? </Text>
+        <Text>Sudah Punya Akun? </Text>
         <TouchableOpacity onPress={() => navigation.replace('LoginScreen')}>
           <Text style={styles.link}>Masuk</Text>
         </TouchableOpacity>

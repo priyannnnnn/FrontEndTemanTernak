@@ -28,7 +28,13 @@ function Telur({navigation}) {
 
             <Button
             mode='contained'
-            style={{ marginTop: 4 }}>
+            onPress={() =>
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'DaftarTelur' }],
+              })
+            }
+            >
                 Simpan
             </Button>
             <Button 
@@ -62,6 +68,7 @@ const styles=StyleSheet.create({
   ScrollView:{
     flex:1,
     backgroundColor:theme.colors.backgroundColor,
+    marginTop:40
   }
     
 })

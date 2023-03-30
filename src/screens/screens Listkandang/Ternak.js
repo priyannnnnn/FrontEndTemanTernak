@@ -62,5 +62,6 @@ const style=StyleSheet.create({
     width:'100%',
     paddingBottom:1,
     backgroundColor:theme.colors.backgroundColor,
+    marginTop:35
   }
 })

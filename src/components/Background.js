@@ -1,16 +1,20 @@
 import React from 'react'
 import { ImageBackground, StyleSheet, KeyboardAvoidingView } from 'react-native'
 import { theme } from '../core/theme'
-
+import { Image, } from 'react-native'
 export default function Background({ children }) {
   return (
+    
     <ImageBackground
-      resizeMode="repeat"
+      resizeMode="cover"
+      source={require('../assets/1234.jpg')}
       style={styles.background}
+      
     >
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         {children}
       </KeyboardAvoidingView>
+      
     </ImageBackground>
   )
 }
@@ -30,4 +34,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  
 })

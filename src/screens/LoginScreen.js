@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { TouchableOpacity, StyleSheet, View } from 'react-native'
+import { TouchableOpacity, StyleSheet, View, ScrollView, SafeAreaView } from 'react-native'
 import { Text } from 'react-native-paper'
 import Background from '../components/Background'
 import Logo from '../components/Logo'
@@ -10,6 +10,8 @@ import BackButton from '../components/BackButton'
 import { theme } from '../core/theme'
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
+
+
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState({ value: '', error: '' })
@@ -28,12 +30,19 @@ export default function LoginScreen({ navigation }) {
       routes: [{ name: 'Dashboard' }],
     })
   }
-
+// const margin =height <380 ? 30:100;
   return (
+    <View style={styles.f}>
+      
     <Background>
+      
       <BackButton goBack={navigation.goBack} />
-      <Logo />
-      <Header>Welcome back.</Header>
+      {/* <Logo /> */}
+      
+      
+      <ScrollView style={styles.f}>
+      <Header>Selamat Datang.</Header>
+      <SafeAreaView>
       <TextInput
         label="Email"
         returnKeyType="next"
@@ -55,6 +64,7 @@ export default function LoginScreen({ navigation }) {
         errorText={password.error}
         secureTextEntry
       />
+   </SafeAreaView>
       <View style={styles.forgotPassword}>
         <TouchableOpacity
           onPress={() => navigation.navigate('ResetPasswordScreen')}
@@ -66,12 +76,14 @@ export default function LoginScreen({ navigation }) {
         Login
       </Button>
       <View style={styles.row}>
-        <Text>Don’t have an account? </Text>
+        <Text>Tidak Punya Akun? </Text>
         <TouchableOpacity onPress={() => navigation.replace('RegisterScreen')}>
-          <Text style={styles.link}>Sign up</Text>
+          <Text style={styles.link}>Buat Akun</Text>
         </TouchableOpacity>
       </View>
+      </ScrollView>
     </Background>
+    </View>
   )
 }
 
@@ -93,4 +105,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: theme.colors.primary,
   },
+  f:{
+    flex:1,
+    marginTop:40,
+  
+  
+    
+  }
 })

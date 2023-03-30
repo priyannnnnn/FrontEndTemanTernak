@@ -13,7 +13,6 @@ function PenggunaanPakan({navigation}) {
             <BackButton goBack={navigation.goBack}/>
             <Header>PENGGUNAAN PAKAN</Header>
             <Text style={style.Text}>Pilih Pakan</Text>
-            <Input label="hh"/>
             <TextInput
             label='Masukkan Produk Pakan'/>
             <Text style={style.Text}>Jumlah perKG</Text>
@@ -62,6 +61,7 @@ const style=StyleSheet.create({
       ScrollView:{
         flex:1,
         backgroundColor:theme.colors.backgroundColor,
-        paddingBottom:1
+        paddingBottom:1,
+        marginTop:35
       }
 })

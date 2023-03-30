@@ -67,5 +67,6 @@ const styles=StyleSheet.create({
   ScrollView:{
     flex:1,
     backgroundColor:theme.colors.backgroundColor,
+    marginTop:35
   }
 })
