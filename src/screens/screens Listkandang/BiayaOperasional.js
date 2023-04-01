@@ -1,6 +1,5 @@
 import { Text, TouchableOpacity, View,StyleSheet, ScrollView} from "react-native";
 import BackButton from "../../components/BackButton";
-import Background from "../../components/Background";
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";
@@ -42,8 +41,8 @@ function BiayaOperasional({navigation}) {
 }
 export default BiayaOperasional;
 const styles=StyleSheet.create({
-    View:{
-        flex: 1,
+  View:{
+    flex: 1,
     width: '100%',
     backgroundColor: theme.colors.backgroundColor,
     padding: 20,
@@ -54,7 +53,6 @@ const styles=StyleSheet.create({
     textAlign:'left',
     fontSize:18,
     fontWeight: 'bold',
-
   },
   ScrollView:{
     flex:1,
