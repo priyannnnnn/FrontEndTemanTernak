@@ -20,9 +20,9 @@ function Ternak({navigation}) {
             <Text style={style.Text} >Tanggal</Text>
             <TextInput
             label='Masukkan Tanggal'/>
-            <Text style={style.Text} >Harga</Text>
+            <Text style={style.Text} >Harga Total</Text>
             <TextInput
-            label='Harga'/>
+            label='Total Harga Ayam '/>
 
             <Button
             mode='contained'

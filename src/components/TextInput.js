@@ -24,7 +24,7 @@ export default function TextInput({ errorText, description, ...props }) {
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    marginVertical: 12,
+    marginVertical: 23,
   },
   input: {
     backgroundColor: theme.colors.surface,
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
   description: {
     fontSize: 13,
     color: theme.colors.secondary,
-    paddingTop: 8,
+    paddingTop: 10,
   },
   error: {
     fontSize: 13,
