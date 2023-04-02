@@ -4,47 +4,79 @@ import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";
 import Header from "../../components/HeaderInputKandang";
+import { useState } from "react";
+import axios from "axios";
 
 function Ternak({navigation}) {
-    return (
-      <ScrollView style={style.ScrollView}>
-       <View style={style.View}>
-            <BackButton goBack={navigation.goBack}/>
-            <Header>ISI KANDANG</Header>
-            <Text style={style.Text} >Umur</Text>
-            <TextInput
-            label='Masukkan Umur'/>
-            <Text style={style.Text} >Total</Text>
-            <TextInput
-            label= 'Total Ayam'/>
-            <Text style={style.Text} >Tanggal</Text>
-            <TextInput
-            label='Masukkan Tanggal'/>
-            <Text style={style.Text} >Harga Total</Text>
-            <TextInput
-            label='Total Harga Ayam '/>
+  
+  const [ livestock, setLiveStock ] = useState({
+    age:      { value : '', error: '' },
+    quantity: { value : '', error: '' },
+    date:     { value : '', error: '' },
+    amount:   { value : '', error: '' },
+    type:     { value : '', error: '' },
+    note:     { value : '', error: '' },
+  })
 
-            <Button
-            mode='contained'
-            style={{ marginTop: 4 }}>
-                Simpan
-            </Button>
-            <Button 
-            mode='contained'
-                onPress={() =>
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'ListKandang' }],
-                  })
-                }
-            >Kembali</Button>
-        </View>
-      </ScrollView>
-    )
+  const onSubmit = () => {
+    const data = {
+      age: livestock?.age?.value,
+      quantity: livestock?.quantity?.value,
+      date: livestock?.date?.value,
+      amount: livestock?.amount?.value,
+      type: livestock?.type?.value,
+      note: livestock?.note?.value
+    }
+    axios.post(`http://139.162.6.202:8000/api/v1/livestock`, data)
+      .then(res => {
+        console.log(res.data)
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+  }
+
+  return (
+    <ScrollView style={style.ScrollView}>
+      <View style={style.View}>
+      <BackButton goBack={navigation.goBack}/>
+      <Header>Isi Kandang</Header>
+
+      <Text style={style.Text} >Umur</Text>
+      <TextInput onChangeText={(text) => setLiveStock({ ...livestock, age: {value: text, error: ''}  })} label='Masukkan Umur'/>
+
+      <Text style={style.Text} >Total</Text>
+      <TextInput onChangeText={(text) => setLiveStock({ ...livestock, quantity: {value: text, error: ''}  })}  label= 'Total Ayam'/>
+
+      <Text style={style.Text} >Tanggal</Text>
+      <TextInput onChangeText={(text) => setLiveStock({ ...livestock, date: {value: text, error: ''}  })}  label='Masukkan Tanggal'/>
+
+      <Text style={style.Text} >Harga Total</Text>
+      <TextInput onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam'/>
+
+      <Text style={style.Text} >Type</Text>
+      <TextInput onChangeText={(text) => setLiveStock({ ...livestock, type: {value: text, error: ''}  })}  label='Peksi'/>
+
+      <Text style={style.Text} >Catatan</Text>
+      <TextInput onChangeText={(text) => setLiveStock({ ...livestock, note: {value: text, error: ''}  })}  label='Masukkan Catatan'/>
+
+      <Button mode='contained' style={{ marginTop: 4 }} onPress={ onSubmit }>Simpan</Button>
+      <Button mode='contained'
+        onPress={() =>
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'ListKandang' }],
+          })
+        }>
+          Kembali
+        </Button>
+      </View>
+    </ScrollView>
+  )
 }
 export default Ternak;
 const style=StyleSheet.create({
-    View:{
+  View:{
     flex: 1,
     width: '100%',
     backgroundColor: theme.colors.backgroundColor,
