@@ -10,12 +10,12 @@ import axios from "axios";
 function Ternak({navigation}) {
   
   const [ livestock, setLiveStock ] = useState({
-    age:      { value : '', error: '' },
-    quantity: { value : '', error: '' },
-    date:     { value : '', error: '' },
-    amount:   { value : '', error: '' },
-    type:     { value : '', error: '' },
-    note:     { value : '', error: '' },
+    age:      { value : 2, error: '' },
+    quantity: { value : 500, error: '' },
+    date:     { value : '2023-04-02', error: '' },
+    amount:   { value : 600000, error: '' },
+    type:     { value : 'PEKSI', error: '' },
+    note:     { value : 'NOTE', error: '' },
   })
 
   const onSubmit = () => {
@@ -29,7 +29,7 @@ function Ternak({navigation}) {
     }
     axios.post(`http://139.162.6.202:8000/api/v1/livestock`, data)
       .then(res => {
-        console.log(res.data)
+        navigation.navigate('DaftarTernak', {name: 'DaftarTernak'})
       })
       .catch((error) => {
         console.error(error);
@@ -43,22 +43,22 @@ function Ternak({navigation}) {
       <Header>Isi Kandang</Header>
 
       <Text style={style.Text} >Umur</Text>
-      <TextInput onChangeText={(text) => setLiveStock({ ...livestock, age: {value: text, error: ''}  })} label='Masukkan Umur'/>
+      <TextInput value={livestock?.age.value} onChangeText={(text) => setLiveStock({ ...livestock, age: {value: text, error: ''}  })} label='Masukkan Umur'/>
 
       <Text style={style.Text} >Total</Text>
-      <TextInput onChangeText={(text) => setLiveStock({ ...livestock, quantity: {value: text, error: ''}  })}  label= 'Total Ayam'/>
+      <TextInput value={livestock?.quantity.value} onChangeText={(text) => setLiveStock({ ...livestock, quantity: {value: text, error: ''}  })}  label= 'Total Ayam'/>
 
       <Text style={style.Text} >Tanggal</Text>
-      <TextInput onChangeText={(text) => setLiveStock({ ...livestock, date: {value: text, error: ''}  })}  label='Masukkan Tanggal'/>
+      <TextInput value={livestock?.date.value} onChangeText={(text) => setLiveStock({ ...livestock, date: {value: text, error: ''}  })}  label='Masukkan Tanggal'/>
 
       <Text style={style.Text} >Harga Total</Text>
-      <TextInput onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam'/>
+      <TextInput value={livestock?.amount.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam'/>
 
       <Text style={style.Text} >Type</Text>
-      <TextInput onChangeText={(text) => setLiveStock({ ...livestock, type: {value: text, error: ''}  })}  label='Peksi'/>
+      <TextInput value={livestock?.type.value} onChangeText={(text) => setLiveStock({ ...livestock, type: {value: text, error: ''}  })}  label='Peksi'/>
 
       <Text style={style.Text} >Catatan</Text>
-      <TextInput onChangeText={(text) => setLiveStock({ ...livestock, note: {value: text, error: ''}  })}  label='Masukkan Catatan'/>
+      <TextInput value={livestock?.note.value} onChangeText={(text) => setLiveStock({ ...livestock, note: {value: text, error: ''}  })}  label='Masukkan Catatan'/>
 
       <Button mode='contained' style={{ marginTop: 4 }} onPress={ onSubmit }>Simpan</Button>
       <Button mode='contained'

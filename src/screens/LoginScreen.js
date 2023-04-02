@@ -14,8 +14,8 @@ import { passwordValidator } from '../helpers/passwordValidator'
 
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
+  const [email, setEmail] = useState({ value: 'rohanisuhadi@outlook.com', error: '' })
+  const [password, setPassword] = useState({ value: '121212121', error: '' })
 
   const onLoginPressed = () => {
     const emailError = emailValidator(email.value)
