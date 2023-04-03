@@ -24,54 +24,47 @@ function ListKandang({navigation}){
            <Text style={styles.text}>Isi Kandang :</Text>
            
                 <Button
-                 mode='contained'
-                onPress={() =>
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'Ternak' }],
-                  })
-                }
-               >
-                TERNAK</Button>
-                <Button   mode='contained'
-                onPress={() =>
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'Telur' }],
-                  })
-                }
-                >TELUR</Button>
+                 mode='contained' onPress={() => 
+                  navigation.reset({index: 0,
+                  routes: [{ name: 'Ternak' }],
+                  })}>
+                  Ternak</Button>
+                <Button   mode='contained' onPress={() =>
+                  navigation.reset({index: 0,
+                  routes: [{ name: 'Telur' }],
+                  })}>
+                  Pendapatan Telur</Button>
                 <Button 
-                 mode='contained'
-                onPress={() =>
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'PenggunaanPakan' }],
-                  })
-                }
-                >Penggunaan Pakan</Button>
+                mode='contained' onPress={() =>
+                  navigation.reset({index: 0,
+                  routes: [{ name: 'Penjualan' }],
+                  })}>
+                    Penjualan Telur
+                </Button>
                 <Button 
                  mode='contained' onPress={() =>
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'PersediaanPakan' }],
-                  })
-                }>Persediaan Pakan</Button>
-                <Button 
-                 mode='contained'
-                 onPress={() =>
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'BiayaOperasional' }],
-                  })
-                }>Biaya Operasional</Button>
+                  navigation.reset({ index: 0,
+                  routes: [{ name: 'PenggunaanPakan' }],
+                  })}>
+                    Penggunaan Pakan</Button>
                 <Button 
                  mode='contained' onPress={() =>
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'Pengurangan' }],
-                  })
-                }>Pengurangan</Button>
+                  navigation.reset({index: 0,
+                  routes: [{ name: 'PersediaanPakan' }],
+                  })}>
+                    Persediaan Pakan</Button>
+                <Button 
+                  mode='contained' onPress={() =>
+                  navigation.reset({index: 0,
+                  routes: [{ name: 'BiayaOperasional' }],
+                  })}>
+                    Biaya Operasional</Button>
+                <Button 
+                  mode='contained' onPress={() =>
+                  navigation.reset({index: 0,
+                  routes: [{ name: 'Pengurangan' }],
+                  })}>
+                    Pengurangan</Button>
                 <Button 
                  mode='contained' onPress={() =>
                   navigation.reset({

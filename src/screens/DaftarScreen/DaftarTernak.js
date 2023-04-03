@@ -5,7 +5,7 @@ import { theme } from "../../core/theme";
 import {Ionicons} from '@expo/vector-icons';
 import { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
-import { TouchableOpacity } from "react-native-web";
+import { TouchableOpacity } from "react-native";
 
 function DaftarTernak({navigation}){
 

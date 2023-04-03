@@ -12,7 +12,7 @@ function Pengurangan({navigation}) {
         <View style={styles.View}>
             <BackButton goBack={navigation.goBack}/>
             <Header>PENGURANGAN TERNAK</Header>
-            <Text style={styles.Text}>Jumlah Ternak</Text>
+            <Text style={styles.Text}>Jumlah Ternak Afkir</Text>
             <TextInput
             label='Jumlah Ternak'/>
             <Text style={styles.Text}>Tanggal</Text>
@@ -21,7 +21,7 @@ function Pengurangan({navigation}) {
             <Text style={styles.Text}>Umur</Text>
             <TextInput
             label='Bisa Perkiraan'/>
-            <Text style={styles.Text}>Alasa</Text>
+            <Text style={styles.Text}>Alasan</Text>
             <TextInput
             label='Alasan Afkir'/>
             <Text style={styles.Text}>Harga Jual</Text>

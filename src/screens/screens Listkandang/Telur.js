@@ -19,12 +19,7 @@ function Telur({navigation}) {
             <Text style={styles.Text}>Tanggal</Text>
             <TextInput
             label= 'Tanggal'/>
-            <Text style={styles.Text}>Pendapatan Total</Text>
-            <TextInput
-            label='Pendapatan Total'/>
-            <Text style={styles.Text}>Type</Text>
-            <TextInput
-            label='Type'/>
+            
 
             <Button
             mode='contained'
