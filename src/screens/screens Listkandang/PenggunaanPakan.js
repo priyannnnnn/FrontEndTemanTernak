@@ -27,7 +27,12 @@ function PenggunaanPakan({navigation}) {
 
             <Button
             mode='contained'
-            style={{ marginTop: 4 }}>
+            onPress={() =>
+              navigation.reset({
+                index: 0,
+                routes: [{ name: 'DaftarPersediaanPakan' }],
+              })
+            }>
                 Simpan
             </Button>
             <Button 

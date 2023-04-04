@@ -36,7 +36,7 @@ function PersediaanPakan({navigation}) {
                 onPress={() =>
                   navigation.reset({
                     index: 0,
-                    routes: [{ name: 'ListKandang' }],
+                    routes: [{ name: 'DaftarPersediaanPakan' }],
                   })
                 }
             >Kembali</Button>

@@ -20,7 +20,11 @@ function Penjualan({navigation}){
             <Text style={styles.Text}>Total Pendapatan Telur</Text>
             <TextInput
             label='Pendapatan Total'/>
-            
+        <Button mode='contained'
+        onPress={() => navigation.reset({
+            index: 0, routes: [{ name: 'ListKandang' }],})}>
+          Kembali
+        </Button>   
         </View> 
         </ScrollView>
     )
