@@ -5,45 +5,55 @@ import Header from "../../components/HeaderInputKandang";
 import Input from "../../components/input";
 import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";
+import { useState } from "react";
 
 function PenggunaanPakan({navigation}) {
+
+  const [ livestock, setLiveStock ] = useState({
+    choosefeed: { value : '', error: '' },
+    amountfeed: { value : '', error: '' },
+    type:       { value : '', error: '' },
+    date:       { value : 'NOTE', error: '' },
+  })
+
+  const onSubmit = () => {
+    const data = {
+      choosefeed: livestock?.choosefeed?.value,
+      amountfeed: livestock?.amountfeed?.value,
+      type: livestock?.type?.value,
+      date: livestock?.date?.value
+    }
+    axios.post(`http://139.162.6.202:8000/api/v1/livestock`, data)
+      .then(res => {
+        navigation.navigate('DaftaPenggunaanPakan', {name: 'DaftarPenggunaanPakan'})
+      })
+      .catch((error) => {
+        console.error(error);
+      })
+  }
+
     return (
       <ScrollView style={style.ScrollView}>
         <View style={style.View}>
             <BackButton goBack={navigation.goBack}/>
             <Header>PENGGUNAAN PAKAN</Header>
+
             <Text style={style.Text}>Pilih Pakan</Text>
-            <TextInput
-            label='Masukkan Produk Pakan'/>
+            <TextInput value={livestock?.choosefeed.value} onChangeText={(text) => setLiveStock({ ...livestock, choosefeed: {value: text, error: ''}  })}label='Masukkan Produk Pakan'/>
+
             <Text style={style.Text}>Jumlah perKG</Text>
-            <TextInput
-            label= 'Tanggal'/>
+            <TextInput value={livestock?.amountfeed.value} onChangeText={(text) => setLiveStock({ ...livestock, amountfeed: {value: text, error: ''}  })}
+            label= 'Masukkan Jumlah Pakan'/>
+
             <Text style={style.Text}>Type</Text>
-            <TextInput
-            label='Nama Produk Pakan'/>
+            <TextInput value={livestock?.type.value} onChangeText={(text) => setLiveStock({ ...livestock, type: {value: text, error: ''}  })}label='Nama Produk Pakan'/>
+
             <Text style={style.Text}>Tanggal</Text>
-            <TextInput
+            <TextInput value={livestock?.date.value} onChangeText={(text) => setLiveStock({ ...livestock, date: {value: text, error: ''}  })}
             label='Tanggal'/>
 
-            <Button
-            mode='contained'
-            onPress={() =>
-              navigation.reset({
-                index: 0,
-                routes: [{ name: 'DaftarPersediaanPakan' }],
-              })
-            }>
-                Simpan
-            </Button>
-            <Button 
-            mode='contained'
-                onPress={() =>
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'ListKandang' }],
-                  })
-                }
-            >Kembali</Button>
+            <Button mode='contained' style={{ marginTop: 4 }} onPress={onSubmit}>Simpan</Button>
+            <Button mode='contained'onPress={() =>navigation.reset({index: 0,routes: [{ name: 'ListKandang' }],})}>Kembali</Button>
         </View>
       </ScrollView>
     )
@@ -54,7 +64,7 @@ const style=StyleSheet.create({
         flex: 1,
         width: '100%',
         backgroundColor: theme.colors.backgroundColor,
-        padding: 20,
+        padding: 10,
         alignSelf: 'center',
         justifyContent: 'center',
       },
@@ -67,6 +77,6 @@ const style=StyleSheet.create({
         flex:1,
         backgroundColor:theme.colors.backgroundColor,
         paddingBottom:1,
-        marginTop:35
+        marginTop:20
       }
 })

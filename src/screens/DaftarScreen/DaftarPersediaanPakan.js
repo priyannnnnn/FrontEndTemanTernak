@@ -2,8 +2,9 @@ import { ScrollView, View,Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
+import Button from "../../components/Button";
 
-function DaftarPersediaanPakan(){
+function DaftarPersediaanPakan({navigation}){
     return(
         <ScrollView>
             <View style={styles.container}>
@@ -18,6 +19,15 @@ function DaftarPersediaanPakan(){
                 <Text style={styles.listItem}>Harga :</Text>
             </View> 
             </View>
+            <Button 
+            mode='contained'
+                onPress={() =>
+                  navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'PersediaanPakan' }],
+                  })
+                }
+            >Kembali</Button>
         </ScrollView>
     )
 }

@@ -24,6 +24,7 @@ import penjumlahan from './src/screens/screens Listkandang/Penjualan'
 import DaftarPersediaanPakan from './src/screens/DaftarScreen/DaftarPersediaanPakan'
 import DaftarPengurangan from './src/screens/DaftarScreen/DaftarPengurangan'
 import DaftarPenggunaanPakan from './src/screens/DaftarScreen/DaftarPenggunaanPakan'
+import DaftarPenjualanTelur from './src/screens/DaftarScreen/DaftarPenjualanTelur'
 
 
 const Stack = createStackNavigator()
@@ -56,6 +57,7 @@ export default function App() {
           <Stack.Screen name='DaftarPersediaanPakan' component={DaftarPersediaanPakan}/>
           <Stack.Screen name='DaftarPengurangan' component={DaftarPengurangan}/>
           <Stack.Screen name='DaftarPenggunaanPakan' component={DaftarPenggunaanPakan}/>
+          <Stack.Screen name='DaftarPenjualanTelur' component={DaftarPenjualanTelur}/>
          
 
           <Stack.Screen

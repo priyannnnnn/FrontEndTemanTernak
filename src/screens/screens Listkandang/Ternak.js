@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, ScrollView} from "react-native";
+import { Text, StyleSheet, View, ScrollView, Alert} from "react-native";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
@@ -6,15 +6,16 @@ import { theme } from "../../core/theme";
 import Header from "../../components/HeaderInputKandang";
 import { useState } from "react";
 import axios from "axios";
+import { agevalidator } from "../../helpers/Agevalidator";
 
 function Ternak({navigation}) {
   
   const [ livestock, setLiveStock ] = useState({
-    age:      { value : 2, error: '' },
-    quantity: { value : 500, error: '' },
+    age:      { value : '', error: '' },
+    quantity: { value : '', error: '' },
     date:     { value : '2023-04-02', error: '' },
     amount:   { value : 600000, error: '' },
-    type:     { value : 'PEKSI', error: '' },
+    type:     { value : '', error: '' },
     note:     { value : 'NOTE', error: '' },
   })
 
@@ -27,6 +28,16 @@ function Ternak({navigation}) {
       type: livestock?.type?.value,
       note: livestock?.note?.value
     }
+    const ageIsValid=!isNaN(data.age)&& data.age>1;
+    const quantityIsValid=!isNaN(data.quantity) && data.quantity>1;
+    const amountIsValid=!isNaN(data.amount)&& data.amount>1;
+    const typeIsvalid=data.type.trim().length>0
+
+
+      if (!ageIsValid || !quantityIsValid || !amountIsValid || !typeIsvalid){
+        Alert.alert ('Data Anda Salah',"Mohon Untuk Cek Kembali")
+        return;
+      }
     axios.post(`http://139.162.6.202:8000/api/v1/livestock`, data)
       .then(res => {
         navigation.navigate('DaftarTernak', {name: 'DaftarTernak'})
@@ -62,14 +73,8 @@ function Ternak({navigation}) {
 
       <Button mode='contained' style={{ marginTop: 4 }} onPress={ onSubmit }>Simpan</Button>
       <Button mode='contained'
-        onPress={() =>
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'ListKandang' }],
-          })
-        }>
-          Kembali
-        </Button>
+        onPress={() => navigation.reset({index: 0,
+        routes: [{ name: 'ListKandang' }],})}>Kembali</Button>
       </View>
     </ScrollView>
   )

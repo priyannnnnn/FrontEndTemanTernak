@@ -2,13 +2,14 @@ import { ScrollView, View,Text, StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
+import Button from "../../components/Button";
 
-function DaftarPenggunaanPakan(){
+function DaftarPenggunaanPakan({navigation}){
     return(
         <ScrollView>
             <View style={styles.container}>
             <TouchableOpacity style={styles.button}>
-                <Text style={styles.buttonText}> PersediaanPakan</Text>
+                <Text style={styles.buttonText}> PenggunaanPakan</Text>
             </TouchableOpacity>
             <Text style={styles.title}></Text>
             <View style={styles.employeeListContainer}>
@@ -18,6 +19,11 @@ function DaftarPenggunaanPakan(){
                 <Text style={styles.listItem}>Harga :</Text>
             </View> 
             </View>
+            <Button mode='contained'
+        onPress={() => navigation.reset({
+            index: 0, routes: [{ name: 'PenggunaanPakan' }],})}>
+          Kembali
+        </Button>
         </ScrollView>
     )
 }

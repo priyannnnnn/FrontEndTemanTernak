@@ -87,7 +87,7 @@ function DaftarTernak({navigation}){
             onPress={() =>
             navigation.reset({
                 index: 0,
-                routes: [{ name: 'Dashboard' }],
+                routes: [{ name: 'Ternak' }],
             })
             }>Kembali</Button>
         </View>

@@ -4,33 +4,29 @@ import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
 import Button from "../../components/Button";
 
-function DaftarPengurangan({navigation}){
+function DaftarPenjualanTelur({navigation}){
     return(
         <ScrollView>
         <View style={styles.container}>
         <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>PenguranganTernak</Text>
+            <Text style={styles.buttonText}> PersediaanPakan</Text>
         </TouchableOpacity>
         <Text style={styles.title}></Text>
         <View style={styles.employeeListContainer}>
-            <Text style={styles.listItem}>Jumlah :</Text>
+            <Text style={styles.listItem}>Jumlah Telur :</Text>
             <Text style={styles.listItem}>Tanggal :</Text>
-            <Text style={styles.listItem}>Umur :</Text>
-            <Text style={styles.listItem}>Alasan :</Text>
-            <Text style={styles.listItem}>Harga Jual :</Text>
-            <Text style={styles.listItem}>Keterangan :</Text>
+            <Text style={styles.listItem}>Total Pendapatan Telur  :</Text>
         </View> 
         </View>
-        <Button mode='contained'
-            onPress={() => navigation.reset({
-            index: 0, routes: [{ name: 'Pengurangan' }],})}>
-            Kembali
-        </Button> 
+        <Button 
+            mode='contained' onPress={() => 
+                navigation.reset({index: 0,
+                routes: [{ name: 'PersediaanPakan' }],})}
+        >Kembali</Button>
     </ScrollView>
     )
-    
 }
-export default DaftarPengurangan;
+export default DaftarPenjualanTelur;
 const styles=StyleSheet.create({
     text:{
         fontSize:20,
