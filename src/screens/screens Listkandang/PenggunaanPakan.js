@@ -6,6 +6,7 @@ import Input from "../../components/input";
 import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";
 import { useState } from "react";
+import { Picker } from "@react-native-picker/picker";
 
 function PenggunaanPakan({navigation}) {
 
@@ -15,6 +16,8 @@ function PenggunaanPakan({navigation}) {
     type:       { value : '', error: '' },
     date:       { value : 'NOTE', error: '' },
   })
+
+  const [selectedValue, setSelectedValue] = useState("java");
 
   const onSubmit = () => {
     const data = {
@@ -46,6 +49,16 @@ function PenggunaanPakan({navigation}) {
             label= 'Masukkan Jumlah Pakan'/>
 
             <Text style={style.Text}>Type</Text>
+
+            <Picker
+              selectedValue={selectedValue}
+              style={{ height: 50, width: 150 }}
+              onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
+            >
+              <Picker.Item label="Java" value="java" />
+              <Picker.Item label="JavaScript" value="js" />
+            </Picker>
+
             <TextInput value={livestock?.type.value} onChangeText={(text) => setLiveStock({ ...livestock, type: {value: text, error: ''}  })}label='Nama Produk Pakan'/>
 
             <Text style={style.Text}>Tanggal</Text>

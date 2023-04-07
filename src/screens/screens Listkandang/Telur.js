@@ -1,9 +1,7 @@
 import { ScrollView, Text, StyleSheet, View } from "react-native";
 import BackButton from "../../components/BackButton";
-import Background from "../../components/Background";
 import Button from "../../components/Button";
 import Header from "../../components/HeaderInputKandang";
-//import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";
 import TextInput from "../../components/TextInputKandang";
 import { useState } from "react";
