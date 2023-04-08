@@ -57,7 +57,7 @@ function PenggunaanPakan({navigation}) {
         console.error(error);
       })
   }
-
+  
     return (
       <ScrollView style={style.ScrollView}>
         <View style={style.View}>
@@ -73,14 +73,16 @@ function PenggunaanPakan({navigation}) {
 
             <Text style={style.Text}>Type</Text>
 
+            <View style={{ borderRadius:5,borderWidth:1,borderColor:'#708090',overflow:'hidden',}}> 
             <Picker
-              selectedValue={selectedValue}
-              style={{ height: 50, width: 365, }}
-              onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
-            >
+            style={{backgroundColor:'#FFFAFA',width:"100%",height:50,textAlign:'center',marginTop:-8,marginBottom:7}}
+              selectedValue={livestock?.type.value}
+              onValueChange={(itemValue, itemIndex) => setLiveStock({...livestock, type:{value:itemValue,error:''}})}
+              >
               <Picker.Item label="Java" value="java" />
               <Picker.Item label="JavaScript" value="js" />
             </Picker>
+              </View>
 
             <TextInput value={livestock?.type.value} onChangeText={(text) => setLiveStock({ ...livestock, type: {value: text, error: ''}  })}label='Nama Produk Pakan'/>
 

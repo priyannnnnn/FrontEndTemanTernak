@@ -18,11 +18,11 @@ function Telur({ navigation }) {
     // const currentDate = selectedDate;
     setShow(false);
     // setDate(currentDate);
-    if (event?.type === 'dismissed') {
-      setDate(date);
-      return;
-  }
-  setDate(selectedDate);
+    // if (event?.type === 'dismissed') {
+      // setDate(date);
+      // return;
+  // }
+  // setDate(selectedDate);
   };
 
   const showMode = (currentMode) => {
@@ -44,7 +44,7 @@ function Telur({ navigation }) {
         <Text style={styles.Text}>Jumlah Telur</Text>
         <TextInput label='Masukkan Jumlah Telur' keyboardType="numeric" />
         <Text style={styles.Text}>Tanggal</Text>
-        <TextInput value={`${moment(date).format('YYYY-MM-DD')}`} onBlur={onChange} onFocus={showDatepicker} label='Tanggal' />
+        <TextInput value={`${moment(date).format('YYYY-MM-DD')}`} onBlur={onChange} onChange={showDatepicker} onFocus={showDatepicker} label='Tanggal' />
         {show && (
           <DateTimePicker
             testID="dateTimePicker"

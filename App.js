@@ -12,7 +12,7 @@ import {
 } from './src/screens'
 import BuatKandang from './src/screens/BuatKandang';
 import ListKandang  from './src/screens/ListKandang'
-import Telur from './src/screens/screens Listkandang/Telur'
+import Telur from './src/screens/screensListkandang/Telur'
 import Ternak from './src/screens/screensListkandang/Ternak'
 import PersediaanPakan from './src/screens/screensListkandang/PersediaanPakan'
 import Pengurangan from './src/screens/screensListkandang/Pengurangan'
