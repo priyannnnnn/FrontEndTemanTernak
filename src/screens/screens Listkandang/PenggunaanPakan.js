@@ -7,6 +7,8 @@ import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";
 import { useState } from "react";
 import { Picker } from "@react-native-picker/picker";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from "moment";
 
 function PenggunaanPakan({navigation}) {
 
@@ -16,6 +18,27 @@ function PenggunaanPakan({navigation}) {
     type:       { value : '', error: '' },
     date:       { value : 'NOTE', error: '' },
   })
+
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    if (Platform.OS === 'android') {
+      setShow(true);
+    }
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
 
   const [selectedValue, setSelectedValue] = useState("java");
 
@@ -52,7 +75,7 @@ function PenggunaanPakan({navigation}) {
 
             <Picker
               selectedValue={selectedValue}
-              style={{ height: 50, width: 150 }}
+              style={{ height: 50, width: 365, }}
               onValueChange={(itemValue, itemIndex) => setSelectedValue(itemValue)}
             >
               <Picker.Item label="Java" value="java" />
@@ -62,8 +85,16 @@ function PenggunaanPakan({navigation}) {
             <TextInput value={livestock?.type.value} onChangeText={(text) => setLiveStock({ ...livestock, type: {value: text, error: ''}  })}label='Nama Produk Pakan'/>
 
             <Text style={style.Text}>Tanggal</Text>
-            <TextInput value={livestock?.date.value} onChangeText={(text) => setLiveStock({ ...livestock, date: {value: text, error: ''}  })}
+            <TextInput value={`${moment(date).format('YYYY-MM-DD')}`} onBlur={onChange} onFocus={showDatepicker}
             label='Tanggal'/>
+            {show &&(
+              <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={mode}
+              is24Hour={true}
+              onChange={onChange}/>
+            )}
 
             <Button mode='contained' style={{ marginTop: 4 }} onPress={onSubmit}>Simpan</Button>
             <Button mode='contained'onPress={() =>navigation.reset({index: 0,routes: [{ name: 'ListKandang' }],})}>Kembali</Button>

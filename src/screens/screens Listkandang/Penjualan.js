@@ -5,14 +5,37 @@ import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
 import Header from "../../components/HeaderInputKandang";
 import { useState } from "react";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from "moment";
 
 function Penjualan({navigation}){
 
     const [ livestock, setLiveStock ] = useState({
         totalegg:      { value : '', error: '' },
         totalpriceegg: { value : '', error: '' },
-        date:          { value : '2023-04-02', error: '' },
+        date:          { value : '', error: '' },
       })
+
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    if (Platform.OS === 'android') {
+      setShow(true);
+    }
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
     
       const onSubmit = () => {
         const data = {
@@ -37,8 +60,15 @@ function Penjualan({navigation}){
             <TextInput value={livestock?.totalegg.value} onChangeText={(text) => setLiveStock({ ...livestock, totalegg: {value: text, error: ''}  })} label='Masukkan Jumlah Telur'/>
 
             <Text style={styles.Text}>Tanggal</Text>
-            <TextInput value={livestock?.date.value} onChangeText={(text) => setLiveStock({ ...livestock, date: {value: text, error: ''}  })} label= 'Tanggal'/>
-
+            <TextInput value={`${moment(date).format('YYYY-MM-DD')}`} onBlur={onChange} onFocus={showDatepicker} label= 'Tanggal'/>
+            {show &&(
+              <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={mode}
+              is24Hour={true}
+              onChange={onChange}/>
+            )}
             <Text style={styles.Text}>Total Pendapatan Telur</Text>
             <TextInput value={livestock?.totalpriceegg.value} onChangeText={(text) => setLiveStock({ ...livestock, totalpriceegg: {value: text, error: ''}  })} label='Pendapatan Total'/>
 

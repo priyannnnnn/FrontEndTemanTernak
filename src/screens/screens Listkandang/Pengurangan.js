@@ -6,6 +6,8 @@ import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";
 import Header from "../../components/HeaderInputKandang"
 import { useState } from "react";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from "moment";
 
 function Pengurangan({navigation}) {
 
@@ -17,6 +19,27 @@ function Pengurangan({navigation}) {
     sellprice:    { value : '', error: '' },
     note:         { value : 'NOTE', error: '' },
   })
+
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    if (Platform.OS === 'android') {
+      setShow(true);
+    }
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
 
   const onSubmit = () => {
     const data = {
@@ -44,7 +67,16 @@ function Pengurangan({navigation}) {
             <TextInput value={livestock?.amountafkir.value} onChangeText={(text) => setLiveStock({ ...livestock, amountafkir: {value: text, error: ''}  })}label='Jumlah Ternak'/>
 
             <Text style={styles.Text}>Tanggal</Text>
-            <TextInput value={livestock?.date.value} onChangeText={(text) => setLiveStock({ ...livestock, date: {value: text, error: ''}  })}label= 'Masukkan Tanggal'/>
+            <TextInput value={`${moment(date).format('YYYY-MM-DD')}`} onBlur={onChange} onFocus={showDatepicker}
+            label= 'Masukkan Tanggal'/>
+            {show &&(
+              <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={mode}
+              is24Hour={true}
+              onChange={onChange}/>
+            )}
 
             <Text style={styles.Text}>Umur</Text>
             <TextInput value={livestock?.age.value} onChangeText={(text) => setLiveStock({ ...livestock, age: {value: text, error: ''}  })}label='Bisa Perkiraan'/>

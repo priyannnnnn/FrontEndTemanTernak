@@ -6,6 +6,9 @@ import Header from "../../components/HeaderInputKandang";
 import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";
 import { useState } from "react";
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from "moment";
+
 
 function PersediaanPakan({navigation}) {
   const [livestock, setLiveStock]=useState({
@@ -14,6 +17,27 @@ function PersediaanPakan({navigation}) {
     totalprice: { value : '', error: '' },
     date:       { value : '2023-04-02', error: '' },
   })
+
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const [show, setShow] = useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    if (Platform.OS === 'android') {
+      setShow(true);
+    }
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
 
   const onSubmit=()=>{
     const data={
@@ -47,8 +71,16 @@ function PersediaanPakan({navigation}) {
             <TextInput value={livestock?.totalprice.value} onChangeText={(text)=> setLiveStock({...livestock, totalprice:{value:text, error:''} })}label='Harga keseluruhan'/>
 
             <Text style={styles.Text}>Tanggal</Text>
-            <TextInput value={livestock?.date.value} onChangeText={(text)=> setLiveStock({...livestock, date:{value:text, error:''} })} 
+            <TextInput value={`${moment(date).format('YYYY-MM-DD')}`} onBlur={onChange} onFocus={showDatepicker}
             label= 'Tanggal'/>
+            {show &&(
+              <DateTimePicker
+              testID="dateTimePicker"
+              value={date}
+              mode={mode}
+              is24Hour={true}
+              onChange={onChange}/>
+            )}
 
             <Button mode='contained' style={{ marginTop: 4 }} onPress={onSubmit}>Simpan</Button>
             <Button 
