@@ -79,12 +79,13 @@ function PenggunaanPakan({navigation}) {
               selectedValue={livestock?.type.value}
               onValueChange={(itemValue, itemIndex) => setLiveStock({...livestock, type:{value:itemValue,error:''}})}
               >
-              <Picker.Item label="Java" value="java" />
-              <Picker.Item label="JavaScript" value="js" />
+              <Picker.Item label="P100" value="java" />
+              <Picker.Item label="Sinta" value="js" />
+              <Picker.Item label="Comfeed" value="j" />
             </Picker>
               </View>
 
-            <TextInput value={livestock?.type.value} onChangeText={(text) => setLiveStock({ ...livestock, type: {value: text, error: ''}  })}label='Nama Produk Pakan'/>
+            {/* <TextInput value={livestock?.type.value} onChangeText={(text) => setLiveStock({ ...livestock, type: {value: text, error: ''}  })}label='Nama Produk Pakan'/> */}
 
             <Text style={style.Text}>Tanggal</Text>
             <TextInput value={`${moment(date).format('YYYY-MM-DD')}`} onBlur={onChange} onFocus={showDatepicker}
@@ -124,5 +125,6 @@ const style=StyleSheet.create({
         backgroundColor:theme.colors.backgroundColor,
         paddingBottom:1,
         marginTop:20
-      }
+      },
+      
 })

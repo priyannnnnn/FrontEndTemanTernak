@@ -7,6 +7,7 @@ import Header from "../../components/HeaderInputKandang";
 import { useState } from "react";
 import axios from "axios";
 import { agevalidator } from "../../helpers/Agevalidator";
+import { Picker } from "@react-native-picker/picker";
 
 function Ternak({navigation}) {
   
@@ -66,7 +67,16 @@ function Ternak({navigation}) {
       <TextInput value={livestock?.amount.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam'/>
 
       <Text style={style.Text} >Type</Text>
-      <TextInput value={livestock?.type.value} onChangeText={(text) => setLiveStock({ ...livestock, type: {value: text, error: ''}  })}  label='Peksi'/>
+      <View style={{ borderRadius:5,borderWidth:1,borderColor:'#708090',overflow:'hidden',}}>
+        <Picker
+        style={{backgroundColor:'#FFFAFA',width:"100%",height:50,textAlign:'center',marginTop:-8,marginBottom:7}}
+        selectedValue={livestock?.type.value}
+        onValueChange={(itemValue,itemIndex) => setLiveStock({...livestock, type:{value:itemValue,error:''}})}>
+          <Picker.Item label="peksi" value="peksi"/>
+          <Picker.Item label="Blaster" value="Blaster"/>
+        </Picker>
+      </View>
+      {/* <TextInput value={livestock?.type.value} onChangeText={(text) => setLiveStock({ ...livestock, type: {value: text, error: ''}  })}  label='Peksi'/> */}
 
       <Text style={style.Text} >Catatan</Text>
       <TextInput value={livestock?.note.value} onChangeText={(text) => setLiveStock({ ...livestock, note: {value: text, error: ''}  })}  label='Masukkan Catatan'/>
