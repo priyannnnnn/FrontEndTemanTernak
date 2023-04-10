@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     flex:1
   },
   r:{
-    opacity:0.75
+    opacity:0.85
   }
 
 })

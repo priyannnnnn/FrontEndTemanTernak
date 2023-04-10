@@ -4,17 +4,18 @@ import { ScrollView, StyleSheet, View,Text } from "react-native";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
 import Header from "../../components/HeaderInputKandang";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
+import axios from "axios";
 
 function Penjualan({navigation}){
 
     const [ livestock, setLiveStock ] = useState({
-        totalegg:      { value : '', error: '' },
-        totalpriceegg: { value : '', error: '' },
-        date:          { value : '', error: '' },
-      })
+      quantity  : { value : '', error: '' },
+      amount    : { value : '', error: '' },
+      date      : { value : '', error: '' },
+    })
 
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
@@ -36,31 +37,36 @@ function Penjualan({navigation}){
   const showDatepicker = () => {
     showMode('date');
   };
+
+  useEffect(() => {
+    setLiveStock({...livestock, date:{ value: `${moment(date).format('YYYY-MM-DD')}`, error: ''}})
+  }, [date])
     
-      const onSubmit = () => {
-        const data = {
-          totalegg: livestock?.totalegg?.value,
-          totalpriceegg: livestock?.totalpriceegg?.value,
-          date:livestock?.date?.value
-        }
-        axios.post(`http://139.162.6.202:8000/api/v1/livestock`, data)
-        .then(res => {
-          navigation.navigate('DaftarPenjualanTelur', {name: 'DaftarPenjualanTelur'})
-        })
-        .catch((error) => {
-          console.error(error);
-        })
+  const onSubmit = () => {
+    const data = {
+      quantity: livestock?.quantity?.value,
+      amount: livestock?.amount?.value,
+      date:livestock?.date?.value
     }
+
+    axios.post(`http://139.162.6.202:8000/api/v1/saleEgg`, data)
+    .then(res => {
+      navigation.navigate('DaftarPenjualanTelur', {name: 'DaftarPenjualanTelur'})
+    })
+    .catch((error) => {
+      console.error(error);
+    })
+  }
     return(
         <ScrollView>
         <View style={styles.View}>
         <BackButton goBack={navigation.goBack}/>
             <Header>Penjualan Telur</Header>
             <Text style={styles.Text}>Jumlah Telur</Text>
-            <TextInput value={livestock?.totalegg.value} onChangeText={(text) => setLiveStock({ ...livestock, totalegg: {value: text, error: ''}  })} label='Masukkan Jumlah Telur'/>
+            <TextInput value={livestock?.quantity.value} onChangeText={(text) => setLiveStock({ ...livestock, quantity: {value: text, error: ''}  })} label='Masukkan Jumlah Telur' keyboardType="numeric"/>
 
             <Text style={styles.Text}>Tanggal</Text>
-            <TextInput value={`${moment(date).format('YYYY-MM-DD')}`} onBlur={onChange} onFocus={showDatepicker} label= 'Tanggal'/>
+            <TextInput value={livestock?.date.value} onChangeText={showDatepicker} onFocus={showDatepicker} label= 'Tanggal'/>
             {show &&(
               <DateTimePicker
               testID="dateTimePicker"
@@ -70,7 +76,7 @@ function Penjualan({navigation}){
               onChange={onChange}/>
             )}
             <Text style={styles.Text}>Total Pendapatan Telur</Text>
-            <TextInput value={livestock?.totalpriceegg.value} onChangeText={(text) => setLiveStock({ ...livestock, totalpriceegg: {value: text, error: ''}  })} label='Pendapatan Total'/>
+            <TextInput value={livestock?.amount.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })} label='Pendapatan Total' keyboardType="numeric"/>
 
         <Button mode='contained' style={{margin:4}} onPress={onSubmit}>Simpan</Button>  
         <Button mode='contained'

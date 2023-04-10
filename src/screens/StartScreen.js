@@ -6,17 +6,18 @@ import Button from '../components/Button'
 import Paragraph from '../components/Paragraph'
 import { Text } from 'react-native'
 import { Image,  } from 'react-native'
+import LogoStartScreen from '../components/LogoStartScreen'
 
 
 export default function StartScreen({ navigation }) {
   return (
     <Background >
-      
+      <LogoStartScreen/>
       {/* <Logo /> */}
-      <Header>Login Template</Header>
-      <Paragraph>
+      {/* <Header>Login Template</Header> */}
+      {/* <Paragraph>
         The easiest way to start with your amazing application.
-      </Paragraph>
+      </Paragraph> */}
       <Button
         mode="contained"
         onPress={() => navigation.navigate('LoginScreen')}

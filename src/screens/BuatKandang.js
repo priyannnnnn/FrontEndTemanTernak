@@ -35,11 +35,11 @@ function BuatKandang({ route, navigation }) {
          onValueChange={(itemValue,itemIndex)=>setSelectedValue(itemValue)}>
           <Picker.name />
           <Picker.Item label="kandang puyuh" value="s"/>
-          <Picker.Item label="kandang ayam petelur" value="s"/>
+          <Picker.Item label="kandang ayam petelur" value="y"/>
         </Picker>
         </View>
 
-        <Button mode='contained' style={{ marginTop: 4 }}
+        <Button mode='contained' 
           onPress={() =>
             navigation.reset({
               index: 0,

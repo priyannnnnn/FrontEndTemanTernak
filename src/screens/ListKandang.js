@@ -1,4 +1,4 @@
-import { StyleSheet, Text,TouchableOpacity } from "react-native";
+import { ScrollView, StyleSheet, Text,TouchableOpacity } from "react-native";
 import BackButton from "../components/BackButton";
 import Background from "../components/Background";
 import Header from "../components/HeaderInputKandang";
@@ -18,6 +18,7 @@ function ListKandang({navigation}){
       return (
         <Background>
             <BackButton goBack={navigation.goBack}/>
+            <ScrollView>
             <Header>List Kandang</Header>
            <Text style={styles.text}>Nama Kandang :</Text>
            <Text style={styles.text}>Kapasitas :</Text>
@@ -82,7 +83,7 @@ function ListKandang({navigation}){
                 }
                 
             >Kembali</Button>
-            
+            </ScrollView>
         </Background>
       )
     

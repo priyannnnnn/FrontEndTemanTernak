@@ -62,7 +62,7 @@ function PenggunaanPakan({navigation}) {
       <ScrollView style={style.ScrollView}>
         <View style={style.View}>
             <BackButton goBack={navigation.goBack}/>
-            <Header>PENGGUNAAN PAKAN</Header>
+            <Header>Penggunaan Pakan</Header>
 
             <Text style={style.Text}>Pilih Pakan</Text>
             <TextInput value={livestock?.choosefeed.value} onChangeText={(text) => setLiveStock({ ...livestock, choosefeed: {value: text, error: ''}  })}label='Masukkan Produk Pakan'/>
@@ -124,7 +124,7 @@ const style=StyleSheet.create({
         flex:1,
         backgroundColor:theme.colors.backgroundColor,
         paddingBottom:1,
-        marginTop:20
+        marginTop:45
       },
       
 })

@@ -4,7 +4,7 @@ import Logo from '../components/Logo'
 import Header from '../components/Header'
 import Paragraph from '../components/Paragraph'
 import Button from '../components/Button'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 
 export default function Dashboard({ navigation }) {
   return (
@@ -13,10 +13,9 @@ export default function Dashboard({ navigation }) {
     
     <Background>
       {/* <Logo /> */}
-      <Header>Let’s start</Header>
-      <Paragraph>
-        Your amazing app starts here. Open you favorite code editor and start
-        editing this project.
+      <Header>Ayo Beternak</Header>
+      <Paragraph >
+        Selamat Datang Sahabat Peternak Milineal
       </Paragraph>
       <Button
         mode="outlined"
@@ -27,8 +26,9 @@ export default function Dashboard({ navigation }) {
           })
         }
       >
-        Start
+        Buat Kandang
       </Button>
+      <Text style={styles.Paragraph}>* Buat Kandang Jika belum Punya Kandang</Text>
       <Button
         mode="outlined"
         onPress={() =>
@@ -50,5 +50,8 @@ export default function Dashboard({ navigation }) {
 const styles=StyleSheet.create({
   ff:{
     flex:1
+  },
+  Paragraph:{
+    fontSize:15
   }
 })
