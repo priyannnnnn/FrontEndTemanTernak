@@ -77,7 +77,7 @@ function PersediaanPakan({navigation}) {
             <TextInput value={feed?.amount.value} onChangeText={(text)=> setFeed({...feed, amount: {value:text, error:''} })}label='Harga keseluruhan' keyboardType='numeric'/>
 
             <Text style={styles.Text}>Tanggal</Text>
-            <TextInput value={feed?.date.value} onChangeText={showDatepicker} onFocus={showDatepicker} label= 'Tanggal'/>
+            <TextInput value={feed?.date.value} onChangeText={(text)=> setFeed({...setFeed, date:{value:text, error:''}})} onBlur={onChange} onChange={showDatepicker} onFocus={showDatepicker} label= 'Tanggal'/>
             {show &&(
               <DateTimePicker
               testID="dateTimePicker"
