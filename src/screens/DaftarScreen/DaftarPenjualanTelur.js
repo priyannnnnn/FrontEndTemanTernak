@@ -9,7 +9,7 @@ function DaftarPenjualanTelur({navigation}){
         <ScrollView>
         <View style={styles.container}>
         <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}> PersediaanPakan</Text>
+            <Text style={styles.buttonText}> DaftarPenjualanTelur</Text>
         </TouchableOpacity>
         <Text style={styles.title}></Text>
         <View style={styles.employeeListContainer}>
@@ -21,7 +21,7 @@ function DaftarPenjualanTelur({navigation}){
         <Button 
             mode='contained' onPress={() => 
                 navigation.reset({index: 0,
-                routes: [{ name: 'PersediaanPakan' }],})}
+                routes: [{ name: 'Penjualan' }],})}
         >Kembali</Button>
     </ScrollView>
     )

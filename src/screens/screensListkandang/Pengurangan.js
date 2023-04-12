@@ -1,6 +1,6 @@
 import { Text, TouchableOpacity,StyleSheet, View, ScrollView } from "react-native";
 import BackButton from "../../components/BackButton";
-import Background from "../../components/Background";
+import Background from "../../components/StartBackground";
 import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";

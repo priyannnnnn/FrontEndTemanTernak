@@ -1,5 +1,5 @@
 import React from 'react'
-import Background from '../components/Background'
+import StartBackground from '../components/StartBackground'
 import Logo from '../components/Logo'
 import Header from '../components/Header'
 import Button from '../components/Button'
@@ -11,7 +11,7 @@ import LogoStartScreen from '../components/LogoStartScreen'
 
 export default function StartScreen({ navigation }) {
   return (
-    <Background >
+    <StartBackground >
       <LogoStartScreen/>
       {/* <Logo /> */}
       {/* <Header>Login Template</Header> */}
@@ -33,6 +33,6 @@ export default function StartScreen({ navigation }) {
       <Text>
         Daftar jika Belum Punya Akun
       </Text>
-    </Background>
+    </StartBackground>
   )
 }

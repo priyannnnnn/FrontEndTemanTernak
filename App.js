@@ -12,13 +12,13 @@ import {
 } from './src/screens'
 import BuatKandang from './src/screens/BuatKandang';
 import ListKandang  from './src/screens/ListKandang'
-import Telur from './src/screens/screensListkandang/Telur'
+import PendapatanTelur from './src/screens/screensListkandang/PendapatanTelur'
 import Ternak from './src/screens/screensListkandang/Ternak'
 import PersediaanPakan from './src/screens/screensListkandang/PersediaanPakan'
 import Pengurangan from './src/screens/screensListkandang/Pengurangan'
 import PenggunaanPakan from './src/screens/screensListkandang/PenggunaanPakan'
 import BiayaOperasional from './src/screens/screensListkandang/BiayaOperasional'
-import DaftarTelur from './src/screens/DaftarScreen/DaftarTelur'
+import DaftarPendapatanTelur from './src/screens/DaftarScreen/DaftarPendapatanTelur'
 import DaftarTernak from './src/screens/DaftarScreen/DaftarTernak'
 import penjumlahan from './src/screens/screensListkandang/Penjualan'
 import DaftarPersediaanPakan from './src/screens/DaftarScreen/DaftarPersediaanPakan'
@@ -45,14 +45,14 @@ export default function App() {
           <Stack.Screen name="Dashboard" component={Dashboard} />
           <Stack.Screen name='BuatKandang' component={BuatKandang}/>
           <Stack.Screen name='ListKandang' component={ListKandang} />
-          <Stack.Screen name='Telur' component={Telur}/>
+          <Stack.Screen name='PendapatanTelur' component={PendapatanTelur}/>
           <Stack.Screen name='BiayaOperasional' component={BiayaOperasional}/>
           <Stack.Screen name='PenggunaanPakan' component={PenggunaanPakan}/>
           <Stack.Screen name='Pengurangan' component={Pengurangan}/>
           <Stack.Screen name='PersediaanPakan' component={PersediaanPakan}/>
           <Stack.Screen name='Ternak' component={Ternak}/>
           <Stack.Screen name='Penjualan' component={penjumlahan}/>
-          <Stack.Screen name='DaftarTelur' component={DaftarTelur}/>
+          <Stack.Screen name='DaftarPendapatanTelur' component={DaftarPendapatanTelur}/>
           <Stack.Screen name='DaftarTernak' component={DaftarTernak}/>
           <Stack.Screen name='DaftarPersediaanPakan' component={DaftarPersediaanPakan}/>
           <Stack.Screen name='DaftarPengurangan' component={DaftarPengurangan}/>

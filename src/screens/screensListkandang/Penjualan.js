@@ -11,7 +11,7 @@ import axios from "axios";
 
 function Penjualan({navigation}){
 
-    const [ livestock, setLiveStock ] = useState({
+    const [ saleEgg, setsaleEgg ] = useState({
       quantity  : { value : '', error: '' },
       amount    : { value : '', error: '' },
       date      : { value : '', error: '' },
@@ -39,7 +39,7 @@ function Penjualan({navigation}){
   };
 
   useEffect(() => {
-    setLiveStock({...livestock, date:{ value: `${moment(date).format('YYYY-MM-DD')}`, error: ''}})
+    setsaleEgg({...saleEgg, date:{ value: `${moment(date).format('YYYY-MM-DD')}`, error: ''}})
   }, [date])
     
   const onSubmit = () => {
@@ -63,10 +63,10 @@ function Penjualan({navigation}){
         <BackButton goBack={navigation.goBack}/>
             <Header>Penjualan Telur</Header>
             <Text style={styles.Text}>Jumlah Telur</Text>
-            <TextInput value={livestock?.quantity.value} onChangeText={(text) => setLiveStock({ ...livestock, quantity: {value: text, error: ''}  })} label='Masukkan Jumlah Telur' keyboardType="numeric"/>
+            <TextInput value={saleEgg?.quantity.value} onChangeText={(text) => setsaleEgg({ ...saleEgg, quantity: {value: text, error: ''}  })} label='Masukkan Jumlah Telur' keyboardType="numeric"/>
 
             <Text style={styles.Text}>Tanggal</Text>
-            <TextInput value={livestock?.date.value} onChangeText={showDatepicker} onFocus={showDatepicker} label= 'Tanggal'/>
+            <TextInput value={saleEgg?.date.value} onChangeText={(text)=> setsaleEgg({...saleEgg, date:{value:text, error:''}})} onChange={showDatepicker} onFocus={showDatepicker} label= 'Tanggal'/>
             {show &&(
               <DateTimePicker
               testID="dateTimePicker"
@@ -76,7 +76,7 @@ function Penjualan({navigation}){
               onChange={onChange}/>
             )}
             <Text style={styles.Text}>Total Pendapatan Telur</Text>
-            <TextInput value={livestock?.amount.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })} label='Pendapatan Total' keyboardType="numeric"/>
+            <TextInput value={saleEgg?.amount.value} onChangeText={(text) => setsaleEgg({ ...saleEgg, amount: {value: text, error: ''}  })} label='Pendapatan Total' keyboardType="numeric"/>
 
         <Button mode='contained' style={{margin:4}} onPress={onSubmit}>Simpan</Button>  
         <Button mode='contained'

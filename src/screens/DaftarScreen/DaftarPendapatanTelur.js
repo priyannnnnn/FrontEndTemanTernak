@@ -5,9 +5,9 @@ import { theme } from "../../core/theme";
 import {Ionicons} from '@expo/vector-icons';
 import { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
-import { TouchableOpacity } from "react-native-web";
+import { TouchableOpacity } from "react-native";
 
-function DaftarTelur({navigation}){
+function DaftarPendapatanTelur({navigation}){
 
     const [ employee, setEmployee ] = useState([])
     const [ loading, setLoading ] = useState(false)
@@ -19,7 +19,7 @@ function DaftarTelur({navigation}){
 
     const getData = () => {
         setLoading(true)
-        fetch('http://139.162.6.202:8000/api/v1/livestock', {
+        fetch('http://139.162.6.202:8000/api/v1/incomeEgg', {
           method: "GET"
         })
           .then(res => res.json())
@@ -46,10 +46,10 @@ function DaftarTelur({navigation}){
             <TouchableOpacity
                 onPress={toggleAddEmployeeModal}
                 style={styles.button}>
-                <Text style={styles.buttonText}>Tambah Ternak</Text>
+                <Text style={styles.buttonText}>Tambah PendapatanTelur</Text>
             </TouchableOpacity>
 
-            <Text style={styles.title}>Dafter Ternak</Text>
+            <Text style={styles.title}>Dafter PendapatanTelur</Text>
             {employee.map((data, index) => <View
                 style={styles.employeeListContainer}
                 key={data.id}>
@@ -95,7 +95,7 @@ function DaftarTelur({navigation}){
       </ScrollView>
     )
 }
-export default DaftarTelur;
+export default DaftarPendapatanTelur;
 const styles=StyleSheet.create({
     text:{
         fontSize:20,

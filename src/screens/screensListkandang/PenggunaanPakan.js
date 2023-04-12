@@ -65,7 +65,18 @@ function PenggunaanPakan({navigation}) {
             <Header>Penggunaan Pakan</Header>
 
             <Text style={style.Text}>Pilih Pakan</Text>
-            <TextInput value={livestock?.choosefeed.value} onChangeText={(text) => setLiveStock({ ...livestock, choosefeed: {value: text, error: ''}  })}label='Masukkan Produk Pakan'/>
+            <View style={{borderRadius:5,borderWidth:1,borderColor:'#708090',overflow:'hidden'}}>
+            <Picker
+              style={{backgroundColor:'#FFFAFA',width:"100%",height:50,textAlign:'center',marginTop:-8,marginBottom:7}}
+              selectedValue={livestock?.choosefeed.value}
+              onValueChange={(itemValue)=> setLiveStock({...livestock, choosefeed:{value:itemValue, error:''}})} 
+            >
+              <Picker.Item/>
+              <Picker.Item label="Pakan Pedaging" value="Pedaging"/>
+              <Picker.Item label="Pakan Petelur " value="Petelur"/>
+            </Picker>
+            </View> 
+            {/* <TextInput value={livestock?.choosefeed.value} onChangeText={(text) => setLiveStock({ ...livestock, choosefeed: {value: text, error: ''}  })}label='Masukkan Produk Pakan'/> */}
 
             <Text style={style.Text}>Jumlah perKG</Text>
             <TextInput value={livestock?.amountfeed.value} onChangeText={(text) => setLiveStock({ ...livestock, amountfeed: {value: text, error: ''}  })}
@@ -75,7 +86,7 @@ function PenggunaanPakan({navigation}) {
 
             <View style={{ borderRadius:5,borderWidth:1,borderColor:'#708090',overflow:'hidden',}}> 
             <Picker
-            style={{backgroundColor:'#FFFAFA',width:"100%",height:50,textAlign:'center',marginTop:-8,marginBottom:7}}
+              style={{backgroundColor:'#FFFAFA',width:"100%",height:50,textAlign:'center',marginTop:-8,marginBottom:7}}
               selectedValue={livestock?.type.value}
               onValueChange={(itemValue, itemIndex) => setLiveStock({...livestock, type:{value:itemValue,error:''}})}
               >

@@ -10,17 +10,17 @@ const warna={
 export default function Background({ children }) {
   return (
     <View style={styles.ff}>
-    <ImageBackground
+    {/* <ImageBackground
       resizeMode="cover"
       source={require('../assets/1234.jpg')}
       style={styles.background}
       imageStyle={styles.r}
-    >
+    > */}
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         {children}
       </KeyboardAvoidingView>
       
-    </ImageBackground>
+    {/* </ImageBackground> */}
     </View>
   )
 }
@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
   background: {
     flex: 1,
     width: '100%',
-    backgroundColor: theme.colors.backgroundColor,
+    backgroundColor:'#FAEBD7',
     
   },
   container: {
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   ff:{
     color:'#EBF4FA',
     flex:1,
-    backgroundColor:theme.colors.backgroundColor
+    backgroundColor:'#FAEBD7'
   },
   r:{
     opacity:0.85

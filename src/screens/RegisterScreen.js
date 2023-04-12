@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import { Text } from 'react-native-paper'
-import Background from '../components/Background'
+import Background from '../components/StartBackground'
 import Logo from '../components/Logo'
 import Header from '../components/Header'
 import Button from '../components/Button'

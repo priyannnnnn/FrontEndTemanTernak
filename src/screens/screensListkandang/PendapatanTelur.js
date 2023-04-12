@@ -7,8 +7,28 @@ import TextInput from "../../components/TextInputKandang";
 import { useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
+import axios from "axios";
 
-function Telur({ navigation }) {
+function PendapatanTelur({ navigation }) {
+
+  const [IncomeEgg, setIncomeEgg]=useState({
+    quantity: {value :'',error:''},
+    date:     {value:`${moment(date).format('YYYY-MM-DD')}`, error:''}
+  })
+  const onSubmit=()=>{
+    const data={
+      quantity:IncomeEgg?.quantity.value,
+      date: IncomeEgg?.date.value
+    }
+
+    axios.post(`http://139.162.6.202:8000/api/v1/incomeEgg`,data)
+    .then(res =>{
+      navigation.navigate('DaftarPendapatanTelur')
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+  }
 
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
@@ -42,9 +62,11 @@ function Telur({ navigation }) {
         <BackButton goBack={navigation.goBack} />
         <Header>Telur</Header>
         <Text style={styles.Text}>Jumlah Telur</Text>
-        <TextInput label='Masukkan Jumlah Telur' keyboardType="numeric" />
+        <TextInput value={IncomeEgg?.quantity.value} onChangeText={(text)=> setIncomeEgg({...IncomeEgg, quantity:{value:text,error:''}})} 
+          label='Masukkan Jumlah Telur' keyboardType="numeric" />
+          
         <Text style={styles.Text}>Tanggal</Text>
-        <TextInput value={`${moment(date).format('YYYY-MM-DD')}`} onBlur={onChange} onChange={showDatepicker} onFocus={showDatepicker} label='Tanggal' />
+        <TextInput value={IncomeEgg?.date.value} onChangeText={(text)=> setIncomeEgg({...setIncomeEgg, date:{value:text,error:''}})} onBlur={onChange} onChange={showDatepicker} onFocus={showDatepicker} label='Tanggal' />
         {show && (
           <DateTimePicker
             testID="dateTimePicker"
@@ -60,7 +82,7 @@ function Telur({ navigation }) {
           onPress={() =>
             navigation.reset({
               index: 0,
-              routes: [{ name: 'DaftarTelur' }],
+              routes: [{ name: 'DaftarPendapatanTelur' }],
             })
           }
         >
@@ -79,7 +101,7 @@ function Telur({ navigation }) {
     </ScrollView>
   )
 }
-export default Telur;
+export default PendapatanTelur;
 const styles = StyleSheet.create({
   View: {
     flex: 1,

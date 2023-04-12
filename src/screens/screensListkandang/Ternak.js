@@ -55,16 +55,16 @@ function Ternak({navigation}) {
       <Header>Isi Kandang</Header>
 
       <Text style={style.Text} >Umur</Text>
-      <TextInput value={livestock?.age.value} onChangeText={(text) => setLiveStock({ ...livestock, age: {value: text, error: ''}  })} label='Masukkan Umur'/>
+      <TextInput value={livestock?.age.value} onChangeText={(text) => setLiveStock({ ...livestock, age: {value: text, error: ''}  })} label='Masukkan Umur' keyboardType="numeric"/>
 
       <Text style={style.Text} >Total</Text>
-      <TextInput value={livestock?.quantity.value} onChangeText={(text) => setLiveStock({ ...livestock, quantity: {value: text, error: ''}  })}  label= 'Total Ayam'/>
+      <TextInput value={livestock?.quantity.value} onChangeText={(text) => setLiveStock({ ...livestock, quantity: {value: text, error: ''}  })}  label= 'Total Ayam' keyboardType="numeric"/>
 
       <Text style={style.Text} >Tanggal</Text>
       <TextInput value={livestock?.date.value} onChangeText={(text) => setLiveStock({ ...livestock, date: {value: text, error: ''}  })}  label='Masukkan Tanggal'/>
 
       <Text style={style.Text} >Harga Total</Text>
-      <TextInput value={livestock?.amount.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam'/>
+      <TextInput value={livestock?.amount.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam' keyboardType="numeric"/>
 
       <Text style={style.Text} >Type</Text>
       <View style={{ borderRadius:5,borderWidth:1,borderColor:'#708090',overflow:'hidden',}}>
@@ -75,6 +75,7 @@ function Ternak({navigation}) {
           <Picker.Item/>
           <Picker.Item label="peksi" value="peksi"/>
           <Picker.Item label="Blaster" value="Blaster"/>
+          <Picker.Item label="Albino" value="Albino"/>
         </Picker>
       </View>
       {/* <TextInput value={livestock?.type.value} onChangeText={(text) => setLiveStock({ ...livestock, type: {value: text, error: ''}  })}  label='Peksi'/> */}

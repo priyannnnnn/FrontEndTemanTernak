@@ -8,13 +8,8 @@ import { pembantu } from "../helpers/pembantu";
 import Expensesoutput from "../helpers/ExpensesOutput";
 import TextInput from "../components/TextInputKandang";
 
-//import Ternak from "./Ternak";
-
-
 function ListKandang({navigation}){
-  // const expensectx=useContext(pembantu);
-
-  //   return (<Expensesoutput expenses={expensectx.expenses} expensesPeriod="y" fallbackText="no"/>
+ 
       return (
         <Background>
             <BackButton goBack={navigation.goBack}/>
@@ -32,7 +27,7 @@ function ListKandang({navigation}){
                   Ternak</Button>
                 <Button   mode='contained' onPress={() =>
                   navigation.reset({index: 0,
-                  routes: [{ name: 'Telur' }],
+                  routes: [{ name: 'PendapatanTelur' }],
                   })}>
                   Pendapatan Telur</Button>
                 <Button 
