@@ -55,10 +55,9 @@ function DaftarPendapatanTelur({navigation}){
                 key={data.id}>
                 <Text style={{ ...styles.listItem, color: "tomato" }}>{data.date}</Text>
                 <Text style={styles.name}>{data.employee_name}</Text>
-                <Text style={styles.listItem}>Umur: {data.age}</Text>
-                <Text style={styles.listItem}>Jumlah: {data.quantity}</Text>
-                <Text style={styles.listItem}>Harga Total: {data.amount}</Text>
-
+                <Text style={styles.listItem}>Jumlah telur: {data.quantity}</Text>
+                <Text style={styles.listItem}>Tanggal: {data.date}</Text>
+              
                 <View style={styles.buttonContainer}>
                 <TouchableOpacity
                     onPress={() => {

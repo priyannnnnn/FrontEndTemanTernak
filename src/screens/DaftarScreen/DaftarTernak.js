@@ -10,7 +10,7 @@ import { TouchableOpacity } from "react-native";
 function DaftarTernak({navigation}){
 
     const [ employee, setEmployee ] = useState([])
-    const [ loading, setLoading ] = useState(false)
+    const [ loading, setLoading ] = useState(true)
     const [ errorMessage, setErrorMessage ] = useState('')
 
     const toggleAddEmployeeModal = () => {
@@ -35,9 +35,30 @@ function DaftarTernak({navigation}){
           })
       }
 
+      const DeleteData = () => {
+        setLoading(true)
+        fetch('http://139.162.6.202:8000/api/v1/livestock',
+        {method: "DELETE"})
+        .then(res => res.json())
+        .then(res =>{
+          console.log(res)
+          setLoading(false)
+          setErrorMessage('')
+          setEmployee(res.content)
+        })
+        .catch(()=> {
+          setLoading(false)
+          setErrorMessage("hdr")
+        })
+      }
+
       useEffect(() => {
         getData()
       }, [])
+
+      useEffect(()=>{
+        DeleteData()
+      },[])
 
     return(
         <ScrollView>
@@ -49,7 +70,7 @@ function DaftarTernak({navigation}){
                 <Text style={styles.buttonText}>Tambah Ternak</Text>
             </TouchableOpacity>
 
-            <Text style={styles.title}>Dafter Ternak</Text>
+            <Text style={styles.title}>Daftar Ternak</Text>
             {employee.map((data, index) => <View
                 style={styles.employeeListContainer}
                 key={data.id}>
@@ -69,7 +90,7 @@ function DaftarTernak({navigation}){
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={() => {
+                    onPress={() => { DeleteData
                     
                     }}
                     style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>

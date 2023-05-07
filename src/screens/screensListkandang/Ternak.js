@@ -15,7 +15,7 @@ function Ternak({navigation}) {
     age:      { value : '', error: '' },
     quantity: { value : '', error: '' },
     date:     { value : '2023-04-02', error: '' },
-    amount:   { value : '600000', error: '' },
+    amount:   { value : '', error: '' },
     type:     { value : '', error: '' },
     note:     { value : '', error: '' },
   })

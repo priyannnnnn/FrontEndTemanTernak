@@ -34,7 +34,7 @@ function BuatKandang({ route, navigation }) {
          selectedValue={selectedValue}
          onValueChange={(itemValue,itemIndex)=>setSelectedValue(itemValue)}>
           <Picker.name />
-          <Picker.Item label="kandang puyuh" value="s"/>
+          <Picker.Item label="kandang puyuh Petelur" value="s"/>
           <Picker.Item label="kandang ayam petelur" value="y"/>
         </Picker>
         </View>

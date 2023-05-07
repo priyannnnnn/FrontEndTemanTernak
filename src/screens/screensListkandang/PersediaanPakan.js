@@ -9,14 +9,15 @@ import { useEffect, useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
 import axios from "axios";
+import { Picker } from "@react-native-picker/picker";
 
 
 function PersediaanPakan({navigation}) {
   const [feed, setFeed] = useState({
-    quantity: { value : 50,error:''},
-    type:     { value : 'PETELUR', error: '' },
+    quantity: { value : '',error:''},
+    type:     { value : '', error: '' },
     amount:   { value : '', error: '' },
-    date:     { value : `${moment(new Date()).format('YYYY-MM-DD')}`, error: '' },
+    date:     { value : '', error: '' },
   })
 
   const [date, setDate] = useState(new Date());
@@ -49,7 +50,7 @@ function PersediaanPakan({navigation}) {
       amount:feed?.amount?.value,
       type:feed?.type?.value,
       quantity:feed?.quantity?.value,
-      data:feed?.date?.value,
+      date:feed?.date?.value,
     }
     console.log(data);
     axios.post(`http://139.162.6.202:8000/api/v1/feed`, data)
@@ -71,7 +72,16 @@ function PersediaanPakan({navigation}) {
             <TextInput value={feed?.quantity.value} onChangeText={(text)=> setFeed({...feed, quantity: { value: text, error:''} })} label='Masukkan Pakan' keyboardType='numeric'/>
 
             <Text style={styles.Text}>Type</Text>
-            <TextInput value={feed?.type.value} onChangeText={(text)=> setFeed({...feed, type: {value:text, error:''} })} label='Nama Produk Pakan'/>
+            <View style={{ borderRadius:5,borderWidth:1,borderColor:'#708090',overflow:'hidden',}}>
+            <Picker style={{backgroundColor:'#FFFAFA',width:"100%",height:50,textAlign:'center',marginTop:-8,marginBottom:7}}
+              selectedValue={feed?.type.value}
+              onValueChange={(itemvalue) => setFeed({...feed, type:{value:itemvalue, error:''}})}>
+              <Picker.Item/>
+              <Picker.Item label="Pedaging" value="Pedaging"/>
+              <Picker.Item label="Petelur" value="Petelur"/>
+            </Picker>
+            </View>
+            {/* <TextInput value={feed?.type.value} onChangeText={(text)=> setFeed({...feed, type: {value:text, error:''} })} label='Nama Produk Pakan'/> */}
 
             <Text style={styles.Text}>Harga Total</Text>
             <TextInput value={feed?.amount.value} onChangeText={(text)=> setFeed({...feed, amount: {value:text, error:''} })}label='Harga keseluruhan' keyboardType='numeric'/>

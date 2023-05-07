@@ -79,11 +79,7 @@ function PendapatanTelur({ navigation }) {
 
         <Button
           mode='contained'
-          onPress={() =>
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'DaftarPendapatanTelur' }],
-            })
+          onPress={onSubmit
           }
         >
           Simpan

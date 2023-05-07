@@ -44,9 +44,9 @@ function Penjualan({navigation}){
     
   const onSubmit = () => {
     const data = {
-      quantity: livestock?.quantity?.value,
-      amount: livestock?.amount?.value,
-      date:livestock?.date?.value
+      quantity: saleEgg?.quantity?.value,
+      amount: saleEgg?.amount?.value,
+      date:saleEgg?.date?.value
     }
 
     axios.post(`http://139.162.6.202:8000/api/v1/saleEgg`, data)

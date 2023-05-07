@@ -3,26 +3,71 @@ import { TouchableOpacity } from "react-native";
 import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
 import Button from "../../components/Button";
+import { useEffect, useState } from "react";
 
 function DaftarPenjualanTelur({navigation}){
+
+  const [ saleEgg, setsaleEgg]=useState([])
+  const [loading, setLoading] = useState(false)
+  const [rrorMessage, setErrorMessage ] = useState('')
+
+  const GetData = () => {
+      setLoading(true)
+      fetch('http://139.162.6.202:8000/api/v1/saleEgg', {
+        method: "GET"
+      })
+      .then(sale => sale.json())
+      .then(sale => {
+        console.log(sale)
+        setLoading(false)
+        setErrorMessage('')
+        setsaleEgg(sale.context)
+      })
+      .then (() =>{
+        setLoading(false)
+        setErrorMessage("eror")
+      })
+  }
+
+  const deleteData=(id)=>{
+    console.log(id)
+    fetch('http://139.162.6.202:8000/api/v1/saleEgg/' + id, {method: "DELETE"})
+    .then (sel => sel.json())
+    .then (sel =>{
+      console.log(sel)
+    })
+   
+  }
+  useEffect(() => {
+    GetData()
+  },[])
+  
+
+
     return(
         <ScrollView>
         <View style={styles.container}>
         <TouchableOpacity style={styles.button}>
+         
             <Text style={styles.buttonText}> DaftarPenjualanTelur</Text>
         </TouchableOpacity>
-        <Text style={styles.title}></Text>
-        <View style={styles.employeeListContainer}>
-            <Text style={styles.listItem}>Jumlah Telur :</Text>
-            <Text style={styles.listItem}>Tanggal :</Text>
-            <Text style={styles.listItem}>Total Pendapatan Telur  :</Text>
-        </View> 
+        <Text style={styles.title}>Penjualan Telur</Text>
+        {saleEgg.map((data, index)=>  <View
+       style={styles.employeeListContainer} key={data.id}>
+            <Text style={{...styles.listItem, color:"tomato"}}>{data.date}</Text>
+            <Text style={styles.name}>{data.saleEgg_name}</Text>
+            <Text style={styles.listItem}>Jumlah Telur : {data.amount}</Text>
+            <Text style={styles.listItem}>Tanggal : {data.date}</Text>
+            <Text style={styles.listItem}>Total Pendapatan Telur  : {data.quantity}</Text>
+         
+       </View>)}
         </View>
         <Button 
             mode='contained' onPress={() => 
                 navigation.reset({index: 0,
                 routes: [{ name: 'Penjualan' }],})}
         >Kembali</Button>
+        
     </ScrollView>
     )
 }
