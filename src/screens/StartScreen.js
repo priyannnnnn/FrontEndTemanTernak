@@ -4,7 +4,7 @@ import Logo from '../components/Logo'
 import Header from '../components/Header'
 import Button from '../components/Button'
 import Paragraph from '../components/Paragraph'
-import { Text } from 'react-native'
+import { Text,StyleSheet } from 'react-native'
 import { Image,  } from 'react-native'
 import LogoStartScreen from '../components/LogoStartScreen'
 
@@ -30,9 +30,15 @@ export default function StartScreen({ navigation }) {
       >
         DAFTAR
       </Button>
-      <Text>
+      <Text style={style.Text}>
         Daftar jika Belum Punya Akun
       </Text>
     </StartBackground>
   )
 }
+const style=StyleSheet.create({
+  Text:{
+    color:'#000000',
+
+  }
+})

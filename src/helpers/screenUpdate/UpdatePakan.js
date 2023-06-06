@@ -1,9 +1,10 @@
 import { StyleSheet, View } from "react-native";
-import TextInput from "../components/TextInput";
+import TextInput from "../../components/TextInput";
 import { useContext, useEffect, useState } from "react";
-import { theme } from "../core/theme";
-import Button from "../components/Button";
+import { theme } from "../../core/theme";
+import Button from "../../components/Button";
 import axios from "axios";
+
 
 
 function UpdatePakan(props){

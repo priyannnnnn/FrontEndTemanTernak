@@ -1,4 +1,5 @@
 import React from 'react'
+// import { Provider } from 'react-native-paper'
 import { Provider } from 'react-native-paper'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
@@ -25,7 +26,13 @@ import DaftarPersediaanPakan from './src/screens/DaftarScreen/DaftarPersediaanPa
 import DaftarPengurangan from './src/screens/DaftarScreen/DaftarPengurangan'
 import DaftarPenggunaanPakan from './src/screens/DaftarScreen/DaftarPenggunaanPakan'
 import DaftarPenjualanTelur from './src/screens/DaftarScreen/DaftarPenjualanTelur'
-import UpdatePakan from './src/helpers/DaftarPersediaanPakan'
+import UpdatePakan from './src/helpers/screenUpdate/UpdatePakan'
+import UpdatePendapatanTelur from './src/helpers/screenUpdate/UpdatePndptanTelur'
+import UpdatePenjualanTeur from './src/helpers/screenUpdate/UpdatePnjualanTelur'
+import UpdateTernak from './src/helpers/screenUpdate/UpdateTernak'
+
+
+
 
 
 const Stack = createStackNavigator()
@@ -60,6 +67,9 @@ export default function App() {
           <Stack.Screen name='DaftarPenggunaanPakan' component={DaftarPenggunaanPakan}/>
           <Stack.Screen name='DaftarPenjualanTelur' component={DaftarPenjualanTelur}/>
           <Stack.Screen name='UpdatePakan' component={UpdatePakan}/>
+          <Stack.Screen name='UpdatePendapatanTelur' component={UpdatePendapatanTelur}/>
+          <Stack.Screen name='UpdatePenjualanTelur' component={UpdatePenjualanTeur}/>
+          <Stack.Screen name='UpdateTernak' component={UpdateTernak}/>
 
           <Stack.Screen
             name="ResetPasswordScreen"
