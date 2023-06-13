@@ -20,8 +20,12 @@ function PendapatanTelur({ navigation }) {
       quantity:IncomeEgg?.quantity.value,
       date: IncomeEgg?.date.value
     }
+    
+    const config={
+      headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2MjE2NSwiZXhwIjoxNjg2NDYzNjA1fQ.zZdRLcc_6ul4aQu5eRy9i_hsF_afoSLGXPjKHxWfbEM"}`}
+    };
 
-    axios.post(`http://139.162.6.202:8000/api/v1/incomeEgg`,data)
+    axios.post(`http://139.162.6.202:8000/api/v1/incomeEgg`,data,config)
     .then(res =>{
       navigation.navigate('DaftarPendapatanTelur')
     })

@@ -62,7 +62,7 @@ import DaftarPenggunaanPakan from './src/screens/DaftarScreen/DaftarPenggunaanPa
 import DaftarPenjualanTelur from './src/screens/DaftarScreen/DaftarPenjualanTelur'
 import UpdatePakan from './src/helpers/screenUpdate/UpdatePakan'
 import UpdatePendapatanTelur from './src/helpers/screenUpdate/UpdatePndptanTelur'
-import UpdatePenjualanTeur from './src/helpers/screenUpdate/UpdatePnjualanTelur'
+import UpdatePenjualanTelur from './src/helpers/screenUpdate/UpdatePnjualanTelur'
 import UpdateTernak from './src/helpers/screenUpdate/UpdateTernak'
 
 
@@ -101,7 +101,7 @@ export default function App() {
           <Stack.Screen name='DaftarPenjualanTelur' component={DaftarPenjualanTelur}/>
           <Stack.Screen name='UpdatePakan' component={UpdatePakan}/>
           <Stack.Screen name='UpdatePendapatanTelur' component={UpdatePendapatanTelur}/>
-          <Stack.Screen name='UpdatePenjualanTelur' component={UpdatePenjualanTeur}/>
+          <Stack.Screen name='UpdatePenjualanTelur' component={UpdatePenjualanTelur}/>
           <Stack.Screen name='UpdateTernak' component={UpdateTernak}/>
 
           <Stack.Screen

@@ -49,7 +49,11 @@ function Penjualan({navigation}){
       date:saleEgg?.date?.value
     }
 
-    axios.post(`http://139.162.6.202:8000/api/v1/saleEgg`, data)
+    const config={
+      headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2Mzg2NiwiZXhwIjoxNjg2NDY1MzA2fQ.VaduI3MQZnP8J9JreMZtsGa7in5tukyhZ9vWELRiuVM"}`}
+    }
+
+    axios.post(`http://139.162.6.202:8000/api/v1/saleEgg`, data,config)
     .then(res => {
       navigation.navigate('DaftarPenjualanTelur', {name: 'DaftarPenjualanTelur'})
     })

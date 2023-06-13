@@ -17,10 +17,12 @@ function DaftarPendapatanTelur({navigation}){
     const toggleAddEmployeeModal = () => {
         console.log('test_data');
     }
-
+    const config={
+      headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2MjE2NSwiZXhwIjoxNjg2NDYzNjA1fQ.zZdRLcc_6ul4aQu5eRy9i_hsF_afoSLGXPjKHxWfbEM"}`}
+    }
     const getData = () => {
         setLoading(true)
-        fetch('http://139.162.6.202:8000/api/v1/incomeEgg?size=10&page='+pageCurrent, {
+        fetch('http://139.162.6.202:8000/api/v1/incomeEgg?size=10&page=',config, {
           method: "GET"
         })
           .then(res => res.json())
@@ -44,10 +46,11 @@ function DaftarPendapatanTelur({navigation}){
 
       const DeleteData=(id)=>{
         console.log("Get data ",id)
-        fetch ('http://139.162.6.202:8000/api/v1/incomeEgg/'+id,{method:"DELETE"})
+        fetch ('http://139.162.6.202:8000/api/v1/incomeEgg/'+id,config,{method:"DELETE"})
         .then (res => res.json())
         .then(res=> {
           console.log(res)
+          setLoading(false)
           getData()
         })
         .catch((errror)=>{
@@ -66,29 +69,27 @@ function DaftarPendapatanTelur({navigation}){
         return(
         <View style={styles.container} key={item.id}>
           <TouchableOpacity
-                onPress={toggleAddEmployeeModal}
-                style={styles.button}>
-                <Text style={styles.buttonText}>Tambah PendapatanTelur</Text>
-            </TouchableOpacity>
-          <Text style={styles.listItem}>{item.quantity}</Text>
-          <Text style={styles.listItem}>{item.date}</Text>
-
+                onPress={toggleAddEmployeeModal} style={styles.button}>
+                <Text style={styles.buttonText}>{item.date}</Text>
+          </TouchableOpacity>
+          <View style={styles.employeeListContainer}>
+            <Text style={styles.listItem}>Jumlah Telur : {item.quantity}</Text>
+            <Text style={styles.listItem}>Tanggal : {item.date}</Text>
+          
+          <View style={styles.buttonContainer}>
           <TouchableOpacity
-                    onPress={() => {DeleteData(item.id)
-                    
-                    }}
+                    onPress={() => {DeleteData(item.id)}}
                     style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
                     <Text style={styles.buttonText}>Delete</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+                    onPress={() => navigation.navigate ('UpdatePendapatanTelur',{id:item.id})} 
+                    onLongPress={()=> navigation.navigate('UpdatePendapatanTelur',{id:item.id})}
+                    style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                    <Text style={styles.buttonText}>Edit</Text>
                 </TouchableOpacity>
-          <Button 
-            mode='contained'
-            onPress={() =>
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'Dashboard' }],
-            })
-            }>Kembali</Button>
-          
+          </View>
+          </View>
         </View>
         )
       };
@@ -119,9 +120,6 @@ function DaftarPendapatanTelur({navigation}){
         ListFooterComponent={this.renderFooter}
         onEndReached={this.handleLoadMore}
         onEndReachedThreshold={0}
-
-        
-        
         />
         
       )
@@ -256,6 +254,6 @@ const styles=StyleSheet.create({
       },
       container12:{
         marginTop:20,
-        backgroundColor:'#000000'
+        backgroundColor:'#7FFFD4'
       }
 })

@@ -25,8 +25,12 @@ function UpdatePendapatanTelur(props){
         getData(id)
     },[])
 
+    const config={
+      headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2Mzg2NiwiZXhwIjoxNjg2NDY1MzA2fQ.VaduI3MQZnP8J9JreMZtsGa7in5tukyhZ9vWELRiuVM"}`}
+    }
+
     const getData=(id)=>{
-        fetch ('http://139.162.6.202:8000/api/v1/incomeEgg/'+id ,{method:'GET'})
+        fetch ('http://139.162.6.202:8000/api/v1/incomeEgg/'+id,config ,{method:'GET'})
         .then (res => res.json())
         .then (res =>{
             console.log(res)
@@ -48,7 +52,7 @@ function UpdatePendapatanTelur(props){
                 date :IncomeEgg?.date?.value
             }
             console.log(Data);
-            axios.put(`http://139.162.6.202:8000/api/v1/incomeEgg/`+id,Data)
+            axios.put(`http://139.162.6.202:8000/api/v1/incomeEgg/`+id,Data,config)
            
             .then (res =>{
                 navigation.navigate ('DaftarPendapatanTelur', {name:'DaftarPendapatanTelur'})
