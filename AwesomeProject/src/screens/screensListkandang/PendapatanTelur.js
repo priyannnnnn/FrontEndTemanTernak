@@ -10,42 +10,31 @@ import moment from "moment";
 import axios from "axios";
 import { axiosInstance } from "../../context/api";
 import { AuthContext } from "../../context/AuthContext";
-import { AxiosContext, AxiosProvider } from "../../context/AxiosContext";
+import { AxiosContext} from "../../context/AxiosContext";
 import * as Keychain from 'react-native-keychain';
-import { AuthProvider } from "../../context/AuthContext";
+// import { AuthProvider } from "../../context/AuthContext";
 // import { AxiosProvider } from "../../context/AxiosContext";
 // import { AxiosProvider } from "../../context/AxiosContext";
 
 
 function PendapatanTelur({ navigation }) {
 
+  const axiosContext = useContext(AxiosContext);
+  const authContext = useContext(AuthContext);
+
   const [IncomeEgg, setIncomeEgg]=useState({
     quantity: {value :'',error:''},
     date:     {value:`${moment(date).format('YYYY-MM-DD')}`, error:''}
   })
-  const authContext = useContext(AuthContext);
-  const publicAxios = useContext(AxiosContext);
-  const AxiosProvider1=useContext(AxiosProvider);
-
-  const submit=()=>{
-    axios.defaults.headers.common['Authorization']=`Bearer ${accessToken}`
-
-    console.log("aut")
-  }
 
   const onSubmit=()=>{
     const data={
       quantity:IncomeEgg?.quantity.value,
       date: IncomeEgg?.date.value
     }
-    // const config={
-    //   headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2MjE2NSwiZXhwIjoxNjg2NDYzNjA1fQ.zZdRLcc_6ul4aQu5eRy9i_hsF_afoSLGXPjKHxWfbEM"}`}
-    // };  
-        .then(res =>{
-          navigation.navigate('DaftarPendapatanTelur')
-        })
-    axios.post(`http://139.162.6.202:8000/api/v1/incomeEgg`,data,config)
+    axiosContext.authAxios.post(`/api/v1/incomeEgg`,data)
     .then(res =>{
+      console.info("succes sellegg")
       navigation.navigate('DaftarPendapatanTelur')
     })
     .catch((error)=>{
@@ -102,7 +91,7 @@ function PendapatanTelur({ navigation }) {
 
         <Button
           mode='contained'
-          onPress={submit
+          onPress={onSubmit
           }
         >
           Simpan

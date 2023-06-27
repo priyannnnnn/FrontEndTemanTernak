@@ -4,15 +4,17 @@ import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";
 import Header from "../../components/HeaderInputKandang";
-import { useState,useEffect } from "react";
+import { useState,useEffect, useContext } from "react";
 import axios from "axios";
 import { agevalidator } from "../../helpers/Agevalidator";
 import { Picker } from "@react-native-picker/picker";
 import moment from "moment";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { AxiosContext } from "../../context/AxiosContext";
 
 function Ternak({navigation}) {
   
+  const axiosContext = useContext(AxiosContext);
   const [ livestock, setLiveStock ] = useState({
     age:      { value : '', error: '' },
     quantity: { value : '', error: '' },
@@ -66,7 +68,7 @@ function Ternak({navigation}) {
         Alert.alert ('Data Anda Salah',"Mohon Untuk Cek Kembali")
         return;
       }
-    axios.post(`http://139.162.6.202:8000/api/v1/livestock`, data)
+    axiosContext.authAxios.post(`/api/v1/livestock`, data)
       .then(res => {
         navigation.navigate('DaftarTernak', {name: 'DaftarTernak'})
       })

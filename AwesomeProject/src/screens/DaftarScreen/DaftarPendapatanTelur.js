@@ -3,10 +3,10 @@ import Button from "../../components/Button";
 import { GlobalStyles } from "../../components/style";
 import { theme } from "../../core/theme";
 import {Ionicons} from '@expo/vector-icons';
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
-import { AxiosProvider } from "../../context/AxiosContext";
+import { AxiosContext, AxiosProvider } from "../../context/AxiosContext";
 import { AuthProvider } from "../../context/AuthContext";
 
 function DaftarPendapatanTelur({navigation}){
@@ -15,6 +15,9 @@ function DaftarPendapatanTelur({navigation}){
     const [ loading, setLoading ] = useState(false)
     const [ errorMessage, setErrorMessage ] = useState('')
     const [pageCurrent, setpageCurrent]= useState(1);
+    const [totalpage, settotalpage]= useState(10);
+
+    const axiosContext = useContext(AxiosContext);
 
     const toggleAddEmployeeModal = () => {
         console.log('test_data');
@@ -24,14 +27,20 @@ function DaftarPendapatanTelur({navigation}){
       headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2MjE2NSwiZXhwIjoxNjg2NDYzNjA1fQ.zZdRLcc_6ul4aQu5eRy9i_hsF_afoSLGXPjKHxWfbEM"}`}
     }
     const getData = () => {
+
+        if(totalpage < pageCurrent)
+          return;
+          
         setLoading(true)
-        fetch('http://139.162.6.202:8000/api/v1/incomeEgg?size=10&page=',config, {
-          method: "GET"
-        })
-          .then(res => res.json())
+        axiosContext.authAxios.get('/api/v1/incomeEgg?size=10&page=')
+        // fetch('http://139.162.6.202:8000/api/v1/incomeEgg?size=10&page=',config, {
+        //   method: "GET"
+        // })
+          
           .then(res => {
-            setIncomeEgg(IncomeEgg.concat(res.content))
-            console.log(res);
+            console.log('getdata_income_egg',res.data)
+            setIncomeEgg(IncomeEgg.concat(res.data.content))
+            settotalpage(res.data.totalPages)
             setLoading(false)
             setErrorMessage('')
             //setIncomeEgg(res.content)
@@ -41,8 +50,9 @@ function DaftarPendapatanTelur({navigation}){
           //   console.log(res)
           //   setLoading(false)
           // })
-          .catch(() => {
+          .catch((e) => {
             setLoading(false)
+            console.error(e)
             setErrorMessage("Network Error. Please try again.")
           })
       }
