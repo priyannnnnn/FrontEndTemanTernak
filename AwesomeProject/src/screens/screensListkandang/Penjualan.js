@@ -4,12 +4,19 @@ import { ScrollView, StyleSheet, View,Text } from "react-native";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
 import Header from "../../components/HeaderInputKandang";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
 import axios from "axios";
+import * as Keychain from 'react-native-keychain';
+import { AxiosContext } from "../../context/AxiosContext";
+import { AuthContext } from "../../context/AuthContext";
+
 
 function Penjualan({navigation}){
+
+  const axiosContext = useContext(AxiosContext);
+  const authContext = useContext(AuthContext);
 
     const [ saleEgg, setsaleEgg ] = useState({
       quantity  : { value : '', error: '' },
@@ -50,11 +57,12 @@ function Penjualan({navigation}){
     }
 
     const config={
-      headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2Mzg2NiwiZXhwIjoxNjg2NDY1MzA2fQ.VaduI3MQZnP8J9JreMZtsGa7in5tukyhZ9vWELRiuVM"}`}
+      headers:{Authorization: `Bearer ${''}`}
     }
 
-    axios.post(`http://139.162.6.202:8000/api/v1/saleEgg`, data,config)
+    axiosContext.authAxios.post(`http://139.162.6.202:8000/api/v1/saleEgg`, data)
     .then(res => {
+      console.info("succes sellegg")
       navigation.navigate('DaftarPenjualanTelur', {name: 'DaftarPenjualanTelur'})
     })
     .catch((error) => {

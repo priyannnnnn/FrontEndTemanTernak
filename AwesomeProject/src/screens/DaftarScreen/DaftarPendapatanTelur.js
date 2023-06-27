@@ -6,6 +6,8 @@ import {Ionicons} from '@expo/vector-icons';
 import { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
+import { AxiosProvider } from "../../context/AxiosContext";
+import { AuthProvider } from "../../context/AuthContext";
 
 function DaftarPendapatanTelur({navigation}){
 
@@ -16,6 +18,7 @@ function DaftarPendapatanTelur({navigation}){
 
     const toggleAddEmployeeModal = () => {
         console.log('test_data');
+        
     }
     const config={
       headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2MjE2NSwiZXhwIjoxNjg2NDYzNjA1fQ.zZdRLcc_6ul4aQu5eRy9i_hsF_afoSLGXPjKHxWfbEM"}`}

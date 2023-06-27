@@ -64,6 +64,8 @@ import UpdatePakan from './src/helpers/screenUpdate/UpdatePakan'
 import UpdatePendapatanTelur from './src/helpers/screenUpdate/UpdatePndptanTelur'
 import UpdatePenjualanTelur from './src/helpers/screenUpdate/UpdatePnjualanTelur'
 import UpdateTernak from './src/helpers/screenUpdate/UpdateTernak'
+import { AuthProvider } from './src/context/AuthContext';
+import { AxiosProvider } from './src/context/AxiosContext';
 
 
 
@@ -73,43 +75,49 @@ const Stack = createStackNavigator()
 export default function App() {
   return (
     <Provider theme={theme}>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="StartScreen"
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          <Stack.Screen name="StartScreen" component={StartScreen} />
-          <Stack.Screen name="LoginScreen" component={LoginScreen} />
-          <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
-          <Stack.Screen name="Dashboard" component={Dashboard} />
-          <Stack.Screen name='BuatKandang' component={BuatKandang}/>
-          <Stack.Screen name='ListKandang' component={ListKandang} />
-          <Stack.Screen name='PendapatanTelur' component={PendapatanTelur}/>
-          <Stack.Screen name='BiayaOperasional' component={BiayaOperasional}/>
-          <Stack.Screen name='PenggunaanPakan' component={PenggunaanPakan}/>
-          <Stack.Screen name='Pengurangan' component={Pengurangan}/>
-          <Stack.Screen name='PersediaanPakan' component={PersediaanPakan}/>
-          <Stack.Screen name='Ternak' component={Ternak}/>
-          <Stack.Screen name='Penjualan' component={penjumlahan}/>
-          <Stack.Screen name='DaftarPendapatanTelur' component={DaftarPendapatanTelur}/>
-          <Stack.Screen name='DaftarTernak' component={DaftarTernak}/>
-          <Stack.Screen name='DaftarPersediaanPakan' component={DaftarPersediaanPakan}/>
-          <Stack.Screen name='DaftarPengurangan' component={DaftarPengurangan}/>
-          <Stack.Screen name='DaftarPenggunaanPakan' component={DaftarPenggunaanPakan}/>
-          <Stack.Screen name='DaftarPenjualanTelur' component={DaftarPenjualanTelur}/>
-          <Stack.Screen name='UpdatePakan' component={UpdatePakan}/>
-          <Stack.Screen name='UpdatePendapatanTelur' component={UpdatePendapatanTelur}/>
-          <Stack.Screen name='UpdatePenjualanTelur' component={UpdatePenjualanTelur}/>
-          <Stack.Screen name='UpdateTernak' component={UpdateTernak}/>
+      <AuthProvider>
+        <AxiosProvider>
+          <NavigationContainer>
+            <Stack.Navigator
+              initialRouteName="StartScreen"
+              screenOptions={{
+                headerShown: false,
+              }}
+            >
+              <Stack.Screen name="StartScreen" component={StartScreen} />
+              <Stack.Screen name="LoginScreen" component={LoginScreen} />
+              <Stack.Screen name="RegisterScreen" component={RegisterScreen} />
+              <Stack.Screen name="Dashboard" component={Dashboard} />
+              <Stack.Screen name='BuatKandang' component={BuatKandang}/>
+              <Stack.Screen name='ListKandang' component={ListKandang} />
+              <Stack.Screen name='PendapatanTelur' component={PendapatanTelur}/>
+              <Stack.Screen name='BiayaOperasional' component={BiayaOperasional}/>
+              <Stack.Screen name='PenggunaanPakan' component={PenggunaanPakan}/>
+              <Stack.Screen name='Pengurangan' component={Pengurangan}/>
+              <Stack.Screen name='PersediaanPakan' component={PersediaanPakan}/>
+              <Stack.Screen name='Ternak' component={Ternak}/>
+              <Stack.Screen name='Penjualan' component={penjumlahan}/>
+              <Stack.Screen name='DaftarPendapatanTelur' component={DaftarPendapatanTelur}/>
+              <Stack.Screen name='DaftarTernak' component={DaftarTernak}/>
+              <Stack.Screen name='DaftarPersediaanPakan' component={DaftarPersediaanPakan}/>
+              <Stack.Screen name='DaftarPengurangan' component={DaftarPengurangan}/>
+              <Stack.Screen name='DaftarPenggunaanPakan' component={DaftarPenggunaanPakan}/>
+              <Stack.Screen name='DaftarPenjualanTelur' component={DaftarPenjualanTelur}/>
+              <Stack.Screen name='UpdatePakan' component={UpdatePakan}/>
+              <Stack.Screen name='UpdatePendapatanTelur' component={UpdatePendapatanTelur}/>
+              <Stack.Screen name='UpdatePenjualanTelur' component={UpdatePenjualanTelur}/>
+              <Stack.Screen name='UpdateTernak' component={UpdateTernak}/>
+              <Stack.Screen name='AuthProvider' component={AuthProvider}/>
 
-          <Stack.Screen
-            name="ResetPasswordScreen"
-            component={ResetPasswordScreen}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+              <Stack.Screen
+                name="ResetPasswordScreen"
+                component={ResetPasswordScreen}
+              />
+              
+            </Stack.Navigator>
+          </NavigationContainer>
+      </AxiosProvider>
+      </AuthProvider>
     </Provider>
   )
 }

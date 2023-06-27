@@ -1,13 +1,21 @@
-import { ScrollView, Text, StyleSheet, View } from "react-native";
+import { ScrollView, Text, StyleSheet, View, Alert } from "react-native";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
 import Header from "../../components/HeaderInputKandang";
 import { theme } from "../../core/theme";
 import TextInput from "../../components/TextInputKandang";
-import { useState } from "react";
+import { useState,useContext } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
 import axios from "axios";
+import { axiosInstance } from "../../context/api";
+import { AuthContext } from "../../context/AuthContext";
+import { AxiosContext, AxiosProvider } from "../../context/AxiosContext";
+import * as Keychain from 'react-native-keychain';
+import { AuthProvider } from "../../context/AuthContext";
+// import { AxiosProvider } from "../../context/AxiosContext";
+// import { AxiosProvider } from "../../context/AxiosContext";
+
 
 function PendapatanTelur({ navigation }) {
 
@@ -15,16 +23,27 @@ function PendapatanTelur({ navigation }) {
     quantity: {value :'',error:''},
     date:     {value:`${moment(date).format('YYYY-MM-DD')}`, error:''}
   })
+  const authContext = useContext(AuthContext);
+  const publicAxios = useContext(AxiosContext);
+  const AxiosProvider1=useContext(AxiosProvider);
+
+  const submit=()=>{
+    axios.defaults.headers.common['Authorization']=`Bearer ${accessToken}`
+
+    console.log("aut")
+  }
+
   const onSubmit=()=>{
     const data={
       quantity:IncomeEgg?.quantity.value,
       date: IncomeEgg?.date.value
     }
-    
-    const config={
-      headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2MjE2NSwiZXhwIjoxNjg2NDYzNjA1fQ.zZdRLcc_6ul4aQu5eRy9i_hsF_afoSLGXPjKHxWfbEM"}`}
-    };
-
+    // const config={
+    //   headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2MjE2NSwiZXhwIjoxNjg2NDYzNjA1fQ.zZdRLcc_6ul4aQu5eRy9i_hsF_afoSLGXPjKHxWfbEM"}`}
+    // };  
+        .then(res =>{
+          navigation.navigate('DaftarPendapatanTelur')
+        })
     axios.post(`http://139.162.6.202:8000/api/v1/incomeEgg`,data,config)
     .then(res =>{
       navigation.navigate('DaftarPendapatanTelur')
@@ -83,7 +102,7 @@ function PendapatanTelur({ navigation }) {
 
         <Button
           mode='contained'
-          onPress={onSubmit
+          onPress={submit
           }
         >
           Simpan
@@ -99,6 +118,7 @@ function PendapatanTelur({ navigation }) {
         >Kembali</Button>
       </View>
     </ScrollView>
+    // <AuthProvider/>
   )
 }
 export default PendapatanTelur;
