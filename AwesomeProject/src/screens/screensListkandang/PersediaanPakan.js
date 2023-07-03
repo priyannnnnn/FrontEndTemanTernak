@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View , StyleSheet, ScrollView} from "react-native";
+import { Text, TouchableOpacity, View , StyleSheet, ScrollView, Alert} from "react-native";
 import BackButton from "../../components/BackButton";
 import Background from "../../components/StartBackground";
 import Button from "../../components/Button";
@@ -52,6 +52,15 @@ function PersediaanPakan({navigation}) {
       quantity:feed?.quantity?.value,
       date:feed?.date?.value,
     }
+      const amount=!isNaN(data.amount) && data.amount>1;
+      const type=data.type.trim().length>0;
+      const quantity=!isNaN(data.quantity) && data.quantity>1;
+
+        if(!amount || !quantity || !type){
+          Alert.alert('Data Anda Salah',"Mohon Untuk Cek Kembali")
+          return;
+        }
+
     console.log(data);
     axios.post(`http://139.162.6.202:8000/api/v1/feed`, data)
       .then(res => {

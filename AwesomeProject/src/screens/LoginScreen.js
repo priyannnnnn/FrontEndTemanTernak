@@ -70,8 +70,7 @@ const publicAxios = useContext(AxiosContext);
   }
 // const margin =height <380 ? 30:100;
   return (
-    <View style={styles.f}>
-      
+    
     <Background>
       
       <BackButton goBack={navigation.goBack} />
@@ -79,6 +78,7 @@ const publicAxios = useContext(AxiosContext);
       
       
       <ScrollView style={styles.f}>
+      <View style={styles.f}>
       <Header>Selamat Datang.</Header>
       <SafeAreaView>
       <TextInput
@@ -119,9 +119,9 @@ const publicAxios = useContext(AxiosContext);
           <Text style={styles.link}>Buat Akun</Text>
         </TouchableOpacity>
       </View>
+    </View>
       </ScrollView>
     </Background>
-    </View>
   )
 }
 

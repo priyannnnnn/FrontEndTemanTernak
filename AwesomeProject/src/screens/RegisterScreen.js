@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import { Text } from 'react-native-paper'
 import Background from '../components/StartBackground'
@@ -11,9 +11,13 @@ import { theme } from '../core/theme'
 import { emailValidator } from '../helpers/emailValidator'
 import { passwordValidator } from '../helpers/passwordValidator'
 import { nameValidator } from '../helpers/nameValidator'
+import { AxiosContext } from '../context/AxiosContext'
 
 export default function RegisterScreen({ navigation }) {
+  const axiosContext = useContext(AxiosContext);
   const [name, setName] = useState({ value: '', error: '' })
+  const [nickName, setnickName] = useState({ value: '', error: '' })
+  const [numberPhone, setnumberPhone]= useState({value: '', error: ''})
   const [email, setEmail] = useState({ value: '', error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
 
@@ -21,15 +25,25 @@ export default function RegisterScreen({ navigation }) {
     const nameError = nameValidator(name.value)
     const emailError = emailValidator(email.value)
     const passwordError = passwordValidator(password.value)
+    const data={
+      name: name?.value,
+      nickName:nickName?.value,
+      numberPhone:numberPhone?.value,
+      email: email?.value,
+      password: password?.value
+    }
     if (emailError || passwordError || nameError) {
       setName({ ...name, error: nameError })
       setEmail({ ...email, error: emailError })
       setPassword({ ...password, error: passwordError })
       return
     }
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Dashboard' }],
+    axiosContext.authAxios.post('/api/v1/registration/password', data)
+    .then(res => {
+      navigation.navigate('StartScreen', {name: 'StartScreen'})
+    })
+    .catch((error) => {
+      console.error(error)
     })
   }
 
@@ -47,7 +61,8 @@ export default function RegisterScreen({ navigation }) {
         error={!!name.error}
         errorText={name.error}
       />
-      <TextInput label="Nomer Telepon"/>
+      <TextInput label="nick name" onChangeText={(text) => setnickName ({value:text, error:''})}/>
+      <TextInput label="Nomer Telepon" onChangeText={(text) => setnumberPhone ({value:text, error:''})}/>
       <TextInput
         label="Email"
         returnKeyType="next"

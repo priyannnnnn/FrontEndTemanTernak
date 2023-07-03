@@ -39,10 +39,10 @@ function DaftarPendapatanTelur({navigation}){
           
           .then(res => {
             console.log('getdata_income_egg',res.data)
-            setIncomeEgg(IncomeEgg.concat(res.data.content))
-            settotalpage(res.data.totalPages)
             setLoading(false)
             setErrorMessage('')
+            setIncomeEgg(IncomeEgg.concat(res.data.content))
+            settotalpage(res.data.totalPages)
             //setIncomeEgg(res.content)
           })
           // .then((res)=>{
@@ -55,7 +55,7 @@ function DaftarPendapatanTelur({navigation}){
             console.error(e)
             setErrorMessage("Network Error. Please try again.")
           })
-      }
+    }
 
       const DeleteData=(id)=>{
         console.log("Get data ",id)

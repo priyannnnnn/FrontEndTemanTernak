@@ -3,8 +3,9 @@ import { TouchableOpacity } from "react-native";
 import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
 import Button from "../../components/Button";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
+import { AxiosContext } from "../../context/AxiosContext";
 
 
 function DaftarPenjualanTelur({navigation}){
@@ -13,6 +14,7 @@ function DaftarPenjualanTelur({navigation}){
   const [loading, setLoading] = useState(false)
   const [rrorMessage, setErrorMessage ] = useState('')
   const [pageCurrent, setpageCurrent]= useState(1);
+  const axiosContext = useContext(AxiosContext);
 
   const config={
     headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2Mzg2NiwiZXhwIjoxNjg2NDY1MzA2fQ.VaduI3MQZnP8J9JreMZtsGa7in5tukyhZ9vWELRiuVM"}`}
@@ -22,12 +24,9 @@ function DaftarPenjualanTelur({navigation}){
 }
   const GetData = () => {
       setLoading(true)
-      fetch('http://139.162.6.202:8000/api/v1/saleEgg?size=10&page=', config,{
-        method: "GET"
-      })
-      .then(res => res.json())
+      axiosContext.authAxios.get('/api/v1/saleEgg?size=10&page=')
       .then(res => {
-        setsaleEgg(saleEgg.concat(res.content))
+        setsaleEgg(saleEgg.concat(res.data.content))
         console.log(res);
         setLoading(false)
         setErrorMessage('')
@@ -37,29 +36,8 @@ function DaftarPenjualanTelur({navigation}){
         setLoading(false)
         setErrorMessage("Network Error. Please try again.")
       })
-      // const config={
-      //   headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjMwMzg3NiwiZXhwIjoxNjg2MzA1MzE2fQ.UDfDw1Ugmhj1peZlKeYltWs0Uw_dB4Td2vxSsaHRr0Q"}`}
-      // }
-      // axios.get('http://139.162.6.202:8000/api/v1/saleEgg',{headers:{"Authorization":`Bearer ${ "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjM3MTQ1NiwiZXhwIjoxNjg2MzcyODk2fQ.E_jF1fvM1b8BMvAv88BJkMCXHWXFEF-wj2fCdLuijqI"}`}})
-      // .then ((error) =>{
-      //   setLoading(false)
-      //   setErrorMessage("eror")
-      //   console.log(error)
-      //   console.error(error)
-      // })
-      // .then ((res)=>{
-      //   setLoading(false)
-      //   var res=res.data;
-      //   console.log(res)
-      //   setErrorMessage('')
-      //   // setsaleEgg(res.context)
-      // },
-      // (error)=> {
-      //   var status= error.res.status
-      // })
   }
-
-  const DeleteData=(id)=>{
+    const DeleteData=(id)=>{
     console.log(id)
     fetch('http://139.162.6.202:8000/api/v1/saleEgg/' + id, config,{method: "DELETE"})
     .then (sel => sel.json())
@@ -67,7 +45,7 @@ function DaftarPenjualanTelur({navigation}){
       console.log(sel)
     })
    
-  }
+    }
   useEffect(() => {
     console.log("PageCurrent",pageCurrent)
     setLoading(true)
@@ -162,6 +140,7 @@ function DaftarPenjualanTelur({navigation}){
         
     // </ScrollView>
     )
+
 }
 export default DaftarPenjualanTelur;
 const styles=StyleSheet.create({

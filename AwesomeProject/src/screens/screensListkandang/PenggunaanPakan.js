@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View, StyleSheet, ScrollView } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet, ScrollView, Alert } from "react-native";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
 import Header from "../../components/HeaderInputKandang";
@@ -50,6 +50,15 @@ function PenggunaanPakan({navigation}) {
       type: livestock?.type?.value,
       date: livestock?.date?.value
     }
+    const amount = !isNaN(data.amount) && data.amount>1;
+    const type = data.type.trim().length>0;
+    const choosefeed = data.choosefeed.trim().length>0;
+    const quantity=!isNaN(data.quantity) && data.quantity>1;
+
+      if(!amount || !quantity || !type || !choosefeed){
+        Alert.alert('Data Anda Salah',"Mohon Untuk Cek Kembali")
+        return;
+      }
     axios.post(`http://139.162.6.202:8000/api/v1/livestock`, data)
       .then(res => {
         navigation.navigate('DaftaPenggunaanPakan', {name: 'DaftarPenggunaanPakan'})

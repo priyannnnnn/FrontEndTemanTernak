@@ -3,28 +3,29 @@ import { TouchableOpacity } from "react-native";
 import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
 import Button from "../../components/Button";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { AxiosContext } from "../../context/AxiosContext";
 
 function DaftarPersediaanPakan({navigation, route}){
 
+  const axiosContext = useContext(AxiosContext);
   const [feed, setfeed]= useState([])
   const [loading, setLoading]= useState(true)
   const [errormessage, setErrorMessage]= useState('')
   const [pageCurrent, setpageCurrent]= useState(1);
+  const [totalpage, settotalpage]= useState(10);
 
   const config={
     headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2MjE2NSwiZXhwIjoxNjg2NDYzNjA1fQ.zZdRLcc_6ul4aQu5eRy9i_hsF_afoSLGXPjKHxWfbEM"}`}
   }
 
   const  getData = () =>{
-    // setLoading(true)
-    fetch ('http://139.162.6.202:8000/api/v1/feed?page=1&size=10',config,{
-      method: "GET"
-    })
-    .then (sen => sen.json())
+    setLoading(true)
+    axiosContext.authAxios.get('/api/v1/feed?page=1&size=10') 
     .then (sen => {
-      // setLoading (false)
-      setfeed(feed.concat(sen.content))
+      console.log("getdata_feed", sen.data)
+      setLoading (false)
+      setfeed(feed.concat(sen.data.content))
       setErrorMessage('');
       setLoading(false);
       console.log(sen);

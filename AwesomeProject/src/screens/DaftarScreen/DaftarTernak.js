@@ -3,75 +3,97 @@ import Button from "../../components/Button";
 import { GlobalStyles } from "../../components/style";
 import { theme } from "../../core/theme";
 import {Ionicons} from '@expo/vector-icons';
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
+import { AxiosContext } from "../../context/AxiosContext";
 
 function DaftarTernak({navigation}){
-
+    const axiosContext = useContext(AxiosContext);
     const [ employee, setEmployee ] = useState([])
     const [ loading, setLoading ] = useState(true)
     const [ errorMessage, setErrorMessage ] = useState('')
     const [pageCurrent, setpageCurrent]= useState(1)
+    const [totalpage, settotalpage]= useState(10);
 
     const toggleAddEmployeeModal = () => {
         console.log('test_data');
     }
 
     const getData = () => {
+      if(totalpage<pageCurrent)
+      return;
+
         setLoading(true)
-        fetch('http://139.162.6.202:8000/api/v1/livestock', {
-          method: "GET"
-        })
-          .then(res => res.json())
+        axiosContext.authAxios.get('/api/v1/livestock')
           .then(res => {
-            console.log(res);
+            console.log(res.data);
             setLoading(false)
             setErrorMessage('')
-            setEmployee(res.content)
+            setEmployee(employee.concat(res.data.content))
+            settotalpage(res.data.totalpage)
           })
-          .catch(() => {
+          .catch((e) => {
             setLoading(false)
+            console.error(e)
             setErrorMessage("Network Error. Please try again.")
           })
       }
 
-      const DeleteData = () => {
+      const DeleteData = (id) => {
         setLoading(true)
-        fetch('http://139.162.6.202:8000/api/v1/livestock',
-        {method: "DELETE"})
-        .then(res => res.json())
+        axiosContext.authAxios.get('/api/v1/livestock'+id)
         .then(res =>{
-          console.log(res)
+          console.log(res.data)
           setLoading(false)
           setErrorMessage('')
-          setEmployee(res.content)
+          setEmployee(res.data)
           getData()
         })
-        .catch(()=> {
+        .catch((e)=> {
+          console.error(e)
           setLoading(false)
           setErrorMessage("hdr")
         })
       }
 
       useEffect(() => {
+        console.log("PageCurrent = ",pageCurrent)
+        setLoading(true)
         getData()
       }, [])
 
-      useEffect(()=>{
-        DeleteData()
-      },[])
-//yarn add react-native-bootsplash
-//yarn react-native generate-bootsplash assets/bootsplash_logo_original.png --background-color=F5FCFF --logo-width=100  --assets-path=assets  --flavor=main 
+      // useEffect(()=>{
+      //   DeleteData()
+      // },[])
 renderItem=({item})=>{
   return(
-    <View style={styles.container} key={data.id}>
-      <Text style={styles.listItem}>{item.age}</Text>
-      <Text style={styles.listItem}>{item.quantity}</Text>
-      <Text style={styles.listItem}>{item.amount}</Text>
-      <Text style={styles.listItem}>{item.note}</Text>
-      <Text style={styles.listItem}>{item.type}</Text>
-      <Text style={styles.listItem}>{item.date}</Text>
+    <View style={styles.container} key={item.id}>
+      <TouchableOpacity
+                onPress={toggleAddEmployeeModal} style={styles.button}>
+                <Text style={styles.buttonText}>{item.date}</Text>
+        </TouchableOpacity>
+        <View style={styles.employeeListContainer}>
+          <Text style={styles.listItem}>Umur : {item.age}</Text>
+          <Text style={styles.listItem}>Jumlah : {item.quantity}</Text>
+          <Text style={styles.listItem}>Harga :{item.amount}</Text>
+          <Text style={styles.listItem}>Jenis : {item.type}</Text>
+          <Text style={styles.listItem}>Catatan : {item.note}</Text>
+          <Text style={styles.listItem}>Tanggal : {item.date}</Text>
+          <View style={styles.buttonContainer}>
+            <TouchableOpacity
+                      onPress={() => {DeleteData(item.id)}}
+                      style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                      <Text style={styles.buttonText}>Delete</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                      onPress={() => navigation.navigate ('UpdateTernak',{id:item.id})} 
+                      onLongPress={()=> navigation.navigate('UpdateTernak',{id:item.id})}
+                      style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                      <Text style={styles.buttonText}>Edit</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
     </View>
   )
  }
@@ -79,84 +101,20 @@ renderItem=({item})=>{
  renderFooter=()=>{
   return(
     loading?
-    <View style={styles}>
+    <View style={styles.loader}>
       <ActivityIndicator size="large"/>
     </View> :null
   )
  }
  handleLoadMore=()=>{
+    console.log("HandleLoadMore")
     setpageCurrent(pageCurrent+1)
+    getData()
     setLoading(true)
  }
-    // return(
-      //   <ScrollView>
-
-    //         <View style={styles.container}>
-    //         <TouchableOpacity
-    //             onPress={toggleAddEmployeeModal}
-    //             style={styles.button}>
-    //             <Text style={styles.buttonText}>Tambah Ternak</Text>
-    //         </TouchableOpacity>
-
-    //         <Text style={styles.title}>Daftar Ternak</Text>
-    //         {employee.map((data, index) => <View
-    //             style={styles.employeeListContainer}
-    //             key={data.id}>
-    //             <Text style={{ ...styles.listItem, color: "tomato" }}>{data.date}</Text>
-    //             <Text style={styles.name}>{data.employee_name}</Text>
-    //             <Text style={styles.listItem}>Umur: {data.age}</Text>
-    //             <Text style={styles.listItem}>Jumlah: {data.quantity}</Text>
-    //             <Text style={styles.listItem}>Harga Total: {data.amount}</Text>
-    //             <Text style={styles.listItem}>Catatan: {data.note}</Text>
-    //             <Text style={styles.listItem}>Type: {data.type}</Text>
-    //             <Text style={styles.listItem}>Tanggal: {data.date}</Text>
-
-    //             <View style={styles.buttonContainer}>
-    //             {/* <TouchableOpacity
-    //                 onPress={() => {
-                        
-    //                 }}
-    //                 style={{ ...styles.button, marginVertical: 0 }}>
-    //                 <Text style={styles.buttonText}>Edit</Text>
-    //             </TouchableOpacity> */}
-
-    //               <TouchableOpacity
-    //                 onPress={() => navigation.navigate ('UpdateTernak',{id:data.id})
-                        
-    //                 } onLongPress={()=> navigation.navigate('UpdateTernak',{id:data.id})}
-    //                 style={{ ...styles.button, marginVertical: 0 }}>
-    //                 <Text style={styles.buttonText}>Edit</Text>
-    //             </TouchableOpacity>
-
-    //             <TouchableOpacity
-    //                 onPress={() => { DeleteData
-                    
-    //                 }}
-    //                 style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-    //                 <Text style={styles.buttonText}>Delete</Text>
-    //             </TouchableOpacity>
-    //             </View>
-    //         </View>)}
-
-    //         {loading ? <Text
-    //             style={styles.message}>Please Wait...</Text> : errorMessage ? <Text
-    //             style={styles.message}>{errorMessage}</Text> : null}
-
-    //         <Button 
-    //         mode='contained'
-    //         onPress={() =>
-    //         navigation.reset({
-    //             index: 0,
-    //             routes: [{ name: 'Ternak' }],
-    //         })
-    //         }>Kembali</Button>
-    //     </View>
-
-    //   //</ScrollView>
-    // )
     return(
       <FlatList
-      style={styles}
+      style={styles.container12}
       data={employee}
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
@@ -232,5 +190,13 @@ const styles=StyleSheet.create({
       message: {
         color: "tomato",
         fontSize: 17
-      }
+      },
+      container12:{
+        marginTop:20,
+        backgroundColor:'#7FFFD4'
+      },
+      loader:{
+        marginTop:10,
+        alignItems:"center"
+      },
 })

@@ -19,7 +19,7 @@ export default function Dashboard({ navigation }) {
       <Paragraph >
         Selamat Datang Sahabat Peternak Milineal
       </Paragraph>
-      <Button
+      <Button style={styles.color}
         mode="outlined"
         onPress={() =>
           navigation.reset({
@@ -57,5 +57,8 @@ const styles=StyleSheet.create({
     fontSize:15,
     color :'#000000'
   },
+  color:{
+    color:'#164B60'
+  }
  
 })

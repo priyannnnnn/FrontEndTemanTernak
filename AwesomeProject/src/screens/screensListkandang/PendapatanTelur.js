@@ -32,6 +32,12 @@ function PendapatanTelur({ navigation }) {
       quantity:IncomeEgg?.quantity.value,
       date: IncomeEgg?.date.value
     }
+    const quantity=!isNaN(data.quantity) && data.quantity>1;
+
+      if(!quantity){
+        Alert.alert('Data Anda Salah',"Mohon Untuk Cek Kembali")
+        return;
+      }
     axiosContext.authAxios.post(`/api/v1/incomeEgg`,data)
     .then(res =>{
       console.info("succes sellegg")

@@ -1,17 +1,14 @@
 import { theme } from "../../core/theme"; 
 import TextInput from "../../components/TextInputKandang";
-import { ScrollView, StyleSheet, View,Text } from "react-native";
+import { ScrollView, StyleSheet, View,Text, Alert } from "react-native";
 import BackButton from "../../components/BackButton";
 import Button from "../../components/Button";
 import Header from "../../components/HeaderInputKandang";
 import { useContext, useEffect, useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
-import axios from "axios";
-import * as Keychain from 'react-native-keychain';
 import { AxiosContext } from "../../context/AxiosContext";
 import { AuthContext } from "../../context/AuthContext";
-
 
 function Penjualan({navigation}){
 
@@ -55,10 +52,13 @@ function Penjualan({navigation}){
       amount: saleEgg?.amount?.value,
       date:saleEgg?.date?.value
     }
+    const amount=!isNaN(data.amount) && data.amount>1;
+    const quantity=!isNaN(data.quantity) && data.quantity>1;
 
-    const config={
-      headers:{Authorization: `Bearer ${''}`}
-    }
+      if(!amount || !quantity){
+        Alert.alert('Data Anda Salah',"Mohon Untuk Cek Kembali")
+        return;
+      }
 
     axiosContext.authAxios.post(`http://139.162.6.202:8000/api/v1/saleEgg`, data)
     .then(res => {

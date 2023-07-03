@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import StartBackground from '../components/StartBackground'
 import Logo from '../components/Logo'
 import Header from '../components/Header'
@@ -7,9 +7,48 @@ import Paragraph from '../components/Paragraph'
 import { Text, StyleSheet } from 'react-native'
 import { Image,  } from 'react-native'
 import LogoStartScreen from '../components/LogoStartScreen'
+import { AuthContext } from '../context/AuthContext'
+import * as Keychain from 'react-native-keychain';
+import LoginScreen from './LoginScreen';
+import Dashboard from './Dashboard'
 
 
-export default function StartScreen({ navigation }) {
+function StartScreen({ navigation }) {
+  const authContext = useContext(AuthContext);
+  const [status, setStatus] = useState('loading');
+  const onSubmit= () => {
+
+    // const loadJWT = (async () => {
+    //   try{
+    //     const value =await Keychain.getGenericPassword()
+    //     const Jwt = JSON.parse(value.password);
+
+    //     authContext.setAuthState({
+    //       accessToken: Jwt.accessToken || null,
+    //       authenticated: Jwt.accessToken !== null,
+    //     });
+        
+    //     setStatus("succes")
+    //   }catch(error){
+    //     setStatus(error)
+    //     console.log(`Keychain Error: ${error.message}`)
+    //     authContext.setAuthState({
+    //       accessToken: null,
+    //       authenticated: false,
+    //     })
+    //   }
+    // },[]);console.log(loadJWT)
+
+    // useEffect (() =>{
+    //   loadJWT();
+    // },[loadJWT])
+
+    if(authContext?.authState?.authenticated === false){
+      return (navigation.navigate('Dashboard'))
+    }else {
+      return (navigation.navigate('LoginScreen'))
+    }
+  }
   return (
     <StartBackground >
       <LogoStartScreen/>
@@ -20,7 +59,7 @@ export default function StartScreen({ navigation }) {
       </Paragraph> */}
       <Button
         mode="contained"
-        onPress={() => navigation.navigate('LoginScreen')}
+        onPress={onSubmit}
       >
         MASUK
       </Button>
@@ -37,6 +76,7 @@ export default function StartScreen({ navigation }) {
   )
 
 }
+export default StartScreen;
   const Styles =StyleSheet.create({
     Text:{
       color :'#000000'

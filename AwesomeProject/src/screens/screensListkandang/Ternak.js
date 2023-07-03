@@ -12,7 +12,7 @@ import moment from "moment";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AxiosContext } from "../../context/AxiosContext";
 
-function Ternak({navigation}) {
+function Ternak({navigation, props}) {
   
   const axiosContext = useContext(AxiosContext);
   const [ livestock, setLiveStock ] = useState({
@@ -80,7 +80,7 @@ function Ternak({navigation}) {
   return (
     <ScrollView style={style.ScrollView}>
       <View style={style.View}>
-      <BackButton goBack={navigation.goBack}/>
+      <BackButton goBack={navigation.goBack} />
       <Header>Isi Kandang</Header>
 
       <Text style={style.Text} >Umur</Text>
