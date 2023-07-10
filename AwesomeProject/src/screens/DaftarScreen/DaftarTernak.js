@@ -30,19 +30,21 @@ function DaftarTernak({navigation}){
             console.log(res.data);
             setLoading(false)
             setErrorMessage('')
+            //setEmployee(res.data)
             setEmployee(employee.concat(res.data.content))
             settotalpage(res.data.totalpage)
           })
           .catch((e) => {
             setLoading(false)
-            console.error(e)
+            console.error(e, "getdata")
             setErrorMessage("Network Error. Please try again.")
           })
       }
 
       const DeleteData = (id) => {
+        console.log(id)
         setLoading(true)
-        axiosContext.authAxios.get('/api/v1/livestock'+id)
+        axiosContext.authAxios.delete('/api/v1/livestock/'+id)
         .then(res =>{
           console.log(res.data)
           setLoading(false)
@@ -51,7 +53,7 @@ function DaftarTernak({navigation}){
           getData()
         })
         .catch((e)=> {
-          console.error(e)
+          console.error(e,"errror")
           setLoading(false)
           setErrorMessage("hdr")
         })
@@ -108,6 +110,7 @@ renderItem=({item})=>{
  }
  handleLoadMore=()=>{
     console.log("HandleLoadMore")
+    //console.log(pageCurrent)
     setpageCurrent(pageCurrent+1)
     getData()
     setLoading(true)

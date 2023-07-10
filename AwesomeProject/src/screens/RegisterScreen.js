@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { View, StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
 import { Text } from 'react-native-paper'
-import Background from '../components/StartBackground'
+import Background from '../components/Background'
 import Logo from '../components/Logo'
 import Header from '../components/Header'
 import Button from '../components/Button'
@@ -51,8 +51,9 @@ export default function RegisterScreen({ navigation }) {
    
     <Background>
       <BackButton goBack={navigation.goBack} />
-      <Logo />
+      {/* <Logo /> */}
       <Header>Create Account</Header>
+      <View>  
       <TextInput
         label="Name"
         returnKeyType="next"
@@ -60,7 +61,8 @@ export default function RegisterScreen({ navigation }) {
         onChangeText={(text) => setName({ value: text, error: '' })}
         error={!!name.error}
         errorText={name.error}
-      />
+        />
+        </View>
       <TextInput label="nick name" onChangeText={(text) => setnickName ({value:text, error:''})}/>
       <TextInput label="Nomer Telepon" onChangeText={(text) => setnumberPhone ({value:text, error:''})}/>
       <TextInput

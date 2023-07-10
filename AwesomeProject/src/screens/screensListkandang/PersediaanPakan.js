@@ -5,11 +5,12 @@ import Button from "../../components/Button";
 import Header from "../../components/HeaderInputKandang";
 import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
 import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
+import { AxiosContext } from "../../context/AxiosContext";
 
 
 function PersediaanPakan({navigation}) {
@@ -23,6 +24,7 @@ function PersediaanPakan({navigation}) {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
+  const axiosContext = useContext(AxiosContext);
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -62,8 +64,10 @@ function PersediaanPakan({navigation}) {
         }
 
     console.log(data);
-    axios.post(`http://139.162.6.202:8000/api/v1/feed`, data)
+    axiosContext.authAxios.post('/api/v1/feed',data)
+   // axios.post(`http://139.162.6.202:8000/api/v1/feed`, data)
       .then(res => {
+        console.log(res.data)
         navigation.navigate('DaftarPersediaanPakan', {name: 'DaftarPersediaanPakan'})
       })
       .catch((error) => {

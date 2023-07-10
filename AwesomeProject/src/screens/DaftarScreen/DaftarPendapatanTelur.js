@@ -1,13 +1,18 @@
-import { FlatList, StyleSheet, Text, View, ActivityIndicator} from "react-native";
+import { FlatList, StyleSheet, Text, View, ActivityIndicator, TextInput} from "react-native";
 import Button from "../../components/Button";
 import { GlobalStyles } from "../../components/style";
 import { theme } from "../../core/theme";
-import {Ionicons} from '@expo/vector-icons';
+import {Ionicons} from 'react-native/vector-icons';
 import { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
 import { AxiosContext, AxiosProvider } from "../../context/AxiosContext";
+//import filter from "lodash.filter"
 import { AuthProvider } from "../../context/AuthContext";
+import { Feather, Entypo } from "@expo/vector-icons";
+import AntDesign from 'react-native-vector-icons/AntDesign'
+
+
 
 function DaftarPendapatanTelur({navigation}){
 
@@ -16,6 +21,8 @@ function DaftarPendapatanTelur({navigation}){
     const [ errorMessage, setErrorMessage ] = useState('')
     const [pageCurrent, setpageCurrent]= useState(1);
     const [totalpage, settotalpage]= useState(10);
+    const [masterdata, setmasterdata]= useState([]);
+    const [search, setsearch]= useState('');
 
     const axiosContext = useContext(AxiosContext);
 
@@ -33,16 +40,13 @@ function DaftarPendapatanTelur({navigation}){
           
         setLoading(true)
         axiosContext.authAxios.get('/api/v1/incomeEgg?size=10&page=')
-        // fetch('http://139.162.6.202:8000/api/v1/incomeEgg?size=10&page=',config, {
-        //   method: "GET"
-        // })
-          
           .then(res => {
             console.log('getdata_income_egg',res.data)
             setLoading(false)
-            setErrorMessage('')
             setIncomeEgg(IncomeEgg.concat(res.data.content))
-            settotalpage(res.data.totalPages)
+            setErrorMessage('')
+            //settotalpage(res.data.totalPages)
+            setmasterdata(res)
             //setIncomeEgg(res.content)
           })
           // .then((res)=>{
@@ -58,27 +62,29 @@ function DaftarPendapatanTelur({navigation}){
     }
 
       const DeleteData=(id)=>{
-        console.log("Get data ",id)
-        fetch ('http://139.162.6.202:8000/api/v1/incomeEgg/'+id,config,{method:"DELETE"})
-        .then (res => res.json())
+        console.log("Get data = ",id)
+        // fetch ('http://139.162.6.202:8000/api/v1/incomeEgg/'+id,config,{method:"DELETE"})
+        axiosContext.authAxios.delete('/api/v1/incomeEgg/'+id)
         .then(res=> {
-          console.log(res)
+          console.log(res.data)
           setLoading(false)
+          setIncomeEgg(res.data)
           getData()
         })
         .catch((errror)=>{
-          console.log(errror)
+          console.error(errror, "err")
           }
         )}
 
       useEffect(() => {
-        console.log("PageCurrent",pageCurrent)
+        console.log("PageCurrent = ",pageCurrent)
         setLoading(true)
         getData()
         return()=>{}
       }, [pageCurrent])
 
-      render=({item})=>{
+     const render=({item})=>{
+      // console.log(item)
         return(
         <View style={styles.container} key={item.id}>
           <TouchableOpacity
@@ -123,18 +129,76 @@ function DaftarPendapatanTelur({navigation}){
         )
       }
 
+      const searchFilter = (text) => {
+        if(text) {
+          const newData= IncomeEgg.filter ((item) =>{
+          // const newData= masterdata.filter((item)=> {
+            const itemData = item.quantity ? item.date.toUpperCase()
+            : ''.toUpperCase();
+            const textData = text.toUpperCase();
+            return itemData.indexOf(textData) > -1;
+          });
+          setIncomeEgg(newData)
+          setsearch(text)
+        }else{
+          setIncomeEgg(masterdata);
+          setsearch(text)
+        }
+      }
+
+      const handleSearch= (item) =>{
+        setsearch(item);
+        const formattedQuery = item.toLowerCase();
+        const filterData= filter(masterdata, (item)=> {
+          return contains(item , formattedQuery)
+        })
+        setmasterdata (filterData)
+      };
+      const contains= ({date, quantity}, item) => {
+        if(date.includes(item) || quantity.includes(item)){
+          return true;
+        }
+        return false;
+      }
+
+      const List = ({item})=> {
+        console.log("Item Data = ",item)
+          if (item === ""){
+            return <render quantity ={item.quantity} date={item.date} />
+          }
+          // if(item.quantity.toUpperCase().includes(masterdata.toUpperCase().trim().replace(/\s/g, ""))){
+          //   return <render quantity ={item.quantity} date={item.date}/>
+          // }
+          if (item.quantity.toUpperCase().includes(item.toUpperCase().trim().replace(/\s/g, ""))){
+            return <render quantity ={item.quantity} date={item.date}/>
+          }
+      }
+
+      const Search= text =>{
+        setsearch(text);
+        const filterData= IncomeEgg.filter(item => item.date.toLowerCase().includes(text.toLowerCase()
+        ))
+        setmasterdata(filterData)
+      }
 
       return(
+        <View>
+          <Text style={styles.listItem}>hggdtg</Text>
+          <TextInput style={styles.input} placeholder="search" 
+              value={IncomeEgg} 
+              clearButtonMode="always"
+              onChangeText={Search}/>
         <FlatList
         style={styles.container12}
         data={IncomeEgg}
-        renderItem={this.render}
+        renderItem={render}
         keyExtractor={(item,index)=> index.toString()}
         ListFooterComponent={this.renderFooter}
         onEndReached={this.handleLoadMore}
         onEndReachedThreshold={0}
-        />
-        
+        >
+        </FlatList>
+        </View>
       )
 
 
@@ -268,5 +332,22 @@ const styles=StyleSheet.create({
       container12:{
         marginTop:20,
         backgroundColor:'#7FFFD4'
-      }
+      },
+      input: {
+        height:45,
+        borderWidth:1,
+        paddingLeft:20,
+        margin:5,
+        borderColor:'#009688',
+        backgroundColor:'blue',
+        // paddingHorizontal:20,
+        // paddingVertical:10,
+        // borderEndWidth:1,
+        // borderRadius:8,
+        // borderEndColor:'#cccccc'
+        // fontSize: 20,
+        // marginLeft: 10,
+        // width: "90%",
+        // color:'#000000'
+      },
 })

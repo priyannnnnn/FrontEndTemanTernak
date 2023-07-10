@@ -6,43 +6,47 @@ import Button from "../../components/Button";
 import { useContext, useEffect, useState } from "react";
 import { AxiosContext } from "../../context/AxiosContext";
 
-function DaftarPersediaanPakan({navigation, route}){
+function DaftarPersediaanPakan({navigation}){
 
-  const axiosContext = useContext(AxiosContext);
   const [feed, setfeed]= useState([])
-  const [loading, setLoading]= useState(true)
+  const [loading, setLoading]= useState(false)
   const [errormessage, setErrorMessage]= useState('')
   const [pageCurrent, setpageCurrent]= useState(1);
   const [totalpage, settotalpage]= useState(10);
+  const axiosContext = useContext(AxiosContext);
 
-  const config={
-    headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2MjE2NSwiZXhwIjoxNjg2NDYzNjA1fQ.zZdRLcc_6ul4aQu5eRy9i_hsF_afoSLGXPjKHxWfbEM"}`}
-  }
+  // const config={
+  //   headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2MjE2NSwiZXhwIjoxNjg2NDYzNjA1fQ.zZdRLcc_6ul4aQu5eRy9i_hsF_afoSLGXPjKHxWfbEM"}`}
+  // }
+  const toggleAddEmployeeModal = () => {
+    console.log('test_data');}
 
-  const  getData = () =>{
+  const getData = () =>{
+    if (totalpage < pageCurrent)
+    return;
+
+    console.log("get data")
     setLoading(true)
-    axiosContext.authAxios.get('/api/v1/feed?page=1&size=10') 
-    .then (sen => {
-      console.log("getdata_feed", sen.data)
-      setLoading (false)
-      setfeed(feed.concat(sen.data.content))
+    axiosContext.authAxios.get('/api/v1/feed?page=1&size=')
+    .then (res => {
+      console.log("getdata_feed")
+      setLoading(false)
+      setfeed(feed.concat(res.data.content))
+      //setfeed(res.content)
       setErrorMessage('');
       setLoading(false);
-      console.log(sen);
-     
+      console.log(res.data);
     })
-    .catch(()=> {
-      setLoading(false)
-      setErrorMessage("try")
+    .catch((e)=> {
+      console.error(e)
      })
   }
 
-  const deleteData = (id) => {
+  const DeleteData = (id) => {
     console.log(id);
     setLoading(true)
-    fetch('http://139.162.6.202:8000/api/v1/feed/'+id,config,
-    {method: "DELETE"})
-    .then(res => res.json())
+   axiosContext.authAxios.delete('/api/v1/feed/'+id)
+    // .then(res => res.json())
     .then(res =>{
       console.log(res)
       setLoading(false)
@@ -51,14 +55,14 @@ function DaftarPersediaanPakan({navigation, route}){
     })
     .catch((error)=> {
       setLoading(false)
-      console.log(error)
+      console.error(error)
     })
     }
 
-   const updateData = (id )=> {
-    console.log(id)
-    fetch ('http://139.162.6.202:8000/api/v1/feed/'+id, {method: "PUT" })
-   }
+  //  const updateData = (id )=> {
+  //   console.log(id)
+  //   fetch ('http://139.162.6.202:8000/api/v1/feed/'+id, {method: "PUT" })
+  //  }
   
   useEffect(()=> {
     console.log("PageCurrent",pageCurrent)
@@ -66,10 +70,11 @@ function DaftarPersediaanPakan({navigation, route}){
     getData()
     return()=>{}
   },[pageCurrent])
+  
 
-  renderItem=({})=>{
+  renderItem=({item})=>{
     return(
-      <View style={styles.container} key={item.id}>
+      <View style={styles.container} >
           <TouchableOpacity
                 onPress={toggleAddEmployeeModal} style={styles.button}>
                 <Text style={styles.buttonText}>{item.date}</Text>
@@ -189,7 +194,9 @@ function DaftarPersediaanPakan({navigation, route}){
 //             >Kembali</Button>
 //         </ScrollView>
 //     )
- }
+ 
+ 
+}
 export default DaftarPersediaanPakan;
 const styles=StyleSheet.create({
   text:{

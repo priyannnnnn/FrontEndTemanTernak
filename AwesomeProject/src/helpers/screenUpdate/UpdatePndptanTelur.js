@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";
@@ -6,6 +6,7 @@ import Button from "../../components/Button";
 import moment from "moment";
 import axios from "axios";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { AxiosContext } from "../../context/AxiosContext";
 
 function UpdatePendapatanTelur(props){
 
@@ -20,25 +21,28 @@ function UpdatePendapatanTelur(props){
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+    const axiosContext = useContext(AxiosContext);
 
     useEffect(()=> {
         getData(id)
     },[])
 
     const config={
-      headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2Mzg2NiwiZXhwIjoxNjg2NDY1MzA2fQ.VaduI3MQZnP8J9JreMZtsGa7in5tukyhZ9vWELRiuVM"}`}
+      headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4ODgyODI1MiwiZXhwIjoxNjg4ODI5NjkyfQ.ZJfT-nqpnOkjb5rYa7NUXHt2VhC7Kg3EbnlkOSyVuqA"}`}
     }
-
+    
     const getData=(id)=>{
-        fetch ('http://139.162.6.202:8000/api/v1/incomeEgg/'+id,config ,{method:'GET'})
-        .then (res => res.json())
+      console.log("id = ", id)
+      axiosContext.authAxios.get('/api/v1/incomeEgg/'+id)
+        // fetch ('http://139.162.6.202:8000/api/v1/incomeEgg/'+id,config ,{method:'GET'})
+        // .then (res => res.json())
         .then (res =>{
-            console.log(res)
+            console.log(res.data)
             setIncomeEgg({
                 ...IncomeEgg,
                 id:res.id,
-                quantity:{value:`${res.quantity}`,error:''},
-                date : {value:`${res.date}`, error:''}
+                quantity:{value:`${res.data.quantity}`,error:''},
+                date : {value:`${res.data.date}`, error:''}
                 //.format('YYYY-MM-DD')
             })
         })
@@ -52,16 +56,18 @@ function UpdatePendapatanTelur(props){
                 date :IncomeEgg?.date?.value
             }
             console.log(Data);
-            axios.put(`http://139.162.6.202:8000/api/v1/incomeEgg/`+id,Data,config)
-           
+            console.log("Update Data")
+             //axios.put(`http://139.162.6.202:8000/api/v1/incomeEgg/`+id,Data,config)
+            axiosContext.authAxios.put(`/api/v1/incomeEgg/`+id,Data)
             .then (res =>{
-                navigation.navigate ('DaftarPendapatanTelur', {name:'DaftarPendapatanTelur'})
-            getData()
-            console.log(res)})
-            
+              console.log("",res.data)
+              navigation.navigate ('DaftarPendapatanTelur')
+               getData()
+              //console.log(res, "ress")
+            })
             
             .catch((error) =>{
-                console.log(error);
+                console.error(error, "Error");
             })
         }
 

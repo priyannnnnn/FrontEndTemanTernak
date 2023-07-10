@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";
@@ -6,6 +6,7 @@ import Button from "../../components/Button";
 import moment from "moment";
 import axios from "axios";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { AxiosContext } from "../../context/AxiosContext";
 
 function UpdatePenjualanTelur(props){
 
@@ -22,6 +23,7 @@ function UpdatePenjualanTelur(props){
     const [date, setDate] = useState(new Date());
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
+    const axiosContext = useContext(AxiosContext);
 
     useEffect(()=> {
         getData(id)
@@ -33,22 +35,45 @@ function UpdatePenjualanTelur(props){
 
 
     const getData=(id)=>{
-        fetch ('http://139.162.6.202:8000/api/v1/saleEgg/'+id,config ,{method:'GET'})
-        .then (res => res.json())
+        // fetch ('http://139.162.6.202:8000/api/v1/saleEgg/'+id,config ,{method:'GET'})
+        // .then (res => res.json())
+        axiosContext.authAxios.get('/api/v1/saleEgg/'+id)
         .then (res =>{
-            console.log(res)
+            console.log(res.data)
             setsaleEgg({
                 ...saleEgg,
                 id:res.id,
-                quantity  : { value : '', error: '' },
-                amount    : { value : '', error: '' },
-                date      : { value : '', error: '' }
+                quantity  : { value : `${res.data.quantity}`, error: '' },
+                amount    : { value : `${res.data.amount}`, error: '' },
+                date      : { value : `${res.data.date}`, error: '' }
                 //.format('YYYY-MM-DD')
             })
         })
         .catch((error) => {
             console.log(error)
         })}
+
+        const UpdateData=(id)=>{
+          const Data={
+              quantity:saleEgg?.quantity.value,
+              amount : saleEgg?.amount.value,
+              date :saleEgg?.date.value
+          }
+          console.log(Data);
+          // axios.put(`http://139.162.6.202:8000/api/v1/incomeEgg/`+id,Data,config)
+          axiosContext.authAxios.put(`/api/v1/saleEgg/`+id)
+          .then (res =>{
+            navigation.navigate ('DaftarPenjualanTelur', {name:'DaftarPenjualanTelur'})
+            // getData()
+            //console.log(res.data)
+          })
+          
+          .catch((error) =>{
+              console.error(error, "hfhf");
+          })
+      }
+
+
 
         const onChange = (event, selectedDate) => {
             // const currentDate = selectedDate;
@@ -82,7 +107,11 @@ function UpdatePenjualanTelur(props){
             testID="dateTimePicker" value={date}
             mode={mode} is24Hour={true} onChange={onChange}
         />
-        )}
+          )}
+         <Button mode='contained' style={{ marginTop: 4 }} onPress={()=> UpdateData(saleEgg.id)} >Simpan</Button>
+            <Button mode='contained'
+                onPress={() => navigation.reset({ index: 0,
+                    routes: [{ name: 'DaftarPenjualanTelur' }], })}>Kembali</Button>
     </View>
     )
 }

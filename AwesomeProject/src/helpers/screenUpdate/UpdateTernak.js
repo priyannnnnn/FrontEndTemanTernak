@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { useContext, useEffect, useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
+import { AxiosContext } from "../../context/AxiosContext";
 
 function UpdateTernak(props){
 
@@ -14,14 +15,19 @@ function UpdateTernak(props){
         note:     { value : '', error: '' },
     })
 
+    const [date, setDate] = useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+    const axiosContext = useContext(AxiosContext);
 
     useEffect(()=>{
         
     })
 
     const getData=(id)=>{
-        fetch('http://139.162.6.202:8000/api/v1/livestock/'+id,{method:'GET'})
-        .then(res => res.json())
+        // fetch('http://139.162.6.202:8000/api/v1/livestock/'+id,{method:'GET'})
+        axiosContext.authAxios.get('/api/v1/livestock/'+id)
+        // .then(res => res.json())
         .then(res=>{
             setLiveStock({...livestock,id:res.id,
                 age:      { value : `${res.age}`, error: '' },
@@ -62,3 +68,31 @@ function UpdateTernak(props){
     );
 }
 export default UpdateTernak;
+const style = StyleSheet.create({
+    View:{
+        flex: 1,
+        width: '100%',
+        backgroundColor:'#FAEBD7',
+        padding: 20,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        marginTop:20,
+      },
+
+      container: {
+        paddingHorizontal: 20
+      },
+      title: {
+        fontWeight: "bold",
+        fontSize: 20,
+        marginBottom: 30,
+        color:'#000000'
+      },
+      Text: {
+        textAlign: 'left',
+        fontSize: 18,
+        fontWeight: 'normal',
+        marginBottom:-10,
+        color:'#000000'
+      },
+})

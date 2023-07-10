@@ -76,11 +76,11 @@ const publicAxios = useContext(AxiosContext);
       <BackButton goBack={navigation.goBack} />
       {/* <Logo /> */}
       
-      
+      <SafeAreaView style={styles.save}>
       <ScrollView style={styles.f}>
       <View style={styles.f}>
       <Header>Selamat Datang.</Header>
-      <SafeAreaView>
+      
       <TextInput
         label="Email"
         returnKeyType="next"
@@ -102,7 +102,6 @@ const publicAxios = useContext(AxiosContext);
         errorText={password.error}
         secureTextEntry
       />
-   </SafeAreaView>
       <View style={styles.forgotPassword}>
         <TouchableOpacity
           onPress={() => navigation.navigate('ResetPasswordScreen')}
@@ -121,6 +120,7 @@ const publicAxios = useContext(AxiosContext);
       </View>
     </View>
       </ScrollView>
+      </SafeAreaView>
     </Background>
   )
 }
@@ -147,8 +147,8 @@ const styles = StyleSheet.create({
   f:{
     flex:1,
     marginTop:40,
-  
-  
-    
+  },
+  save:{
+    flex:1
   }
 })

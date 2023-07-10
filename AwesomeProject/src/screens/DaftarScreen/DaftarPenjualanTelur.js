@@ -23,11 +23,12 @@ function DaftarPenjualanTelur({navigation}){
     console.log('test_data');
 }
   const GetData = () => {
+    console.log("get data")
       setLoading(true)
       axiosContext.authAxios.get('/api/v1/saleEgg?size=10&page=')
       .then(res => {
         setsaleEgg(saleEgg.concat(res.data.content))
-        console.log(res);
+        console.log(res.data);
         setLoading(false)
         setErrorMessage('')
         // setsaleEgg(res.context)
@@ -73,8 +74,8 @@ function DaftarPenjualanTelur({navigation}){
                     <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
           <TouchableOpacity
-                    onPress={() => navigation.navigate ('UpdatePendapatanTelur',{id:item.id})} 
-                    onLongPress={()=> navigation.navigate('UpdatePendapatanTelur',{id:item.id})}
+                    onPress={() => navigation.navigate ('UpdatePenjualanTelur',{id:item.id})} 
+                    onLongPress={()=> navigation.navigate('UpdatePenjualanTelur',{id:item.id})}
                     style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
                     <Text style={styles.buttonText}>Edit</Text>
                 </TouchableOpacity>
