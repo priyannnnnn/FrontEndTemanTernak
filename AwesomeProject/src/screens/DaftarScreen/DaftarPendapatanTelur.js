@@ -11,6 +11,7 @@ import { AxiosContext, AxiosProvider } from "../../context/AxiosContext";
 import { AuthProvider } from "../../context/AuthContext";
 import { Feather, Entypo } from "@expo/vector-icons";
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import { set } from "react-native-reanimated";
 
 
 
@@ -19,7 +20,7 @@ function DaftarPendapatanTelur({navigation}){
     const [ IncomeEgg, setIncomeEgg ] = useState([])
     const [ loading, setLoading ] = useState(false)
     const [ errorMessage, setErrorMessage ] = useState('')
-    const [pageCurrent, setpageCurrent]= useState(1);
+    const [pageCurrent, setpageCurrent]= useState(0);
     const [totalpage, settotalpage]= useState(10);
     const [masterdata, setmasterdata]= useState([]);
     const [search, setsearch]= useState('');
@@ -28,60 +29,54 @@ function DaftarPendapatanTelur({navigation}){
 
     const toggleAddEmployeeModal = () => {
         console.log('test_data');
-        
     }
-    const config={
-      headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2MjE2NSwiZXhwIjoxNjg2NDYzNjA1fQ.zZdRLcc_6ul4aQu5eRy9i_hsF_afoSLGXPjKHxWfbEM"}`}
-    }
+    
     const getData = () => {
-
-        if(totalpage < pageCurrent)
-          return;
-          
-        setLoading(true)
-        axiosContext.authAxios.get('/api/v1/incomeEgg?size=10&page=')
-          .then(res => {
-            console.log('getdata_income_egg',res.data)
-            setLoading(false)
-            setIncomeEgg(IncomeEgg.concat(res.data.content))
-            setErrorMessage('')
+      console.log("get Data = ")
+      setLoading(true)
+      axiosContext.authAxios.get(`/api/v1/incomeEgg?size=10&page=${pageCurrent}`)
+      .then(res => {
+        console.log("then = ")
+        setLoading(false)
+        //setIncomeEgg(res.data.content)
+        setIncomeEgg(IncomeEgg.concat(res.data.content))
+        //setIncomeEgg([...IncomeEgg,...res.data.content])
+        setErrorMessage('')
+        console.log('getdata_income_egg',res.data)
+        setLoading(false)
             //settotalpage(res.data.totalPages)
-            setmasterdata(res)
+            //setmasterdata(res)
             //setIncomeEgg(res.content)
           })
-          // .then((res)=>{
-          //   setIncomeEgg(res.content)
-          //   console.log(res)
-          //   setLoading(false)
-          // })
           .catch((e) => {
             setLoading(false)
             console.error(e)
             setErrorMessage("Network Error. Please try again.")
           })
-    }
-
-      const DeleteData=(id)=>{
-        console.log("Get data = ",id)
+        }
+        
+        const DeleteData=(id)=>{
+          console.log("Get data = ",id)
         // fetch ('http://139.162.6.202:8000/api/v1/incomeEgg/'+id,config,{method:"DELETE"})
         axiosContext.authAxios.delete('/api/v1/incomeEgg/'+id)
         .then(res=> {
           console.log(res.data)
           setLoading(false)
           setIncomeEgg(res.data)
+          console.log("Res Data",res.data)
           getData()
         })
         .catch((errror)=>{
           console.error(errror, "err")
-          }
+        }
         )}
-
-      useEffect(() => {
-        console.log("PageCurrent = ",pageCurrent)
-        setLoading(true)
-        getData()
-        return()=>{}
-      }, [pageCurrent])
+        
+        useEffect(() => {
+          console.log("PageCurrent = ",pageCurrent)
+          setLoading(true)
+          getData()
+          return()=>{}
+        }, [pageCurrent])
 
      const render=({item})=>{
       // console.log(item)
@@ -117,7 +112,7 @@ function DaftarPendapatanTelur({navigation}){
       handleLoadMore=()=>{
         console.log("HandleLoadMore")
         setpageCurrent(pageCurrent+1)
-        getData()
+        //getData()
         setLoading(true)
       }
       renderFooter=()=>{
@@ -129,50 +124,50 @@ function DaftarPendapatanTelur({navigation}){
         )
       }
 
-      const searchFilter = (text) => {
-        if(text) {
-          const newData= IncomeEgg.filter ((item) =>{
-          // const newData= masterdata.filter((item)=> {
-            const itemData = item.quantity ? item.date.toUpperCase()
-            : ''.toUpperCase();
-            const textData = text.toUpperCase();
-            return itemData.indexOf(textData) > -1;
-          });
-          setIncomeEgg(newData)
-          setsearch(text)
-        }else{
-          setIncomeEgg(masterdata);
-          setsearch(text)
-        }
-      }
+      // const searchFilter = (text) => {
+      //   if(text) {
+      //     const newData= IncomeEgg.filter ((item) =>{
+      //     // const newData= masterdata.filter((item)=> {
+      //       const itemData = item.quantity ? item.date.toUpperCase()
+      //       : ''.toUpperCase();
+      //       const textData = text.toUpperCase();
+      //       return itemData.indexOf(textData) > -1;
+      //     });
+      //     setIncomeEgg(newData)
+      //     setsearch(text)
+      //   }else{
+      //     setIncomeEgg(masterdata);
+      //     setsearch(text)
+      //   }
+      // }
 
-      const handleSearch= (item) =>{
-        setsearch(item);
-        const formattedQuery = item.toLowerCase();
-        const filterData= filter(masterdata, (item)=> {
-          return contains(item , formattedQuery)
-        })
-        setmasterdata (filterData)
-      };
-      const contains= ({date, quantity}, item) => {
-        if(date.includes(item) || quantity.includes(item)){
-          return true;
-        }
-        return false;
-      }
+      // const handleSearch= (item) =>{
+      //   setsearch(item);
+      //   const formattedQuery = item.toLowerCase();
+      //   const filterData= filter(masterdata, (item)=> {
+      //     return contains(item , formattedQuery)
+      //   })
+      //   setmasterdata (filterData)
+      // };
+      // const contains= ({date, quantity}, item) => {
+      //   if(date.includes(item) || quantity.includes(item)){
+      //     return true;
+      //   }
+      //   return false;
+      // }
 
-      const List = ({item})=> {
-        console.log("Item Data = ",item)
-          if (item === ""){
-            return <render quantity ={item.quantity} date={item.date} />
-          }
-          // if(item.quantity.toUpperCase().includes(masterdata.toUpperCase().trim().replace(/\s/g, ""))){
-          //   return <render quantity ={item.quantity} date={item.date}/>
-          // }
-          if (item.quantity.toUpperCase().includes(item.toUpperCase().trim().replace(/\s/g, ""))){
-            return <render quantity ={item.quantity} date={item.date}/>
-          }
-      }
+      // const List = ({item})=> {
+      //   console.log("Item Data = ",item)
+      //     if (item === ""){
+      //       return <render quantity ={item.quantity} date={item.date} />
+      //     }
+      //     // if(item.quantity.toUpperCase().includes(masterdata.toUpperCase().trim().replace(/\s/g, ""))){
+      //     //   return <render quantity ={item.quantity} date={item.date}/>
+      //     // }
+      //     if (item.quantity.toUpperCase().includes(item.toUpperCase().trim().replace(/\s/g, ""))){
+      //       return <render quantity ={item.quantity} date={item.date}/>
+      //     }
+      // }
 
       const Search= text =>{
         setsearch(text);

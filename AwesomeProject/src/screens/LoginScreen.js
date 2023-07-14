@@ -49,7 +49,7 @@ const publicAxios = useContext(AxiosContext);
         JSON.stringify({
           accessToken
         }),
-        navigation.navigate("Dashboard")
+        navigation.navigate("BiayaOperasional")
       );
 
       console.log("Keychain",accessToken)

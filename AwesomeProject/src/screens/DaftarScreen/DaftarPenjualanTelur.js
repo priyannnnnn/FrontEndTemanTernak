@@ -13,7 +13,7 @@ function DaftarPenjualanTelur({navigation}){
   const [ saleEgg, setsaleEgg]=useState([])
   const [loading, setLoading] = useState(false)
   const [rrorMessage, setErrorMessage ] = useState('')
-  const [pageCurrent, setpageCurrent]= useState(1);
+  const [pageCurrent, setpageCurrent]= useState(0);
   const axiosContext = useContext(AxiosContext);
 
   const config={
@@ -23,9 +23,9 @@ function DaftarPenjualanTelur({navigation}){
     console.log('test_data');
 }
   const GetData = () => {
-    console.log("get data")
+    console.log("get data = ")
       setLoading(true)
-      axiosContext.authAxios.get('/api/v1/saleEgg?size=10&page=')
+      axiosContext.authAxios.get(`/api/v1/saleEgg?size=10&page=${pageCurrent}`)
       .then(res => {
         setsaleEgg(saleEgg.concat(res.data.content))
         console.log(res.data);
@@ -33,9 +33,8 @@ function DaftarPenjualanTelur({navigation}){
         setErrorMessage('')
         // setsaleEgg(res.context)
       })
-      .catch(()=>{
-        setLoading(false)
-        setErrorMessage("Network Error. Please try again.")
+      .catch((e)=>{
+        console.error(e)
       })
   }
     const DeleteData=(id)=>{
@@ -63,8 +62,8 @@ function DaftarPenjualanTelur({navigation}){
                 <Text style={styles.buttonText}>{item.date}</Text>
           </TouchableOpacity>
       <View style={styles.employeeListContainer}>
-        <Text style={styles.listItem}>Jumlah telur : {item.amount}</Text>
         <Text style={styles.listItem}>Jumlah Pendapatan Telur : {item.quantity}</Text>
+        <Text style={styles.listItem}>Jumlah telur : {item.amount}</Text>
         <Text style={styles.listItem}>Tanggal : {item.date}</Text>
           
         <View style={styles.buttonContainer}>
@@ -88,7 +87,7 @@ function DaftarPenjualanTelur({navigation}){
   handleLoadMore=()=>{
     console.log("HandleLoadMore")
     setpageCurrent(pageCurrent+1)
-    GetData()
+    //GetData()
     setLoading(true)
   }
   renderFooter=()=>{

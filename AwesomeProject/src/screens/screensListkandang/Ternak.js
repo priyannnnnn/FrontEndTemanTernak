@@ -45,9 +45,9 @@ function Ternak({navigation, props}) {
     showMode('date');
   };
 
-  useEffect(() => {
-    setLiveStock({...livestock, date:{ value: `${moment(date).format('YYYY-MM-DD')}`, error: ''}})
-  }, [date])
+  // useEffect(() => {
+  //   setLiveStock({...livestock, date:{ value: `${moment(date).format('YYYY-MM-DD')}`, error: ''}})
+  // }, [date])
 
   const onSubmit = () => {
     const data = {

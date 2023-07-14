@@ -13,7 +13,7 @@ function DaftarTernak({navigation}){
     const [ employee, setEmployee ] = useState([])
     const [ loading, setLoading ] = useState(true)
     const [ errorMessage, setErrorMessage ] = useState('')
-    const [pageCurrent, setpageCurrent]= useState(1)
+    const [pageCurrent, setpageCurrent]= useState(0)
     const [totalpage, settotalpage]= useState(10);
 
     const toggleAddEmployeeModal = () => {
@@ -25,7 +25,7 @@ function DaftarTernak({navigation}){
       return;
 
         setLoading(true)
-        axiosContext.authAxios.get('/api/v1/livestock')
+        axiosContext.authAxios.get(`/api/v1/livestock?size=10&page=${pageCurrent}`)
           .then(res => {
             console.log(res.data);
             setLoading(false)
@@ -110,7 +110,7 @@ renderItem=({item})=>{
  }
  handleLoadMore=()=>{
     console.log("HandleLoadMore")
-    //console.log(pageCurrent)
+    console.log(pageCurrent)
     setpageCurrent(pageCurrent+1)
     getData()
     setLoading(true)

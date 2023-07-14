@@ -50,19 +50,20 @@ function UpdatePendapatanTelur(props){
             console.log(error)
         })}
 
-        const UpdateData=(id)=>{
+        const UpdateData=()=>{
             const Data={
                 quantity: parseInt(IncomeEgg?.quantity?.value),
                 date :IncomeEgg?.date?.value
             }
             console.log(Data);
             console.log("Update Data")
+            console.log("Id Update = ",id)
              //axios.put(`http://139.162.6.202:8000/api/v1/incomeEgg/`+id,Data,config)
             axiosContext.authAxios.put(`/api/v1/incomeEgg/`+id,Data)
             .then (res =>{
               console.log("",res.data)
               navigation.navigate ('DaftarPendapatanTelur')
-               getData()
+              // getData()
               //console.log(res, "ress")
             })
             
@@ -104,7 +105,7 @@ function UpdatePendapatanTelur(props){
           />
         )}
 
-            <Button mode='contained' style={{ marginTop: 4 }} onPress={()=> UpdateData(IncomeEgg.id)} >Simpan</Button>
+            <Button mode='contained' style={{ marginTop: 4 }} onPress={()=> UpdateData()} >Simpan</Button>
             <Button mode='contained'
                 onPress={() => navigation.reset({ index: 0,
                     routes: [{ name: 'DaftarPendapatanTelur' }], })}>Kembali</Button>

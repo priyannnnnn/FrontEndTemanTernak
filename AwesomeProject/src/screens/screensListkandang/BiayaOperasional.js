@@ -4,26 +4,87 @@ import Button from "../../components/Button";
 import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";
 import Header from "../../components/HeaderInputKandang"
+import { useContext, useEffect, useState } from "react";
+import { AxiosContext } from "../../context/AxiosContext";
+import moment from "moment";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 function BiayaOperasional({navigation}) {
+  const [Operation, setOperation] = useState({
+    date : {value: '', error:''},
+    description : {value:'', error:''},
+    amount : {value:'',error:''}
+  })
+  const [Loading, setLoading] = useState()
+  const axiosContext = useContext(AxiosContext);
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState('date');
+  const[show, setShow]= useState(false);
+
+  const onChange = (event, selectedDate) => {
+    const currentDate = selectedDate;
+    setShow(false);
+    setDate(currentDate);
+  };
+
+  const showMode = (currentMode) => {
+    if (Platform.OS === 'android') {
+      setShow(true);
+     }
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode('date');
+  };
+
+  useEffect (() => {
+    setOperation ({...Operation, date:{value : `${moment(date).format('YYYY-MM-DD')}`, error:''}})
+  },[date])
+  
+  const onSubmit = () => {
+    const Data = {
+      date : Operation?.date?.value,
+      description : Operation?.description.value,
+      amount : Operation?.amount?.value,
+    }
+    axiosContext.authAxios.post(`/api/v1/operatingCosh`,Data)
+    .then(res => {
+      console.log("Get Data = ", res.data)
+      navigation.navigate('DaftarOperasional')
+    })
+    .catch((e) => {
+      console.error(e)
+    })
+  }
     return (
       <ScrollView style={styles.ScrollView}>
          <View style={styles.View}>
             <BackButton goBack={navigation.goBack}/>
             <Header>Biaya Operasional</Header>
-            <Text style={styles.Text}>Keterangan</Text>
-            <TextInput
-            label='Tuliskan Keterangan'/>
             <Text style={styles.Text}>Tanggal</Text>
+            <TextInput 
+              value={Operation?.date.value} onChangeText = {(text) => setOperation({...Operation, date: {value: text,error:''}})}  label='Tuliskan Keterangan' 
+              onChange={showDatepicker} onBlur={onChange} onFocus={showDatepicker}/>
+              {show && (
+                <DateTimePicker
+                testID="dateTimePicker"
+                value={date}
+                mode={mode}
+                is24Hour={true}
+                onChange={onChange}/>
+              )}
+
+            <Text style={styles.Text}>Deskripsi</Text>
             <TextInput
-            label= 'Tanggal'/>
-            <Text style={styles.Text}>Kategori</Text>
+            value={Operation?.description.value} onChangeText ={(text) => setOperation({...Operation, description:{value:text, error:''}})} label= 'Tanggal'/>
+            <Text style={styles.Text}>Jumlah</Text>
             <TextInput
-            label='Lain-lain'/>
+            value = {Operation?.amount.value} onChangeText= {(text) => setOperation ({...Operation, amount: {value:text, error:''}})} label='Lain-lain'/>
 
             <Button
             mode='contained'
-            style={{ marginTop: 4 }}>
+            style={{ marginTop: 4 }} onPress ={onSubmit}>
                 Simpan
             </Button>
             <Button 
@@ -53,6 +114,7 @@ const styles=StyleSheet.create({
     textAlign:'left',
     fontSize:18,
     fontWeight: 'bold',
+    color:'#000000'
   },
   ScrollView:{
     flex:1,

@@ -53,15 +53,16 @@ function UpdatePenjualanTelur(props){
             console.log(error)
         })}
 
-        const UpdateData=(id)=>{
+        const UpdateData=()=>{
           const Data={
               quantity:saleEgg?.quantity.value,
               amount : saleEgg?.amount.value,
               date :saleEgg?.date.value
           }
+          console.log(id)
           console.log(Data);
           // axios.put(`http://139.162.6.202:8000/api/v1/incomeEgg/`+id,Data,config)
-          axiosContext.authAxios.put(`/api/v1/saleEgg/`+id)
+          axiosContext.authAxios.put(`/api/v1/saleEgg/`+id,Data)
           .then (res =>{
             navigation.navigate ('DaftarPenjualanTelur', {name:'DaftarPenjualanTelur'})
             // getData()

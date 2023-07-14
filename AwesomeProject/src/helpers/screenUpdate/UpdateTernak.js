@@ -1,12 +1,14 @@
 import { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { AxiosContext } from "../../context/AxiosContext";
+import Button from "../../components/Button";
+import TextInput from "../../components/TextInput";
 
 function UpdateTernak(props){
 
     const {navigation, route}=props;
     const {id}= route.params;
-    const[livestock,setLiveStock]=useState({
+    const[livestock,setLiveStock] = useState({
         age:      { value : '', error: '' },
         quantity: { value : '', error: '' },
         date:     { value : '', error: '' },
@@ -21,47 +23,76 @@ function UpdateTernak(props){
     const axiosContext = useContext(AxiosContext);
 
     useEffect(()=>{
-        
-    })
+        getData(id)
+    },[])
 
     const getData=(id)=>{
-        // fetch('http://139.162.6.202:8000/api/v1/livestock/'+id,{method:'GET'})
+      console.log("ID = ", id)
         axiosContext.authAxios.get('/api/v1/livestock/'+id)
-        // .then(res => res.json())
         .then(res=>{
-            setLiveStock({...livestock,id:res.id,
-                age:      { value : `${res.age}`, error: '' },
-                quantity: { value : `${res.age}`, error: '' },
-                date:     { value : `${res.age}`, error: '' },
-                amount:   { value : `${res.age}`, error: '' },
-                type:     { value : `${res.age}`, error: '' },
-                note:     { value : `${res.age}`, error: '' },})
+          console.log(res.data)
+            setLiveStock({...livestock,id:res.data.id,
+                age:      { value : `${res.data.age}`, error: '' },
+                quantity: { value : `${res.data.quantity}`, error: '' },
+                date:     { value : `${res.data.date}`, error: '' },
+                amount:   { value : `${res.data.amount}`, error: '' },
+                type:     { value : `${res.data.type}`, error: '' },
+                note:     { value : `${res.data.note}`, error: '' },})
         })
         .catch((error)=>{
             console.log(error)
         })
     }
 
+    const UpdateData = () => {
+      const Data = {
+        age : livestock?.age?.value,
+        quantity : livestock?.quantity?.value,
+        date : livestock?.date?.value,
+        amount : livestock?.amount?.value,
+        type : livestock?.type?.value,
+        note : livestock?.note?.value
+      }
+      console.log("Data = ",Data)
+      console.log("ID = ",id)
+
+      axiosContext.authAxios.put('/api/v1/livestock/'+id,Data)
+      .then(res =>{
+        console.log("UPdate DAta", res.data)
+        navigation.navigate('DaftarTernak')
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+    }
+
     return (
-        <View>
-            <Text style={style.Text} >Umur</Text>
-      <TextInput value={livestock?.age.value} onChangeText={(text) => setLiveStock({ ...livestock, age: {value: text, error: ''}  })} label='Masukkan Umur' keyboardType="numeric"/>
+      <View style={style.View}>
+        <ScrollView>
+        <Text style={style.title}>Daftar Ternak</Text>
+        <Text style={style.Text} >Umur</Text>
+        <TextInput value={livestock?.age.value} onChangeText={(text) => setLiveStock({ ...livestock, age: {value: text, error: ''}  })} label='Masukkan Umur' keyboardType="numeric"/>
 
-      <Text style={style.Text} >Total</Text>
-      <TextInput value={livestock?.quantity.value} onChangeText={(text) => setLiveStock({ ...livestock, quantity: {value: text, error: ''}  })}  label= 'Total Ayam' keyboardType="numeric"/>
+        <Text style={style.Text} >Total</Text>
+        <TextInput value={livestock?.quantity.value} onChangeText={(text) => setLiveStock({ ...livestock, quantity: {value: text, error: ''}  })}  label= 'Total Ayam' keyboardType="numeric"/>
 
-      <Text style={style.Text} >Tanggal</Text>
-      <TextInput value={livestock?.date.value} onChangeText={(text) => setLiveStock({...setLiveStock, date: {value: text, error: ''}  })} label='Masukkan Tanggal'/>
+        <Text style={style.Text} >Tanggal</Text>
+        <TextInput value={livestock?.date.value} onChangeText={(text) => setLiveStock({...setLiveStock, date: {value: text, error: ''}  })} label='Masukkan Tanggal'/>
 
-      <Text style={style.Text} >Harga Total</Text>
-      <TextInput value={livestock?.amount.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam' keyboardType="numeric"/>
+        <Text style={style.Text} >Harga Total</Text>
+        <TextInput value={livestock?.amount.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam' keyboardType="numeric"/>
 
-      <Text style={style.Text} >Type</Text>
-      <TextInput value={livestock?.type.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam' keyboardType="numeric"/>
+        <Text style={style.Text} >Type</Text>
+        <TextInput value={livestock?.type.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam' keyboardType="numeric"/>
 
         <Text style={style.Text} >Catatan</Text>
         <TextInput value={livestock?.note.value} onChangeText={(text) => setLiveStock({ ...livestock, note: {value: text, error: ''}  })}  label='Masukkan Catatan'/>
-        </View>
+
+        <Button mode="contained" style={{marginTop:0}} onPress={()=>{UpdateData()}}>Simpan</Button>
+        <Button mode="contained"   onPress={() => navigation.reset({ index: 0,
+                    routes: [{ name: 'DaftarTernak' }], })}>Kembali</Button>
+        </ScrollView>
+      </View>
 
 
 

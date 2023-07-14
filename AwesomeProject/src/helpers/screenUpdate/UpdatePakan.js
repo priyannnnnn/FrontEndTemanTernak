@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { theme } from "../../core/theme";
 import Button from "../../components/Button";
 import axios from "axios";
+import { AxiosContext } from "../../context/AxiosContext";
 
 
 
@@ -12,11 +13,11 @@ function UpdatePakan(props){
     const [loading, setLoading]= useState(true)
     const [errormessage, setErrorMessage]= useState('')
     const {navigation, route} = props;
-    const {id}  = route.params
+    const {id}  = route.params;
+    const axiosContext = useContext(AxiosContext);
 
     // const context=useContext(getData)
     const [feed, setfeed] = useState({
-        
         quantity: { value : '', error:''},
         type:     { value : '', error: '' },
         amount:   { value : '', error: '' },
@@ -26,32 +27,31 @@ function UpdatePakan(props){
     )
 
     useEffect(() => {
-        getDataBy(id)
+        getData(id)
     }, [])
 
-    const getDataBy = (id) => {
-        // console.log(id)
+    const getData = (id) => {
+        console.log("Id = ",id)
         setLoading(true)
-        fetch('http://139.162.6.202:8000/api/v1/feed/'+id,{method: "GET"})
-        .then(res => res.json())
+        axiosContext.authAxios.get('/api/v1/feed/'+id)
         .then(res =>{
             console.log(res);
             setfeed({
                 ...feed, 
                 id:res.id,
-                quantity: {value:`${res.quantity}`, error:''}, 
-                type: {value:`${res.type}`, error:''},
-                amount: {value:`${res.amount}`, error:''},
-                date: {value:`${res.date}`, error:''}
+                quantity: {value:`${res.data.quantity}`, error:''}, 
+                type: {value:`${res.data.type}`, error:''},
+                amount: {value:`${res.data.amount}`, error:''},
+                date: {value:`${res.data.date}`, error:''}
             })
         })
-        .catch(()=> {
-          setLoading(false)
-          setErrorMessage("hdr")
+        .catch((error)=> {
+            setLoading(false)
+            console.error(error)
         })
         }
 
-        const updatedata= (id) => {
+        const updatedata= () => {
             console.log(id);
             const data ={
                 amount: parseInt(feed?.amount?.value),
@@ -60,24 +60,18 @@ function UpdatePakan(props){
                 date:feed?.date?.value,
             }
             console.log(data);
-            
-            axios.put(`http://139.162.6.202:8000/api/v1/feed/`+id,data)
-            // .then (res =>{
-            //     console.log(res)
-            // })
-            
+            console.log ("UPdate Data = ",id)
+            axiosContext.authAxios.put('/api/v1/feed/'+id,data)
             .then (res => {
+                console.log(res.data)
                 navigation.navigate('DaftarPersediaanPakan', {name : 'DaftarPersediaanPakan'})
             })
             .catch ((error)=>{
                 console.log(error);
             })
         }
-    // const test= route.params.id;
+    
     return (
-        // <View style={styles.container}>
-            
-    //    {feed.map((data, index)=>
         <View style={styles.View} >
              <Text style={styles.title}>Daftar PendapatanTelur</Text>
              <Text style={styles.Text}>Jumlah KG</Text>
@@ -91,15 +85,12 @@ function UpdatePakan(props){
 
             <Text style={styles.Text}>Tanggal</Text>
             <TextInput value={feed?.date.value} onChangeText={(text)=> setfeed({...feed, date:{value:text, error:''}})} label="tanggal"/>
+
             <Button mode='contained' style={{ marginTop: 4 }} onPress={()=> updatedata(feed.id)} >Simpan</Button>
             <Button mode='contained'
                 onPress={() => navigation.reset({ index: 0,
-                    routes: [{ name: 'DaftarPersediaanPakan' }], })}>Kembali</Button>
+                routes: [{ name: 'DaftarPersediaanPakan' }], })}>Kembali</Button>
         </View>
-            //    ) }
-           
-   
-                 // </View>
     )}
 export default UpdatePakan;
 const styles = StyleSheet.create({

@@ -66,7 +66,7 @@ import UpdatePenjualanTelur from './src/helpers/screenUpdate/UpdatePnjualanTelur
 import UpdateTernak from './src/helpers/screenUpdate/UpdateTernak'
 import { AuthProvider } from './src/context/AuthContext';
 import { AxiosProvider } from './src/context/AxiosContext';
-
+import DaftarOperasional from './src/screens/DaftarScreen/DaftarOperasional';
 
 
 
@@ -108,6 +108,7 @@ export default function App() {
               <Stack.Screen name='UpdatePenjualanTelur' component={UpdatePenjualanTelur}/>
               <Stack.Screen name='UpdateTernak' component={UpdateTernak}/>
               <Stack.Screen name='AuthProvider' component={AuthProvider}/>
+              <Stack.Screen name='DaftarOperasional'component={DaftarOperasional}/>
 
               <Stack.Screen
                 name="ResetPasswordScreen"

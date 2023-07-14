@@ -37,12 +37,12 @@ function ListKandang({navigation}){
                   })}>
                     Penjualan Telur
                 </Button>
-                <Button 
+                {/* <Button 
                  mode='contained' onPress={() =>
                   navigation.reset({ index: 0,
                   routes: [{ name: 'PenggunaanPakan' }],
                   })}>
-                    Penggunaan Pakan</Button>
+                    Penggunaan Pakan</Button> */}
                 <Button 
                  mode='contained' onPress={() =>
                   navigation.reset({index: 0,
@@ -55,19 +55,19 @@ function ListKandang({navigation}){
                   routes: [{ name: 'BiayaOperasional' }],
                   })}>
                     Biaya Operasional</Button>
-                <Button 
+                {/* <Button 
                   mode='contained' onPress={() =>
                   navigation.reset({index: 0,
                   routes: [{ name: 'Pengurangan' }],
                   })}>
-                    Pengurangan</Button>
-                <Button 
+                    Pengurangan</Button> */}
+                {/* <Button 
                  mode='contained' onPress={() =>
                   navigation.reset({
                     index: 0,
                     routes: [{ name: 'Report' }],
                   })
-                }>Report</Button>
+                }>Report</Button> */}
                <Button 
             mode='contained'
                 onPress={() =>

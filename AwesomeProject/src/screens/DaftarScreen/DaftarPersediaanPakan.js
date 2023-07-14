@@ -11,7 +11,7 @@ function DaftarPersediaanPakan({navigation}){
   const [feed, setfeed]= useState([])
   const [loading, setLoading]= useState(false)
   const [errormessage, setErrorMessage]= useState('')
-  const [pageCurrent, setpageCurrent]= useState(1);
+  const [pageCurrent, setpageCurrent]= useState(0);
   const [totalpage, settotalpage]= useState(10);
   const axiosContext = useContext(AxiosContext);
 
@@ -22,16 +22,19 @@ function DaftarPersediaanPakan({navigation}){
     console.log('test_data');}
 
   const getData = () =>{
-    if (totalpage < pageCurrent)
-    return;
+    // if (totalpage < pageCurrent)
+    // return;
 
     console.log("get data")
     setLoading(true)
-    axiosContext.authAxios.get('/api/v1/feed?page=1&size=')
+    axiosContext.authAxios.get(`/api/v1/feed?size=10&page=${pageCurrent}`)
     .then (res => {
       console.log("getdata_feed")
       setLoading(false)
-      setfeed(feed.concat(res.data.content))
+      //setfeed(res.data.content)
+      //setfeed([...feed,...res.data.content])
+    setfeed(feed.concat(res.data.content))
+     // settotalpage(res+1)
       //setfeed(res.content)
       setErrorMessage('');
       setLoading(false);
@@ -64,14 +67,14 @@ function DaftarPersediaanPakan({navigation}){
   //   fetch ('http://139.162.6.202:8000/api/v1/feed/'+id, {method: "PUT" })
   //  }
   
+  
   useEffect(()=> {
-    console.log("PageCurrent",pageCurrent)
+    console.log("PageCurrent = ",pageCurrent)
     setLoading(true)
     getData()
     return()=>{}
   },[pageCurrent])
   
-
   renderItem=({item})=>{
     return(
       <View style={styles.container} >
@@ -92,8 +95,8 @@ function DaftarPersediaanPakan({navigation}){
                     <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
           <TouchableOpacity
-                    onPress={() => navigation.navigate ('UpdatePendapatanTelur',{id:item.id})} 
-                    onLongPress={()=> navigation.navigate('UpdatePendapatanTelur',{id:item.id})}
+                    onPress={() => navigation.navigate ('UpdatePakan',{id:item.id})} 
+                    onLongPress={()=> navigation.navigate('UpdatePakan',{id:item.id})}
                     style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
                     <Text style={styles.buttonText}>Edit</Text>
                 </TouchableOpacity>
@@ -103,10 +106,10 @@ function DaftarPersediaanPakan({navigation}){
     )
   };
 
-  handleLoadMore=()=>{
+  const handleLoadMore=()=>{
     console.log("HandleLoadMore")
     setpageCurrent(pageCurrent+1)
-    getData()
+    // getData()
     setLoading(true)
   };
 
@@ -127,7 +130,7 @@ function DaftarPersediaanPakan({navigation}){
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
       ListFooterComponent={this.renderFooter}
-      onEndReached={this.handleLoadMore}
+      onEndReached={handleLoadMore}
       onEndReachedThreshold={0}/>)
 
         // <ScrollView>
