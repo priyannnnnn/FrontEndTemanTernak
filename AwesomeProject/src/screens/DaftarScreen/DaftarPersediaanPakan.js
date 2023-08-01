@@ -1,7 +1,8 @@
-import { ScrollView, View,Text, StyleSheet,FlatList,ActivityIndicator } from "react-native";
+import { ScrollView, View,Text, StyleSheet,FlatList,ActivityIndicator,TextInput } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
+import filter from "lodash.filter"
 import Button from "../../components/Button";
 import { useContext, useEffect, useState } from "react";
 import { AxiosContext } from "../../context/AxiosContext";
@@ -14,6 +15,7 @@ function DaftarPersediaanPakan({navigation}){
   const [pageCurrent, setpageCurrent]= useState(0);
   const [totalpage, settotalpage]= useState(10);
   const axiosContext = useContext(AxiosContext);
+  const [search, setsearch]= useState('');
 
   // const config={
   //   headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2MjE2NSwiZXhwIjoxNjg2NDYzNjA1fQ.zZdRLcc_6ul4aQu5eRy9i_hsF_afoSLGXPjKHxWfbEM"}`}
@@ -122,16 +124,53 @@ function DaftarPersediaanPakan({navigation}){
     )
   }
 
+  const handleSearch= (item) =>{
+    setsearch(item);
+    const data =[];
+    const formattedQuery = item.toLowerCase();
+    const filterData= filter(feed, (item)=> {
+      return contains(item , formattedQuery)
+    })
+    console.log("Data = ",data)
+    console.log("Format Query =",formattedQuery)
+    console.log("Filter Data = ",filterData)
+    setfeed(filterData)
+    console.log("String = []")
+    if (data.toString() === filterData.toString()){
+      console.log("get Text")
+        return (
+          <Text style={styles.text}>Data Tidak Ada</Text>
+        )
+      }else{
+        return getData;
+      }
+  };
+  const contains= ({date, quantity, type, amount}, item) => {
+    if( date.includes(item) || type.includes(item) 
+        || quantity.toString().includes(item)
+        || amount.toString().includes(item)){
+      return true;
+    }
+    return false;
+  }
   
     return(
+      <View>
+          <TextInput style={styles.input} placeholder="search" 
+              value={feed} 
+              clearButtonMode="always"
+              onChangeText={handleSearch}
+              autoCorrect={false}/>
       <FlatList
       style={styles.container12}
       data={feed}
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
       ListFooterComponent={this.renderFooter}
+      onEndReachedThreshold={0}
       onEndReached={handleLoadMore}
-      onEndReachedThreshold={0}/>)
+      />
+      </View>)
 
         // <ScrollView>
         //     <View style={styles.container}>
@@ -206,7 +245,8 @@ const styles=StyleSheet.create({
       fontSize:20,
       flex:1,
       marginTop:35,
-      textAlign:'center'
+      textAlign:'center',
+      backgroundColor:theme.colors.error
   },
   view:{
       flex:1,
@@ -218,7 +258,6 @@ const styles=StyleSheet.create({
       marginHorizontal:12,
       margin:3,
       minWidth:20,
-
   },
   container: {
       paddingHorizontal: 20
@@ -274,5 +313,21 @@ const styles=StyleSheet.create({
     container12:{
       marginTop:20,
       backgroundColor:'#7FFFD4'
-    }
+    }, input: {
+      height:45,
+      borderWidth:1,
+      paddingLeft:20,
+      margin:5,
+      borderColor:'#009688',
+      backgroundColor:'blue',
+      // paddingHorizontal:20,
+      // paddingVertical:10,
+      // borderEndWidth:1,
+      // borderRadius:8,
+      // borderEndColor:'#cccccc'
+      // fontSize: 20,
+      // marginLeft: 10,
+      // width: "90%",
+      // color:'#000000'
+    },
 })

@@ -1,23 +1,28 @@
 import { useContext, useEffect, useState } from "react";
 import { AxiosContext } from "../../context/AxiosContext";
 import { log } from "react-native-reanimated";
-import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
+import Button from "../../components/Button";
+import filter from "lodash.filter"
 
-function DaftarOperasional(){
+function DaftarOperasional({navigation}){
     const [Operasional, setOperasional] = useState([])
     const [Loading, setLoading] = useState()
+    const [pageCurrent, setpageCurrent]= useState(1);
     const axiosContext = useContext(AxiosContext);
+    const [search, setsearch]= useState('');
 
     const getData = () => {
-        axiosContext.authAxios.get(`/api/v1/operatingCosh`)
+        axiosContext.authAxios.get(`/api/v1/operatingCosh?size=10&page=${pageCurrent}`)
         .then(res => {
             console.log("Get Data = ", res.data)
             setOperasional(Operasional.concat(res.data.content))
+            console.log("data",res.data)
         })
-        .then((e) => {
-            console.log(e)
+        .catch((e) => {
+            console.error(e)
         })
     }
     const Delete = (id) => {
@@ -28,17 +33,46 @@ function DaftarOperasional(){
             setOperasional (res.data)
         })
         .catch((error) => {
-            console.log(error)
+            console.error(error)
         })
     
       }
 
     useEffect(() => {
-        console.log("Get Data Useeffect = ")
+        console.log("Get Data Useeffect = ",pageCurrent)
+        setLoading(true)
         getData()
-        return () => {}
-    },[])
+    },[pageCurrent])
 
+    const handleLoadMore=()=>{
+    
+      console.log("HandleLoadMore = ",pageCurrent)
+
+      setpageCurrent("Page current = ",pageCurrent+1)
+      setLoading(true)
+    }
+    const handleSearch= (item) =>{
+      setsearch(item);
+      const data =[];
+      const formattedQuery = item.toLowerCase();
+      const filterData= filter(Operasional, (item)=> {
+        return contains(item , formattedQuery)
+      })
+      console.log("Data = ",data)
+      console.log("Format Query =",formattedQuery)
+      console.log("Filter Data = ",filterData)
+      setOperasional(filterData)
+      if (formattedQuery === 0){
+        return getData
+      }
+    };
+    const contains= ({date, description, amount }, item) => {
+      if( date.includes(item) || description.includes(item) 
+          || amount.toString().includes(item)){
+        return true;
+      }
+      return false;
+    }
     const renderItem = ({item}) =>{
         console.log(item)
         return (
@@ -47,33 +81,87 @@ function DaftarOperasional(){
                     <Text style={styles.listItem}> Deskripsi : {item.description}</Text>
                     <Text style={styles.listItem}>Tanggal : {item.date} </Text>
                     <Text style={styles.listItem}> Jumlah : {item.amount}</Text>
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity
-                        onPress={() => {Delete(item.id)}}
-                        style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                        <Text style={styles.buttonText}>Delete</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                        onPress={() => navigation.navigate ('UpdatePendapatanTelur',{id:item.id})} 
-                        onLongPress={()=> navigation.navigate('UpdatePendapatanTelur',{id:item.id})}
-                        style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                        <Text style={styles.buttonText}>Edit</Text>
-                        </TouchableOpacity>
-                    </View>
+                        <View style={styles.buttonContainer}>
+                            <TouchableOpacity
+                            onPress={() => {Delete(item.id)}}
+                            style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                            <Text style={styles.buttonText}>Delete</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                            onPress={() => navigation.navigate ('UpdatePendapatanTelur',{id:item.id})} 
+                            onLongPress={()=> navigation.navigate('UpdatePendapatanTelur',{id:item.id})}
+                            style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                            <Text style={styles.buttonText}>Edit</Text>
+                            </TouchableOpacity>
+                        </View>
                 </View>
             </View>
         )
 
     }
     return (
+      <View>
+        <TextInput style={styles.input} placeholder="search" 
+          value={Operasional} 
+          clearButtonMode="always"
+          onChangeText={handleSearch}
+          autoCorrect={false}/>
         <FlatList
         style={styles.container12}
         data={Operasional}
         renderItem={renderItem}
         keyExtractor={(item,index) => index.toString()}
         onEndReachedThreshold={0}/>
+        </View>
     )
 }
+    // const handleScroll = (event) => {
+    //   const { layoutMeasurement, contentOffset, contentSize } = event.nativeEvent;
+    //   const isEndReached = layoutMeasurement.height + contentOffset.y >= contentSize.height;
+    //   if (isEndReached) {
+    //     setpageCurrent(pageCurrent + 1);
+    //   }
+    // };
+    // return(
+    //   <View style={styles.view}>
+    //     <ScrollView 
+    //     //horizontal={false}
+    //    disableIntervalMomentum={true}
+    //     onScroll={handleScroll} 
+    //     >
+    //       <View style={styles.container}>
+    //         <TouchableOpacity>
+    //           <Text style={styles.title}DaftarOperasional></Text>
+    //         </TouchableOpacity>
+    //         <Text style={styles.title}> DaftarOperasional</Text>
+    //         {Operasional.map((data, index) => 
+    //         <View style={styles.employeeListContainer}>
+    //           <Text style={{ ...styles.listItem, color: "tomato" }}>{data.date}</Text>
+    //           <Text style={styles.listItem}>Deskripsi : {data.description}</Text>
+    //           <Text style={styles.listItem}>Jumlah telur: {data.amount}</Text>
+    //           <Text style={styles.listItem}>Tanggal: {data.date}</Text>
+    //           <View style={styles.buttonContainer}>
+    //             <TouchableOpacity
+    //               onPress={() =>{}}
+    //               style={{...styles.button, marginVertical:0, marginLeft:10, backgroundColor:"tomato"}} >
+    //               <Text style={styles.buttonText}>Delete</Text>
+    //             </TouchableOpacity>
+    //             <TouchableOpacity
+    //               onPress={() => navigation.navigate()}
+    //               style={{...styles.button, marginVertical:0, marginLeft:10, backgroundColor:"tomato"}}>
+    //             <Text style={styles.buttonText}>Update</Text>
+    //             </TouchableOpacity>
+    //           </View>
+    //         </View>)}
+    //       </View>
+    //       {pageCurrent !== 1 && <Text style={styles.text}>Loading ..</Text>}
+    //     </ScrollView>
+    //     <Button mode="contained"
+    //     onPress={() => navigation.reset({index: 0,
+    //     routes: [{ name: 'ListKandang' }],})}>Kembali</Button>
+    //   </View>
+    // )
+
 export default DaftarOperasional;
 const styles = StyleSheet.create({
     text:{
@@ -144,5 +232,13 @@ const styles = StyleSheet.create({
       container12:{
         marginTop:20,
         backgroundColor:'#7FFFD4'
+      },
+      input: {
+        height:45,
+        borderWidth:1,
+        paddingLeft:20,
+        margin:5,
+        borderColor:'#009688',
+        backgroundColor:'blue',
       }
 })

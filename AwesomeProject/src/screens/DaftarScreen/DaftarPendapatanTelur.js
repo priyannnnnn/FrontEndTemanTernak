@@ -7,7 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
 import { AxiosContext, AxiosProvider } from "../../context/AxiosContext";
-//import filter from "lodash.filter"
+import filter from "lodash.filter"
 import { AuthProvider } from "../../context/AuthContext";
 import { Feather, Entypo } from "@expo/vector-icons";
 import AntDesign from 'react-native-vector-icons/AntDesign'
@@ -20,9 +20,8 @@ function DaftarPendapatanTelur({navigation}){
     const [ IncomeEgg, setIncomeEgg ] = useState([])
     const [ loading, setLoading ] = useState(false)
     const [ errorMessage, setErrorMessage ] = useState('')
-    const [pageCurrent, setpageCurrent]= useState(0);
+    const [pageCurrent, setpageCurrent]= useState(1);
     const [totalpage, settotalpage]= useState(10);
-    const [masterdata, setmasterdata]= useState([]);
     const [search, setsearch]= useState('');
 
     const axiosContext = useContext(AxiosContext);
@@ -36,17 +35,15 @@ function DaftarPendapatanTelur({navigation}){
       setLoading(true)
       axiosContext.authAxios.get(`/api/v1/incomeEgg?size=10&page=${pageCurrent}`)
       .then(res => {
-        console.log("then = ")
+        console.log("then = ",totalpage)
         setLoading(false)
-        //setIncomeEgg(res.data.content)
+       // setIncomeEgg(res.data.content)
         setIncomeEgg(IncomeEgg.concat(res.data.content))
-        //setIncomeEgg([...IncomeEgg,...res.data.content])
+        console.log(res.data);
+       //setIncomeEgg([...IncomeEgg,...res.data.content])
         setErrorMessage('')
-        console.log('getdata_income_egg',res.data)
         setLoading(false)
-            //settotalpage(res.data.totalPages)
-            //setmasterdata(res)
-            //setIncomeEgg(res.content)
+           
           })
           .catch((e) => {
             setLoading(false)
@@ -62,7 +59,7 @@ function DaftarPendapatanTelur({navigation}){
         .then(res=> {
           console.log(res.data)
           setLoading(false)
-          setIncomeEgg(res.data)
+          setIncomeEgg(res.data.content)
           console.log("Res Data",res.data)
           getData()
         })
@@ -72,15 +69,16 @@ function DaftarPendapatanTelur({navigation}){
         )}
         
         useEffect(() => {
-          console.log("PageCurrent = ",pageCurrent)
+          console.log("PageCurrent pendapatan = ",pageCurrent)
           setLoading(true)
           getData()
           return()=>{}
         }, [pageCurrent])
 
      const render=({item})=>{
-      // console.log(item)
+      console.log(item)
         return(
+        <ScrollView>
         <View style={styles.container} key={item.id}>
           <TouchableOpacity
                 onPress={toggleAddEmployeeModal} style={styles.button}>
@@ -105,15 +103,66 @@ function DaftarPendapatanTelur({navigation}){
           </View>
           </View>
         </View>
-        )
-      };
+        </ScrollView>
+        )}
+      
       // _keyExtractor=(data,index)=> data.id.toString();
 
       handleLoadMore=()=>{
-        console.log("HandleLoadMore")
-        setpageCurrent(pageCurrent+1)
-        //getData()
-        setLoading(true)
+       const page1 = pageCurrent < totalpage;
+       const page = pageCurrent > totalpage;
+       console.log("Page current =",pageCurrent)
+       console.log("Total page = ",totalpage)
+       let current=pageCurrent;
+        switch(current){
+          case 1:
+            current=1;
+            setpageCurrent(pageCurrent+1-1)
+            break;
+          case 2:
+            current=2;
+            setpageCurrent(pageCurrent+1)
+            break;
+        }
+       
+      // if(totalpage === 10){
+      
+      //      setpageCurrent(pageCurrent)
+      //       }
+      // if(pageCurrent ===3){
+      // setpageCurrent(pageCurrent+1)
+      //         return;
+      //   } 
+      //  }else if(pageCurrent === 1){
+      //    setpageCurrent(pageCurrent+1)
+      //    return;
+      //  }else if (pageCurrent ===3 || pageCurrent > totalpage ){
+      //   setpageCurrent(pageCurrent+1)
+      //   return;
+      //  }
+      //  }else if (page){
+      //   setpageCurrent(pageCurrent+1)
+      //  }
+      //  else{
+      //   return (
+      //     <View>
+      //       <Text style={styles.text}>Kosong</Text>
+      //     </View>
+      //   )
+      //  }
+       
+      
+        // if (pageCurrent < totalpage){
+        //   console.log("HandleLoadMore 1 =",totalpage)
+        //   setpageCurrent(pageCurrent+1)
+        //   //getData()
+        //   setLoading(true)
+        // }else if( page) {
+        //   console.log("HandleLoadMore 2 =",totalpage)
+        //   setpageCurrent(pageCurrent+1)
+        //   //getData()
+        //   setLoading(true)
+        // }
       }
       renderFooter=()=>{
         return(
@@ -141,20 +190,22 @@ function DaftarPendapatanTelur({navigation}){
       //   }
       // }
 
-      // const handleSearch= (item) =>{
-      //   setsearch(item);
-      //   const formattedQuery = item.toLowerCase();
-      //   const filterData= filter(masterdata, (item)=> {
-      //     return contains(item , formattedQuery)
-      //   })
-      //   setmasterdata (filterData)
-      // };
-      // const contains= ({date, quantity}, item) => {
-      //   if(date.includes(item) || quantity.includes(item)){
-      //     return true;
-      //   }
-      //   return false;
-      // }
+      const handleSearch= (item) =>{
+        setsearch(item);
+        const formattedQuery = item.toLowerCase();
+        const filterData= filter(IncomeEgg, (item)=> {
+          return contains(item , formattedQuery)
+        })
+        console.log("Format Query =",formattedQuery)
+        console.log("Filter Data = ",filterData)
+        setIncomeEgg(filterData)
+      };
+      const contains= ({date, quantity}, item) => {
+        if(date.includes(item)){
+          return true;
+        }
+        return false;
+      }
 
       // const List = ({item})=> {
       //   console.log("Item Data = ",item)
@@ -169,20 +220,13 @@ function DaftarPendapatanTelur({navigation}){
       //     }
       // }
 
-      const Search= text =>{
-        setsearch(text);
-        const filterData= IncomeEgg.filter(item => item.date.toLowerCase().includes(text.toLowerCase()
-        ))
-        setmasterdata(filterData)
-      }
-
       return(
-        <View>
-          <Text style={styles.listItem}>hggdtg</Text>
+        <View style={{backgroundColor:'#FF4500'}}>
           <TextInput style={styles.input} placeholder="search" 
               value={IncomeEgg} 
               clearButtonMode="always"
-              onChangeText={Search}/>
+              onChangeText={handleSearch}
+              autoCorrect={false}/>
         <FlatList
         style={styles.container12}
         data={IncomeEgg}
@@ -193,65 +237,12 @@ function DaftarPendapatanTelur({navigation}){
         onEndReachedThreshold={0}
         >
         </FlatList>
+      
+        
         </View>
       )
 
 
-
-    // return(
-    //     <ScrollView>
-
-    //         <View style={styles.container}>
-    //         <TouchableOpacity
-    //             onPress={toggleAddEmployeeModal}
-    //             style={styles.button}>
-    //             <Text style={styles.buttonText}>Tambah PendapatanTelur</Text>
-    //         </TouchableOpacity>
-
-    //         <Text style={styles.title}>Daftar PendapatanTelur</Text>
-    //         {IncomeEgg.map((data, index) => <View
-    //             style={styles.employeeListContainer}
-    //             key={data.id}>
-    //             <Text style={{ ...styles.listItem, color: "tomato" }}>{data.date}</Text>
-    //             <Text style={styles.name}>{data.employee_name}</Text>
-    //             <Text style={styles.listItem}>Jumlah telur: {data.quantity}</Text>
-    //             <Text style={styles.listItem}>Tanggal: {data.date}</Text>
-              
-    //             <View style={styles.buttonContainer}>
-    //             <TouchableOpacity
-    //                 onPress={() => navigation.navigate ('UpdatePendapatanTelur',{id:data.id})
-                        
-    //                 } onLongPress={()=> navigation.navigate('UpdatePendapatanTelur',{id:data.id})}
-    //                 style={{ ...styles.button, marginVertical: 0 }}>
-    //                 <Text style={styles.buttonText}>Edit</Text>
-    //             </TouchableOpacity>
-
-    //             <TouchableOpacity
-    //                 onPress={() => {DeleteData(data.id)
-                    
-    //                 }}
-    //                 style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-    //                 <Text style={styles.buttonText}>Delete</Text>
-    //             </TouchableOpacity>
-    //             </View>
-    //         </View>)}
-
-    //         {loading ? <Text
-    //             style={styles.message}>Please Wait...</Text> : errorMessage ? <Text
-    //             style={styles.message}>{errorMessage}</Text> : null}
-
-    //         <Button 
-    //         mode='contained'
-    //         onPress={() =>
-    //         navigation.reset({
-    //             index: 0,
-    //             routes: [{ name: 'Dashboard' }],
-    //         })
-    //         }>Kembali</Button>
-    //     </View>
-
-    //   </ScrollView>
-    // )
 }
 export default DaftarPendapatanTelur;
 const styles=StyleSheet.create({
@@ -345,4 +336,8 @@ const styles=StyleSheet.create({
         // width: "90%",
         // color:'#000000'
       },
+      viewButton: {
+        height:900,
+        width:300
+      }
 })

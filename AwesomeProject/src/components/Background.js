@@ -16,7 +16,7 @@ export default function Background({ children }) {
       style={styles.background}
       imageStyle={styles.r}
     >
-      <KeyboardAvoidingView style={styles.container} behavior="padding">
+      <KeyboardAvoidingView style={styles.container}>
         {children}
       </KeyboardAvoidingView>
       

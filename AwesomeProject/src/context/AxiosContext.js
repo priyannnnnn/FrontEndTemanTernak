@@ -74,7 +74,7 @@ const AxiosProvider= ({children}) => {
     return(
         <Provider
             value={{
-                authAxios
+                authAxios,
             }}>{children}</Provider>
     );
 };

@@ -93,7 +93,7 @@ function Penjualan({navigation}){
         <Button mode='contained' style={{margin:4}} onPress={onSubmit}>Simpan</Button>  
         <Button mode='contained'
             onPress={() => navigation.reset({
-            index: 0, routes: [{ name: 'ListKandang' }],})}>Kembali</Button>   
+            index: 0, routes: [{ name: 'AmountKandang' }],})}>Kembali</Button>   
         </View> 
         </ScrollView>
     )

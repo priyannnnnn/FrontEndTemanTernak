@@ -11,6 +11,8 @@ import { Picker } from "@react-native-picker/picker";
 import moment from "moment";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AxiosContext } from "../../context/AxiosContext";
+import Background from "../../components/Background";
+import Back from "../../components/Back";
 
 function Ternak({navigation, props}) {
   
@@ -45,9 +47,9 @@ function Ternak({navigation, props}) {
     showMode('date');
   };
 
-  // useEffect(() => {
-  //   setLiveStock({...livestock, date:{ value: `${moment(date).format('YYYY-MM-DD')}`, error: ''}})
-  // }, [date])
+  useEffect(() => {
+    setLiveStock({...livestock, date:{ value: `${moment(date).format('YYYY-MM-DD')}`, error: ''}})
+  }, [date])
 
   const onSubmit = () => {
     const data = {
@@ -78,28 +80,28 @@ function Ternak({navigation, props}) {
   }
 
   return (
+    // <Back>
     <ScrollView style={style.ScrollView}>
       <View style={style.View}>
       <BackButton goBack={navigation.goBack} />
       <Header>Isi Kandang</Header>
 
-      <Text style={style.Text} >Umur</Text>
+      <Text style={style.Text}>Umur</Text>
       <TextInput value={livestock?.age.value} onChangeText={(text) => setLiveStock({ ...livestock, age: {value: text, error: ''}  })} label='Masukkan Umur' keyboardType="numeric"/>
 
-      <Text style={style.Text} >Total</Text>
+      <Text style={style.Text}>Total</Text>
       <TextInput value={livestock?.quantity.value} onChangeText={(text) => setLiveStock({ ...livestock, quantity: {value: text, error: ''}  })}  label= 'Total Ayam' keyboardType="numeric"/>
 
-      <Text style={style.Text} >Tanggal</Text>
+      <Text style={style.Text}>Tanggal</Text>
       <TextInput value={livestock?.date.value} onChangeText={(text) => setLiveStock({...setLiveStock, date: {value: text, error: ''}  })}  onBlur={onChange} onChange={showDatepicker} onFocus={showDatepicker} label='Masukkan Tanggal'/>
       {show &&(
-              <DateTimePicker
-              testID="dateTimePicker"
+        <DateTimePicker
+        testID="dateTimePicker"
               value={date}
               mode={mode}
               is24Hour={true}
               onChange={onChange}/>
-            )}
-
+              )}
       <Text style={style.Text} >Harga Total</Text>
       <TextInput value={livestock?.amount.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam' keyboardType="numeric"/>
 
@@ -110,9 +112,9 @@ function Ternak({navigation, props}) {
         selectedValue={livestock?.type.value}
         onValueChange={(itemValue,itemIndex) => setLiveStock({...livestock, type:{value:itemValue,error:''}})}>
           <Picker.Item/>
-          <Picker.Item style={style.title} label="peksi" value="peksi"/>
-          <Picker.Item style={style.title} label="Blaster" value="Blaster"/>
-          <Picker.Item style={style.title} label="Albino" value="Albino"/>
+          <Picker.Item style={style.title} label="Peksi" value="peksi"/>
+          <Picker.Item style={style.title} label="Blaster" value="blaster"/>
+          <Picker.Item style={style.title} label="Albino" value="albino"/>
         </Picker>
       </View>
       {/* <TextInput value={livestock?.type.value} onChangeText={(text) => setLiveStock({ ...livestock, type: {value: text, error: ''}  })}  label='Peksi'/> */}
@@ -123,9 +125,11 @@ function Ternak({navigation, props}) {
       <Button mode='contained' style={{ marginTop: 4 }} onPress={ onSubmit }>Simpan</Button>
       <Button mode='contained'
         onPress={() => navigation.reset({index: 0,
-        routes: [{ name: 'ListKandang' }],})}>Kembali</Button>
+          routes: [{ name: 'AmountKandang' }],})}>Kembali</Button>
       </View>
     </ScrollView>
+          // </Back>
+       
   )
 }
 export default Ternak;
@@ -133,7 +137,7 @@ const style=StyleSheet.create({
   View:{
     flex: 1,
     width: '100%',
-    backgroundColor: theme.colors.backgroundColor,
+    backgroundColor: theme.colors.screen,
     padding: 20,
     alignSelf: 'center',
     justifyContent: 'center',
@@ -142,13 +146,13 @@ const style=StyleSheet.create({
     textAlign:'left',
     fontSize:20,
     fontWeight: '500',
-    color:'#000000'
+    color:'#F9FBE7'
   },
   ScrollView:{
     flex:1,
     width:'100%',
     paddingBottom:1,
-    backgroundColor:theme.colors.backgroundColor,
+    backgroundColor:theme.colors.screen,
     marginTop:0
   },
   title:{

@@ -67,10 +67,25 @@ import UpdateTernak from './src/helpers/screenUpdate/UpdateTernak'
 import { AuthProvider } from './src/context/AuthContext';
 import { AxiosProvider } from './src/context/AxiosContext';
 import DaftarOperasional from './src/screens/DaftarScreen/DaftarOperasional';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import Tabs from './src/helpers/Tabs';
+import AmountKandang from './src/screens/AmountKandang';
+import {name as appName} from './app.json';
+import {AppRegistry} from 'react-native';
 
 
-
+const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator()
+
+function Expenses(){
+  return(
+  <Tab.Navigator>
+     <Tab.Screen name='teyy' component={ListKandang}/>
+      <Tab.Screen name='rtt' component={Ternak}/>
+  </Tab.Navigator>
+  
+  )
+}
 
 export default function App() {
   return (
@@ -109,6 +124,7 @@ export default function App() {
               <Stack.Screen name='UpdateTernak' component={UpdateTernak}/>
               <Stack.Screen name='AuthProvider' component={AuthProvider}/>
               <Stack.Screen name='DaftarOperasional'component={DaftarOperasional}/>
+              <Stack.Screen name='AmountKandang' component={AmountKandang}/>
 
               <Stack.Screen
                 name="ResetPasswordScreen"
@@ -122,3 +138,4 @@ export default function App() {
     </Provider>
   )
 }
+AppRegistry.registerComponent(appName, () => App);

@@ -18,8 +18,6 @@ const AuthProvider = ({children}) =>{
         return authState.accessToken; 
     };
 
-    
-
     return (
       <Provider value={{
         authState,

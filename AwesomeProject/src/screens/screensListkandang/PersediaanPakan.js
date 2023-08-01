@@ -90,8 +90,8 @@ function PersediaanPakan({navigation}) {
               selectedValue={feed?.type.value}
               onValueChange={(itemvalue) => setFeed({...feed, type:{value:itemvalue, error:''}})}>
               <Picker.Item/>
-              <Picker.Item style={styles.title} label="Pedaging" value="Pedaging"/>
-              <Picker.Item style={styles.title} label="Petelur" value="Petelur"/>
+              <Picker.Item style={styles.title} label="pedaging" value="pedaging"/>
+              <Picker.Item style={styles.title} label="petelur" value="petelur"/>
             </Picker>
             </View>
             {/* <TextInput value={feed?.type.value} onChangeText={(text)=> setFeed({...feed, type: {value:text, error:''} })} label='Nama Produk Pakan'/> */}
@@ -114,7 +114,7 @@ function PersediaanPakan({navigation}) {
             <Button 
             mode='contained'
                 onPress={() => navigation.reset({ index: 0,
-                routes: [{ name: 'ListKandang' }], })}>Kembali</Button>
+                routes: [{ name: 'AmountKandang' }], })}>Kembali</Button>
         </View>
        </ScrollView>
     )

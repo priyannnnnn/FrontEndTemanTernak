@@ -49,10 +49,10 @@ const publicAxios = useContext(AxiosContext);
         JSON.stringify({
           accessToken
         }),
-        navigation.navigate("BiayaOperasional")
+        navigation.navigate("Dashboard")
       );
 
-      console.log("Keychain",accessToken)
+      console.log("Token = ",accessToken)
       authContext.setAuthState({
         authenticated: true,
         accessToken: accessToken,
@@ -61,21 +61,10 @@ const publicAxios = useContext(AxiosContext);
     }catch(error){
       console.error(error)
     }
-
-
-    // navigation.reset({
-    //   index: 0,
-    //   routes: [{ name: 'Dashboard' }],
-    // })
   }
-// const margin =height <380 ? 30:100;
   return (
-    
     <Background>
-      
       <BackButton goBack={navigation.goBack} />
-      {/* <Logo /> */}
-      
       <SafeAreaView style={styles.save}>
       <ScrollView style={styles.f}>
       <View style={styles.f}>

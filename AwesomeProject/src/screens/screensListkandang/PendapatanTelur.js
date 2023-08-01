@@ -29,8 +29,8 @@ function PendapatanTelur({ navigation }) {
 
   const onSubmit=()=>{
     const data={
-      quantity:IncomeEgg?.quantity.value,
-      date: IncomeEgg?.date.value
+      quantity:IncomeEgg?.quantity?.value,
+      date: IncomeEgg?.date?.value
     }
     const quantity=!isNaN(data.quantity) && data.quantity>1;
 
@@ -80,7 +80,7 @@ function PendapatanTelur({ navigation }) {
         <BackButton goBack={navigation.goBack} />
         <Header>Telur</Header>
         <Text style={styles.Text}>Jumlah Telur</Text>
-        <TextInput value={IncomeEgg?.quantity.value} onChangeText={(text)=> setIncomeEgg({...IncomeEgg, quantity:{value:text,error:''}})} 
+        <TextInput value={IncomeEgg?.quantity.value} onChangeText={(text)=> setIncomeEgg({...IncomeEgg, quantity:{value: text,error:''}})} 
           label='Masukkan Jumlah Telur' keyboardType="numeric" />
           
         <Text style={styles.Text}>Tanggal</Text>
@@ -97,8 +97,7 @@ function PendapatanTelur({ navigation }) {
 
         <Button
           mode='contained'
-          onPress={onSubmit
-          }
+          onPress={onSubmit}
         >
           Simpan
         </Button>
@@ -107,7 +106,7 @@ function PendapatanTelur({ navigation }) {
           onPress={() =>
             navigation.reset({
               index: 0,
-              routes: [{ name: 'ListKandang' }],
+              routes: [{ name: 'AmountKandang' }],
             })
           }
         >Kembali</Button>

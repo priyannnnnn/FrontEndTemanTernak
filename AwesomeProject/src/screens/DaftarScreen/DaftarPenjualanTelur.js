@@ -1,4 +1,4 @@
-import { ScrollView, View,Text, StyleSheet, FlatList,ActivityIndicator } from "react-native";
+import { ScrollView, View,Text, StyleSheet, FlatList,ActivityIndicator, TextInput } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
@@ -6,15 +6,18 @@ import Button from "../../components/Button";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { AxiosContext } from "../../context/AxiosContext";
-
+import filter from "lodash.filter"
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 function DaftarPenjualanTelur({navigation}){
 
   const [ saleEgg, setsaleEgg]=useState([])
   const [loading, setLoading] = useState(false)
   const [rrorMessage, setErrorMessage ] = useState('')
+  const [totalpage, settotalpage]= useState(10);
   const [pageCurrent, setpageCurrent]= useState(0);
   const axiosContext = useContext(AxiosContext);
+  const [search, setsearch]= useState('');
 
   const config={
     headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2Mzg2NiwiZXhwIjoxNjg2NDY1MzA2fQ.VaduI3MQZnP8J9JreMZtsGa7in5tukyhZ9vWELRiuVM"}`}
@@ -39,10 +42,15 @@ function DaftarPenjualanTelur({navigation}){
   }
     const DeleteData=(id)=>{
     console.log(id)
-    fetch('http://139.162.6.202:8000/api/v1/saleEgg/' + id, config,{method: "DELETE"})
-    .then (sel => sel.json())
-    .then (sel =>{
-      console.log(sel)
+    axiosContext.authAxios.delete('/api/v1/saleEgg/'+id)
+    .then (res =>{
+      console.log(res.data)
+      setLoading(false)
+      saleEgg(res.data.content)
+      GetData()
+    })
+    .catch((e) => {
+      console.error(e)
     })
    
     }
@@ -85,10 +93,20 @@ function DaftarPenjualanTelur({navigation}){
   };
 
   handleLoadMore=()=>{
-    console.log("HandleLoadMore")
-    setpageCurrent(pageCurrent+1)
-    //GetData()
-    setLoading(true)
+    const page = pageCurrent > totalpage;
+       console.log("Page current =",pageCurrent)
+       console.log("Total page",totalpage)
+        if (pageCurrent < totalpage){
+          console.log("HandleLoadMore 1 = ",totalpage)
+          setpageCurrent(pageCurrent+1)
+          //getData()
+          setLoading(true)
+        }else if( page) {
+          console.log("HandleLoadMore 2 = ",totalpage)
+          setpageCurrent(pageCurrent+1)
+          //getData()
+          setLoading(true)
+        }
   }
   renderFooter=()=>{
     return(
@@ -98,10 +116,30 @@ function DaftarPenjualanTelur({navigation}){
     </View> :null
     )}
 
-
-
+    const handleSearch= (item) =>{
+      setsearch(item);
+      const formattedQuery = item.toLowerCase();
+      const filterData= filter(saleEgg, (item)=> {
+        return contains(item , formattedQuery)
+      })
+      console.log("Format Query =",formattedQuery)
+      console.log("Filter Data = ",filterData)
+      setsaleEgg(filterData)
+    };
+    const contains= ({date, quantity,amount}, item) => {
+      if(date.includes(item) || quantity.toString().includes(item) || amount.toString().includes(item)){
+        return true;
+      }
+      return false;
+    }
 
     return(
+      <View>
+        <TextInput style={styles.input} placeholder="search" 
+              value={saleEgg} 
+              clearButtonMode="always"
+              onChangeText={handleSearch}
+              autoCorrect={false}/>
       <FlatList
       style={styles.container12}
       data={saleEgg}
@@ -111,6 +149,7 @@ function DaftarPenjualanTelur({navigation}){
       onEndReached={this.handleLoadMore}
       onEndReachedThreshold={0}
       />
+      </View>
 
 
 
@@ -212,5 +251,12 @@ const styles=StyleSheet.create({
       container12:{
         marginTop:20,
         backgroundColor:'#7FFFD4'
+      },input: {
+        height:45,
+        borderWidth:1,
+        paddingLeft:20,
+        margin:5,
+        borderColor:'#008000',
+        backgroundColor:'blue',
       }
 })
