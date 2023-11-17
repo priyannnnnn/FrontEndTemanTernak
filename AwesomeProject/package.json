@@ -18,7 +18,7 @@
     "@react-navigation/native": "^6.1.6",
     "@react-navigation/native-stack": "^6.9.12",
     "@react-navigation/stack": "^6.3.16",
-    "axios": "^1.4.0",
+    "axios": "^1.6.2",
     "axios-auth-refresh": "^3.3.6",
     "lodash.filter": "^4.6.0",
     "moment": "^2.29.4",

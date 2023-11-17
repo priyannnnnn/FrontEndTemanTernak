@@ -70,8 +70,11 @@ function Ternak({navigation, props}) {
         Alert.alert ('Data Anda Salah',"Mohon Untuk Cek Kembali")
         return;
       }
+      console.log("URLLL ternak = ")
     axiosContext.authAxios.post(`/api/v1/livestock`, data)
+    console.log("succes URL")
       .then(res => {
+        console.log(res.data)
         navigation.navigate('DaftarTernak', {name: 'DaftarTernak'})
       })
       .catch((error) => {

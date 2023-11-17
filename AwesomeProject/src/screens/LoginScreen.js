@@ -17,17 +17,36 @@ import { AuthContext } from '../context/AuthContext'
 
 
  function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
+  const [email, setEmail] = useState({ value: 'test_24@gmail.com', error: '' })
+  const [password, setPassword] = useState({ value: '12345678', error: '' })
 
 const authContext = useContext(AuthContext);
 const publicAxios = useContext(AxiosContext);
 
+const Login = ()=>{
+  console.log("Succes")
+  const dataLogin = {
+    email:email?.value,
+    password:password?.value
+  }
+  const emailError = emailValidator(email.value)
+  const passwordError = passwordValidator(password.value)
+  if (emailError || passwordError) {
+    setEmail({ ...email, error: emailError })
+    setPassword({ ...password, error: passwordError })
+    return
+  }
+  const response = axios.get('http://localhost:8000/api/v1/login/email'+ dataLogin)
+  console.log("Data = ", dataLogin)
+  console.log("Token = ", response)
+}
+
   const onLoginPressed =async () => {
+    console.log("Login Any farm ")
     try{
-      const dataLogin={
+      const dataLogin = {
         email:email?.value,
-        password:password.value
+        password:password?.value
       }
       const emailError = emailValidator(email.value)
       const passwordError = passwordValidator(password.value)
@@ -35,16 +54,19 @@ const publicAxios = useContext(AxiosContext);
         setEmail({ ...email, error: emailError })
         setPassword({ ...password, error: passwordError })
         return
-      }console.log(dataLogin)
+      }console.log(" Data Login",dataLogin)
+      console.log("URLLLL")
+      console.log("before = ",response)
+      const response = await axios.post('http://localhost:8000/api/v1/login/email',dataLogin)
+      console.log("response Url = ")
+      console.error("url = ",response.data)
+      console.log(response.token)
 
-      const response=await axios.post('http://139.162.6.202:8000/api/v1/login/email',dataLogin)
-
-      console.log(response.data)
-
-      const accessToken = response.data.token
+      const accessToken = response.data
+      console.log("Acces Token")
       console.log('accesssToken=',accessToken)
       
-      await Keychain.setGenericPassword(
+       await Keychain.setGenericPassword(
         'token',
         JSON.stringify({
           accessToken
@@ -60,6 +82,7 @@ const publicAxios = useContext(AxiosContext);
 
     }catch(error){
       console.error(error)
+      console.log("Url Error")
     }
   }
   return (
@@ -103,9 +126,15 @@ const publicAxios = useContext(AxiosContext);
       </Button>
       <View style={styles.row}>
         <Text>Tidak Punya Akun? </Text>
-        <TouchableOpacity onPress={() => navigation.replace('RegisterScreen')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Api')}>
           <Text style={styles.link}>Buat Akun</Text>
         </TouchableOpacity>
+        <View>
+        <Text>Tidak Punya111 Akun? </Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Dashboard')}>
+          <Text style={styles.link}>Buat Akun</Text>
+        </TouchableOpacity>
+        </View>
       </View>
     </View>
       </ScrollView>

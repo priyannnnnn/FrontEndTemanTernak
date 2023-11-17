@@ -29,8 +29,8 @@ export default function Dashboard({ navigation }) {
           <View style={{alignItems:'center', justifyContent:'center', top:10}}>
             <Image source={require('../assets/123.png')} 
               style={{ 
-                width: 25,
-                height: 25,
+                width: 40,
+                height: 40,
                 tintColor: focused ? '#e32f45' : '#748c94',
               }}/>
            {/* <Text style={{color: focused ? '#e32f45' : '#748c94', fontSize:12}}>Kandang</Text>  */}
@@ -39,7 +39,7 @@ export default function Dashboard({ navigation }) {
         />
       <Tab.Screen name='Akun' component={Ternak} options={{tabBarIcon: ({focused}) => (
           <View style={{alignItems:'center', justifyContent:'center', top:10}}>
-              <AntDesign name="user" style={{color:'black', fontSize:40, tintColor: focused ? '#e32f45' : '#748c94',}}/>
+              <AntDesign name="home" style={{color:'black', fontSize:40, tintColor: focused ? '#e32f45' : '#748c94',}}/>
           </View>
       )}}/>
 

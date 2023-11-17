@@ -72,6 +72,7 @@ import Tabs from './src/helpers/Tabs';
 import AmountKandang from './src/screens/AmountKandang';
 import {name as appName} from './app.json';
 import {AppRegistry} from 'react-native';
+import Api from './src/screens/api';
 
 
 const Tab = createBottomTabNavigator();
@@ -90,8 +91,8 @@ function Expenses(){
 export default function App() {
   return (
     <Provider theme={theme}>
-      <AuthProvider>
-        <AxiosProvider>
+      {/* <AuthProvider>
+        <AxiosProvider> */}
           <NavigationContainer>
             <Stack.Navigator
               initialRouteName="StartScreen"
@@ -125,6 +126,7 @@ export default function App() {
               <Stack.Screen name='AuthProvider' component={AuthProvider}/>
               <Stack.Screen name='DaftarOperasional'component={DaftarOperasional}/>
               <Stack.Screen name='AmountKandang' component={AmountKandang}/>
+              <Stack.Screen name='Api' component={Api}/>
 
               <Stack.Screen
                 name="ResetPasswordScreen"
@@ -133,8 +135,8 @@ export default function App() {
               
             </Stack.Navigator>
           </NavigationContainer>
-      </AxiosProvider>
-      </AuthProvider>
+      {/* </AxiosProvider>
+      </AuthProvider> */}
     </Provider>
   )
 }

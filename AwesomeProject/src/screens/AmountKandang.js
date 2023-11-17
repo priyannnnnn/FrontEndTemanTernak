@@ -146,10 +146,10 @@ function AmountKandang({navigation}){
         );
       };
     return(
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView style={{flex: 1, backgroundColor : "#A7D397"}} >
             <StatusBar translucent={false} backgroundColor="#b3ecb3"/>
-            <View style={styles.header}>
-            </View>
+            {/* <View style={styles.header}>
+            </View> */}
             <ScrollView>
                 <View 
                 style={{
