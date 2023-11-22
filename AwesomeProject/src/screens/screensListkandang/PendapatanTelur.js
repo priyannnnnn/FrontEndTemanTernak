@@ -26,6 +26,9 @@ function PendapatanTelur({ navigation }) {
     quantity: {value :'',error:''},
     date:     {value:`${moment(date).format('YYYY-MM-DD')}`, error:''}
   })
+  const config = {
+    headers: { Authorization: `Bearer ${token}` }
+};
 
   const onSubmit=()=>{
     const data={
@@ -38,13 +41,21 @@ function PendapatanTelur({ navigation }) {
         Alert.alert('Data Anda Salah',"Mohon Untuk Cek Kembali")
         return;
       }
-    axiosContext.authAxios.post(`/api/v1/incomeEgg`,data)
+    // axiosContext.authAxios.post(`/api/v1/incomeEgg`,data)
+    // .then(res =>{
+    //   console.info("succes sellegg")
+    //   navigation.navigate('DaftarPendapatanTelur')
+    // })
+    // .catch((error)=>{
+    //   console.log(error)
+    // })
+    axios.post(`/api/v1/incomeEgg`,data,config)
     .then(res =>{
-      console.info("succes sellegg")
+      console.log("succes login  = ", res)
       navigation.navigate('DaftarPendapatanTelur')
     })
-    .catch((error)=>{
-      console.log(error)
+    .catch((error) =>{
+      console.log("error = ",error)
     })
   }
 
