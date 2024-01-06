@@ -17,14 +17,14 @@ import { AuthContext } from '../context/AuthContext'
 
 
  function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState({ value: 'test_24@gmail.com', error: '' })
+  const [email, setEmail] = useState({ value: 'test_24@gmail.com', s: '' })
   const [password, setPassword] = useState({ value: '12345678', error: '' })
 
-const authContext = useContext(AuthContext);
-const publicAxios = useContext(AxiosContext);
+// const authContext = useContext(AuthContext);
+// const publicAxios = useContext(AxiosContext);
 
 const Login = ()=>{
-  console.log("Succes")
+  // console.log("Succes")
   const dataLogin = {
     email:email?.value,
     password:password?.value
@@ -36,55 +36,63 @@ const Login = ()=>{
     setPassword({ ...password, error: passwordError })
     return
   }
-  const response = axios.get('http://localhost:8000/api/v1/login/email'+ dataLogin)
   console.log("Data = ", dataLogin)
-  console.log("Token = ", response)
+  axios.post('http://139.162.6.202:8000/api/v1/login/email'+ dataLogin)
+  .then(res =>{
+    console.log("Data = ",res.data)
+  })
+  .then(err =>{
+    console.error(err)
+  })
+
+  // console.log("Token = ", )
 }
 
-  const onLoginPressed =async () => {
-    console.log("Login Any farm ")
-    try{
-      const dataLogin = {
-        email:email?.value,
-        password:password?.value
-      }
-      const emailError = emailValidator(email.value)
-      const passwordError = passwordValidator(password.value)
-      if (emailError || passwordError) {
-        setEmail({ ...email, error: emailError })
-        setPassword({ ...password, error: passwordError })
-        return
-      }console.log(" Data Login",dataLogin)
-      console.log("URLLLL")
-      console.log("before = ",response)
-      const response = await axios.post('http://localhost:8000/api/v1/login/email',dataLogin)
-      console.log("response Url = ")
-      console.error("url = ",response.data)
-      console.log(response.token)
+  // const onLoginPressed =async () => {
+  //   console.log("Login Any farm ")
+  //   console.log("Login Any farm ")
+  //   try{
+  //     const dataLogin = {
+  //       email:email?.value,
+  //       password:password?.value
+  //     }
+  //     const emailError = emailValidator(email.value)
+  //     const passwordError = passwordValidator(password.value)
+  //     if (emailError || passwordError) {
+  //       setEmail({ ...email, error: emailError })
+  //       setPassword({ ...password, error: passwordError })
+  //       return
+  //     }console.log(" Data Login",dataLogin)
+  //     console.log("URLLLL")
+  //     console.log("before = ",response)
+  //     const response = await axios.post('http://localhost:8000/api/v1/login/email',dataLogin)
+  //     console.log("response Url = ")
+  //     console.error("url = ",response.data)
+  //     console.log(response.token)
 
-      const accessToken = response.data
-      console.log("Acces Token")
-      console.log('accesssToken=',accessToken)
+  //     const accessToken = response.data
+  //     console.log("Acces Token")
+  //     console.log('accesssToken=',accessToken)
       
-       await Keychain.setGenericPassword(
-        'token',
-        JSON.stringify({
-          accessToken
-        }),
-        navigation.navigate("Dashboard")
-      );
+  //      await Keychain.setGenericPassword(
+  //       'token',
+  //       JSON.stringify({
+  //         accessToken
+  //       }),
+  //       navigation.navigate("Dashboard")
+  //     );
 
-      console.log("Token = ",accessToken)
-      authContext.setAuthState({
-        authenticated: true,
-        accessToken: accessToken,
-      });
+  //     console.log("Token = ",accessToken)
+  //     authContext.setAuthState({
+  //       authenticated: true,
+  //       accessToken: accessToken,
+  //     });
 
-    }catch(error){
-      console.error(error)
-      console.log("Url Error")
-    }
-  }
+  //   }catch(error){
+  //     console.error(error)
+  //     console.log("Url Error")
+  //   }
+  // }
   return (
     <Background>
       <BackButton goBack={navigation.goBack} />
@@ -121,17 +129,17 @@ const Login = ()=>{
           <Text style={styles.forgot}>Forgot your password?</Text>
         </TouchableOpacity>
       </View>
-      <Button mode="contained" onPress={onLoginPressed}>
+      <Button mode="contained" onPress={Login}>
         Login
       </Button>
       <View style={styles.row}>
         <Text>Tidak Punya Akun? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Api')}>
+        <TouchableOpacity onPress={() => navigation.navigate('DaftarPendapatanTelur')}>
           <Text style={styles.link}>Buat Akun</Text>
         </TouchableOpacity>
         <View>
         <Text>Tidak Punya111 Akun? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Dashboard')}>
+        <TouchableOpacity onPress={() => navigation.navigate('DaftarPendapatanTelur')}>
           <Text style={styles.link}>Buat Akun</Text>
         </TouchableOpacity>
         </View>

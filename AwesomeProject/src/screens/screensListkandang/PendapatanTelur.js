@@ -27,7 +27,7 @@ function PendapatanTelur({ navigation }) {
     date:     {value:`${moment(date).format('YYYY-MM-DD')}`, error:''}
   })
   const config = {
-    headers: { Authorization: `Bearer ${token}` }
+    headers: { Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTcwMDYzNDU3NCwiZXhwIjoxNzAwNjM2MDE0fQ.lNUeOD3LdJfu7xWD9suk2betHdVbpvvXqdh7o62PbP0"}` }
 };
 
   const onSubmit=()=>{
@@ -49,7 +49,7 @@ function PendapatanTelur({ navigation }) {
     // .catch((error)=>{
     //   console.log(error)
     // })
-    axios.post(`/api/v1/incomeEgg`,data,config)
+    axios.post(`http://localhost:8000/api/v1/incomeEgg`,data,config)
     .then(res =>{
       console.log("succes login  = ", res)
       navigation.navigate('DaftarPendapatanTelur')

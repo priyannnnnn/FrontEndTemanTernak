@@ -51,6 +51,10 @@ function Ternak({navigation, props}) {
     setLiveStock({...livestock, date:{ value: `${moment(date).format('YYYY-MM-DD')}`, error: ''}})
   }, [date])
 
+  const config = {
+    headers: { Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTcwMDYzNTM4MCwiZXhwIjoxNzAwNjM2ODIwfQ.qCwWeeKY5Far6PvvRp6s23eqET0ZCQ9L3I0H03li-P0"}` }
+};
+
   const onSubmit = () => {
     const data = {
       age: livestock?.age?.value,
@@ -71,8 +75,11 @@ function Ternak({navigation, props}) {
         return;
       }
       console.log("URLLL ternak = ")
-    axiosContext.authAxios.post(`/api/v1/livestock`, data)
-    console.log("succes URL")
+      console.log("token = ",config)
+      console.log("Token2 ", config.headers.Authorization)
+    // axiosContext.authAxios.post(`/api/v1/livestock`, data)
+    axios.post(`http://localhost:8000/api/v1/livestock`,data, config)
+    // console.log("succes URL")
       .then(res => {
         console.log(res.data)
         navigation.navigate('DaftarTernak', {name: 'DaftarTernak'})

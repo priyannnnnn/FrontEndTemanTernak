@@ -23,7 +23,8 @@ function AmountKandang({navigation}){
             <View style={styles.viewButton}>
                 <TouchableOpacity onPress={() => navigation.navigate('Ternak')}>
                     <View style={styles.iconContainer}>
-                        <Icon name="search" size={25} color={'#04555c'} />
+                        {/* <Icon name="search" size={25} color={'#04555c'} /> */}
+                        <Image source={require('../image/ternak.png')} style = {{width: 60, height:60}}/>
                     </View>
                 </TouchableOpacity>
                 <Text style={styles.text}>Ternak</Text>
@@ -31,7 +32,8 @@ function AmountKandang({navigation}){
             <View style={styles.viewButton}>
                 <TouchableOpacity onPress={() => navigation.navigate('PendapatanTelur')}>
                     <View style={styles.iconContainer}>
-                    <Icon name="beach-access" size={25} color={'#04555c'} />
+                    {/* <Icon name="beach-access" size={25} color={'#04555c'} /> */}
+                    <Image source={require('../image/pendapatan.png')} style = {{width: 70, height:50}}/>
                     </View>
                 </TouchableOpacity>
                 <Text style={styles.text}>Pendapatan</Text>
@@ -39,7 +41,8 @@ function AmountKandang({navigation}){
             <View style={styles.viewButton}>
                 <TouchableOpacity onPress={() => navigation.navigate('Penjualan')}>
                     <View style={styles.iconContainer}>
-                    <Icon name="near-me" size={25} color={'#04555c'} />
+                    {/* <Icon name="near-me" size={25} color={'#04555c'} /> */}
+                    <Image source={require('../image/toko.png')} style = {{width: 70, height:50}}/>
                     </View>
                 </TouchableOpacity>
                 <Text style={styles.text}>Pejualan</Text>
@@ -53,7 +56,8 @@ function AmountKandang({navigation}){
             <View style={styles.viewButton}>
                 <TouchableOpacity onPress={() => navigation.navigate('PersediaanPakan')}>
                     <View style={styles.iconContainer}>
-                    <Icon name="alarm" size={25} color={'#04555c'} />
+                    {/* <Icon name="alarm" size={25} color={'#04555c'} /> */}
+                    <Image source={require('../image/pakan.png')} style = {{width:120, height:50}}/>
                     </View>
                 </TouchableOpacity>
                 <Text style={styles.text}>Persediaan Pakan</Text>
@@ -61,7 +65,8 @@ function AmountKandang({navigation}){
             <View style={styles.viewButton}>
                 <TouchableOpacity onPress={() => navigation.navigate('BiayaOperasional')}>
                     <View style={styles.iconContainer}>
-                    <Icon name="beach-access" size={25} color={'#04555c'} />
+                    {/* <Icon name="beach-access" size={25} color={'#04555c'} /> */}
+                    <Image source={require('../image/opr.png')} style = {{width:60, height:60}}/>
                     </View>
                 </TouchableOpacity>
                 <Text style={styles.text}>BiayaOperasional</Text>
@@ -167,7 +172,7 @@ function AmountKandang({navigation}){
                 </View>
                 <ListCategories/>
                 <ListCategories2/>
-                <View>
+                <View style = {{marginTop: 30}}>
                     {/* <FlatList
                     contentContainerStyle={{paddingLeft: 20}}
                     horizontal

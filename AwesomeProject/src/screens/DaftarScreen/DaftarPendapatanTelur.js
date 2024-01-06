@@ -6,12 +6,13 @@ import {Ionicons} from 'react-native/vector-icons';
 import { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
-import { AxiosContext, AxiosProvider } from "../../context/AxiosContext";
+// import { AxiosContext, AxiosProvider } from "../../context/AxiosContext";
 import filter from "lodash.filter"
 import { AuthProvider } from "../../context/AuthContext";
 import { Feather, Entypo } from "@expo/vector-icons";
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { set } from "react-native-reanimated";
+import axios from 'axios'
 
 
 
@@ -23,26 +24,35 @@ function DaftarPendapatanTelur({navigation}){
     const [pageCurrent, setpageCurrent]= useState(1);
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
+    const [data, setData] = useState({});
+    const [apiData, setApiData] = useState(null);
 
-    const axiosContext = useContext(AxiosContext);
+    // const axiosContext = useContext(AxiosContext);
 
     const toggleAddEmployeeModal = () => {
         console.log('test_data');
     }
+
+    const config = {
+      headers: { Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTcwMjg2NDEzMiwiZXhwIjoxNzAyODY1NTcyfQ.c2Qs-dlln18AE1j8Abx6vY9Mnm7pfyijh9_f_1k056U"}` }
+  };
     
     const getData = () => {
       console.log("get Data = ")
-      setLoading(true)
-      axiosContext.authAxios.get(`/api/v1/incomeEgg?size=10&page=${pageCurrent}`)
+      // axiosContext.authAxios.get(`/api/v1/incomeEgg?size=10&page=${pageCurrent}`)
+      // setLoading(true)
+      // axios.get(`http://localhost:8000/api/v1/incomeEgg?`,config.headers.Authorization)
+      axios.get('http://localhost:8000/api/v1/incomeEgg',config)
       .then(res => {
-        console.log("then = ",totalpage)
-        setLoading(false)
-       // setIncomeEgg(res.data.content)
-        setIncomeEgg(IncomeEgg.concat(res.data.content))
-        console.log(res.data);
-       //setIncomeEgg([...IncomeEgg,...res.data.content])
-        setErrorMessage('')
-        setLoading(false)
+        console.log("then = ",res.data)
+      //   console.log("then = ",totalpage)
+      //   setLoading(false)
+      //  // setIncomeEgg(res.data.content)
+      //   setIncomeEgg(IncomeEgg.concat(res.data.content))
+      //   console.log(res.data);
+       setIncomeEgg([...IncomeEgg,...res.data.content])
+      //   setErrorMessage('')
+      //   setLoading(false)
            
           })
           .catch((e) => {
@@ -50,30 +60,81 @@ function DaftarPendapatanTelur({navigation}){
             console.error(e)
             setErrorMessage("Network Error. Please try again.")
           })
-        }
+     
+       }
         
-        const DeleteData=(id)=>{
-          console.log("Get data = ",id)
-        // fetch ('http://139.162.6.202:8000/api/v1/incomeEgg/'+id,config,{method:"DELETE"})
-        axiosContext.authAxios.delete('/api/v1/incomeEgg/'+id)
-        .then(res=> {
-          console.log(res.data)
-          setLoading(false)
-          setIncomeEgg(res.data.content)
-          console.log("Res Data",res.data)
-          getData()
-        })
-        .catch((errror)=>{
-          console.error(errror, "err")
-        }
-        )}
+        // const DeleteData=(id)=>{
+        //   console.log("Get data = ",id)
+        // // fetch ('http://139.162.6.202:8000/api/v1/incomeEgg/'+id,config,{method:"DELETE"})
+        // axiosContext.authAxios.delete('/api/v1/incomeEgg/'+id)
+        // .then(res=> {
+        //   console.log(res.data)
+        //   setLoading(false)
+        //   setIncomeEgg(res.data.content)
+        //   console.log("Res Data",res.data)
+        //   getData()
+        // })
+        // .catch((errror)=>{
+        //   console.error(errror, "err")
+        // }
+        // )}
         
+        // useEffect(() => {
+        //   // console.log("PageCurrent pendapatan = ",pageCurrent)
+        //   // setLoading(true)
+        //   // const apiUrl = 'http://localhost:8080/api/v1/employees';
+        //   // axios.get(apiUrl)
+        //   // Handle the response data
+        //   axios.get('http://localhost:8080/api/v1/employees')
+        //   .then(response => {
+        //     console.log('API Response:', response.data);
+        //     setApiData(response.data);
+        //   })
+        //   .catch(error => {
+        //     // Handle errors
+        //     console.error('Error:', error);
+        //   });
+    //       const apiUrl = 'http://localhost:8000/api/v1/incomeEgg';
+    //       const authToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTcwMjg3OTY0NCwiZXhwIjoxNzAyODgxMDg0fQ.eBh13ryeCWirkRC_2OTwtIMg8t6jI_mT22k_mw42ea8';
+
+    // // Set up the Axios request configuration, including the authorization header
+    // const config = {
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'Authorization': `Bearer ${authToken}`,
+    //   },
+    // };
+
+    // // Make a GET request using Axios
+    // axios.get(apiUrl, config)
+    //   .then(response => {
+    //     // Handle the response data
+    //     console.log('API Response:', response.data);
+    //   })
+    //   .catch(error => {
+    //     // Handle errors
+    //     console.error('Error:', error);
+    //   });
+
+          // getData()
+          // return()=>{}
+        // }, [])
+
         useEffect(() => {
-          console.log("PageCurrent pendapatan = ",pageCurrent)
-          setLoading(true)
-          getData()
-          return()=>{}
-        }, [pageCurrent])
+          // Make a GET request when the component mounts
+          // axios.get('https://jsonplaceholder.typicode.com/posts/1')
+        
+          axios.get('http://localhost:8080/api/v1/employees')
+            .then(response => {
+              // Handle the successful response
+              console.log("data = ", response.data)
+              setData(response.data);
+            })
+            .catch(error => {
+              // Handle the error
+              console.error(error);
+            });
+        }, []);
 
      const render=({item})=>{
       console.log(item)
