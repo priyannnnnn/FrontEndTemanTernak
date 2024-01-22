@@ -6,7 +6,7 @@ import {Ionicons} from 'react-native/vector-icons';
 import { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
-// import { AxiosContext, AxiosProvider } from "../../context/AxiosContext";
+import { AxiosContext, AxiosProvider } from "../../context/AxiosContext";
 import filter from "lodash.filter"
 import { AuthProvider } from "../../context/AuthContext";
 import { Feather, Entypo } from "@expo/vector-icons";
@@ -27,7 +27,7 @@ function DaftarPendapatanTelur({navigation}){
     const [data, setData] = useState({});
     const [apiData, setApiData] = useState(null);
 
-    // const axiosContext = useContext(AxiosContext);
+    const axiosContext = useContext(AxiosContext);
 
     const toggleAddEmployeeModal = () => {
         console.log('test_data');
@@ -39,17 +39,14 @@ function DaftarPendapatanTelur({navigation}){
     
     const getData = () => {
       console.log("get Data = ")
-      // axiosContext.authAxios.get(`/api/v1/incomeEgg?size=10&page=${pageCurrent}`)
-      // setLoading(true)
-      // axios.get(`http://localhost:8000/api/v1/incomeEgg?`,config.headers.Authorization)
-      axios.get('http://localhost:8000/api/v1/incomeEgg',config)
+      axiosContext.authAxios.get(`/api/v1/incomeEgg?size=10&page=${pageCurrent}`)
       .then(res => {
         console.log("then = ",res.data)
-      //   console.log("then = ",totalpage)
-      //   setLoading(false)
-      //  // setIncomeEgg(res.data.content)
-      //   setIncomeEgg(IncomeEgg.concat(res.data.content))
-      //   console.log(res.data);
+        console.log("then = ",totalpage)
+        setLoading(false)
+       // setIncomeEgg(res.data.content)
+        setIncomeEgg(IncomeEgg.concat(res.data.content))
+        console.log(res.data);
        setIncomeEgg([...IncomeEgg,...res.data.content])
       //   setErrorMessage('')
       //   setLoading(false)
@@ -63,77 +60,25 @@ function DaftarPendapatanTelur({navigation}){
      
        }
         
-        // const DeleteData=(id)=>{
-        //   console.log("Get data = ",id)
-        // // fetch ('http://139.162.6.202:8000/api/v1/incomeEgg/'+id,config,{method:"DELETE"})
-        // axiosContext.authAxios.delete('/api/v1/incomeEgg/'+id)
-        // .then(res=> {
-        //   console.log(res.data)
-        //   setLoading(false)
-        //   setIncomeEgg(res.data.content)
-        //   console.log("Res Data",res.data)
-        //   getData()
-        // })
-        // .catch((errror)=>{
-        //   console.error(errror, "err")
-        // }
-        // )}
+        const DeleteData=(id)=>{
+          console.log("Get data = ",id)
+        // fetch ('http://139.162.6.202:8000/api/v1/incomeEgg/'+id,config,{method:"DELETE"})
+        axiosContext.authAxios.delete('/api/v1/incomeEgg/'+id)
+        .then(res=> {
+          console.log(res.data)
+          setLoading(false)
+          setIncomeEgg(res.data.content)
+          console.log("Res Data",res.data)
+          getData()
+        })
+        .catch((errror)=>{
+          console.error(errror, "err")
+        }
+        )}
         
-        // useEffect(() => {
-        //   // console.log("PageCurrent pendapatan = ",pageCurrent)
-        //   // setLoading(true)
-        //   // const apiUrl = 'http://localhost:8080/api/v1/employees';
-        //   // axios.get(apiUrl)
-        //   // Handle the response data
-        //   axios.get('http://localhost:8080/api/v1/employees')
-        //   .then(response => {
-        //     console.log('API Response:', response.data);
-        //     setApiData(response.data);
-        //   })
-        //   .catch(error => {
-        //     // Handle errors
-        //     console.error('Error:', error);
-        //   });
-    //       const apiUrl = 'http://localhost:8000/api/v1/incomeEgg';
-    //       const authToken = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTcwMjg3OTY0NCwiZXhwIjoxNzAyODgxMDg0fQ.eBh13ryeCWirkRC_2OTwtIMg8t6jI_mT22k_mw42ea8';
-
-    // // Set up the Axios request configuration, including the authorization header
-    // const config = {
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${authToken}`,
-    //   },
-    // };
-
-    // // Make a GET request using Axios
-    // axios.get(apiUrl, config)
-    //   .then(response => {
-    //     // Handle the response data
-    //     console.log('API Response:', response.data);
-    //   })
-    //   .catch(error => {
-    //     // Handle errors
-    //     console.error('Error:', error);
-    //   });
-
-          // getData()
-          // return()=>{}
-        // }, [])
 
         useEffect(() => {
-          // Make a GET request when the component mounts
-          // axios.get('https://jsonplaceholder.typicode.com/posts/1')
-        
-          axios.get('http://localhost:8080/api/v1/employees')
-            .then(response => {
-              // Handle the successful response
-              console.log("data = ", response.data)
-              setData(response.data);
-            })
-            .catch(error => {
-              // Handle the error
-              console.error(error);
-            });
+         getData()
         }, []);
 
      const render=({item})=>{
@@ -170,60 +115,35 @@ function DaftarPendapatanTelur({navigation}){
       // _keyExtractor=(data,index)=> data.id.toString();
 
       handleLoadMore=()=>{
-       const page1 = pageCurrent < totalpage;
-       const page = pageCurrent > totalpage;
-       console.log("Page current =",pageCurrent)
-       console.log("Total page = ",totalpage)
-       let current=pageCurrent;
-        switch(current){
-          case 1:
-            current=1;
-            setpageCurrent(pageCurrent+1-1)
-            break;
-          case 2:
-            current=2;
+        console.log("Page current =",pageCurrent)
+          console.log("Total page",totalpage)
+          if (pageCurrent < totalpage){
+            console.log("HandleLoadMore 1 = ",totalpage)
             setpageCurrent(pageCurrent+1)
-            break;
-        }
-       
-      // if(totalpage === 10){
+            //getData()
+            setLoading(false)
+          }else {
+            console.log("HandleLoadMore 2 = ",totalpage)
+            setpageCurrent(pageCurrent+1)
+            //getData()
+            setLoading(false)
+          }
+      //  const page1 = pageCurrent < totalpage;
+      //  const page = pageCurrent > totalpage;
+      //  console.log("Page current =",pageCurrent)
+      //  console.log("Total page = ",totalpage)
+      //  let current=pageCurrent;
+      //   switch(current){
+      //     case 1:
+      //       current=1;
+      //       setpageCurrent(pageCurrent+1-1)
+      //       break;
+      //     case 2:
+      //       current=2;
+      //       setpageCurrent(pageCurrent+1)
+      //       break;
+      //   }
       
-      //      setpageCurrent(pageCurrent)
-      //       }
-      // if(pageCurrent ===3){
-      // setpageCurrent(pageCurrent+1)
-      //         return;
-      //   } 
-      //  }else if(pageCurrent === 1){
-      //    setpageCurrent(pageCurrent+1)
-      //    return;
-      //  }else if (pageCurrent ===3 || pageCurrent > totalpage ){
-      //   setpageCurrent(pageCurrent+1)
-      //   return;
-      //  }
-      //  }else if (page){
-      //   setpageCurrent(pageCurrent+1)
-      //  }
-      //  else{
-      //   return (
-      //     <View>
-      //       <Text style={styles.text}>Kosong</Text>
-      //     </View>
-      //   )
-      //  }
-       
-      
-        // if (pageCurrent < totalpage){
-        //   console.log("HandleLoadMore 1 =",totalpage)
-        //   setpageCurrent(pageCurrent+1)
-        //   //getData()
-        //   setLoading(true)
-        // }else if( page) {
-        //   console.log("HandleLoadMore 2 =",totalpage)
-        //   setpageCurrent(pageCurrent+1)
-        //   //getData()
-        //   setLoading(true)
-        // }
       }
       renderFooter=()=>{
         return(

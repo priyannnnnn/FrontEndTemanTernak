@@ -43,6 +43,7 @@ import {
   RegisterScreen,
   ResetPasswordScreen,
   Dashboard,
+  // Loginkandang,
 } from './src/screens'
 // import BuatKandang from '../src/screens/BuatKandang';
 import BuatKandang from './src/screens/BuatKandang';
@@ -74,7 +75,6 @@ import {name as appName} from './app.json';
 import {AppRegistry} from 'react-native';
 import Api from './src/screens/api';
 
-
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator()
 
@@ -91,8 +91,8 @@ function Expenses(){
 export default function App() {
   return (
     <Provider theme={theme}>
-      {/* <AuthProvider>
-        <AxiosProvider> */}
+      <AuthProvider>
+        <AxiosProvider>
           <NavigationContainer>
             <Stack.Navigator
               initialRouteName="StartScreen"
@@ -123,10 +123,11 @@ export default function App() {
               <Stack.Screen name='UpdatePendapatanTelur' component={UpdatePendapatanTelur}/>
               <Stack.Screen name='UpdatePenjualanTelur' component={UpdatePenjualanTelur}/>
               <Stack.Screen name='UpdateTernak' component={UpdateTernak}/>
-              <Stack.Screen name='AuthProvider' component={AuthProvider}/>
+              {/* <Stack.Screen name='AuthProvider' component={AuthProvider}/> */}
               <Stack.Screen name='DaftarOperasional'component={DaftarOperasional}/>
               <Stack.Screen name='AmountKandang' component={AmountKandang}/>
               <Stack.Screen name='Api' component={Api}/>
+              {/* <Stack.Screen name='loginkandang' component={Loginkandang}/> */}
 
               <Stack.Screen
                 name="ResetPasswordScreen"
@@ -135,8 +136,8 @@ export default function App() {
               
             </Stack.Navigator>
           </NavigationContainer>
-      {/* </AxiosProvider>
-      </AuthProvider> */}
+      </AxiosProvider>
+      </AuthProvider>
     </Provider>
   )
 }

@@ -12,9 +12,9 @@ import { axiosInstance } from "../../context/api";
 import { AuthContext } from "../../context/AuthContext";
 import { AxiosContext} from "../../context/AxiosContext";
 import * as Keychain from 'react-native-keychain';
-// import { AuthProvider } from "../../context/AuthContext";
+import { AuthProvider } from "../../context/AuthContext";
 // import { AxiosProvider } from "../../context/AxiosContext";
-// import { AxiosProvider } from "../../context/AxiosContext";
+import { AxiosProvider } from "../../context/AxiosContext";
 
 
 function PendapatanTelur({ navigation }) {
@@ -35,27 +35,20 @@ function PendapatanTelur({ navigation }) {
       quantity:IncomeEgg?.quantity?.value,
       date: IncomeEgg?.date?.value
     }
+    console.log("Data Pendapatan = ",data)
     const quantity=!isNaN(data.quantity) && data.quantity>1;
 
       if(!quantity){
         Alert.alert('Data Anda Salah',"Mohon Untuk Cek Kembali")
         return;
       }
-    // axiosContext.authAxios.post(`/api/v1/incomeEgg`,data)
-    // .then(res =>{
-    //   console.info("succes sellegg")
-    //   navigation.navigate('DaftarPendapatanTelur')
-    // })
-    // .catch((error)=>{
-    //   console.log(error)
-    // })
-    axios.post(`http://localhost:8000/api/v1/incomeEgg`,data,config)
+    axiosContext.authAxios.post(`/api/v1/incomeEgg`,data)
     .then(res =>{
-      console.log("succes login  = ", res)
+      console.log("succes sellegg")
       navigation.navigate('DaftarPendapatanTelur')
     })
-    .catch((error) =>{
-      console.log("error = ",error)
+    .catch((error)=>{
+      console.log(error)
     })
   }
 

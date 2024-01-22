@@ -3,7 +3,7 @@ import axios from "axios";
 import { AuthContext } from "./AuthContext";
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 import * as Keychain from 'react-native-keychain';
-
+import {BASE_URL} from "@env"
 
 const AxiosContext=createContext();
 const {Provider}= AxiosContext;
@@ -12,24 +12,37 @@ const AxiosProvider= ({children}) => {
     const authContext= useContext(AuthContext);
 
     const authAxios=axios.create({
-        baseURL:'http://139.162.6.202:8000',
+        baseURL:BASE_URL,
     });
 
     const publicAxios=axios.create({
-        baseURL:'http://139.162.6.202:8000',
+        baseURL:'http://192.168.61.3:8000',
     });
 
+    // authAxios.interceptors.request.use(
+    //     config=>{
+    //         if (!config.headers.Authorization){
+    //             config.headers.Authorization = `Bearer ${authContext.getAccessToken()}`;
+    //         }
+    //         console.log("config axioscontext", config.headers.Authorization)
+    //         return config;
+    //     },
+    //     error=>{
+    //         return Promise.reject(error);
+    //     },
+    // );
     authAxios.interceptors.request.use(
-        config=>{
-            if (!config.headers.Authorization){
-                config.headers.Authorization=`Bearer ${authContext.getAccessToken()}`;
-            }
-            return config;
+        config => {
+          if (!config.headers.Authorization) {
+            config.headers.Authorization = `Bearer ${authContext.getAccessToken()}`;
+          }
+          return config;
         },
-        error=>{
-            return Promise.reject(error);
+        error => {
+          return Promise.reject(error);
         },
-    );
+      );
+
     const refreshAuthLogic = failedRequest =>{
         const data={
             refreshToken:authContext.authState.refreshToken,
@@ -38,7 +51,7 @@ const AxiosProvider= ({children}) => {
         const options={
             method:'POST',
             data,
-            url:'http://139.162.6.202:8000'
+            url:'http://192.168.61.3:8000'
         };
 
         return axios(options)

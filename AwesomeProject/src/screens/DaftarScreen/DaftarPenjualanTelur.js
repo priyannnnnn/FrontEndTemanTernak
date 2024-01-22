@@ -19,9 +19,6 @@ function DaftarPenjualanTelur({navigation}){
   const axiosContext = useContext(AxiosContext);
   const [search, setsearch]= useState('');
 
-  const config={
-    headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2Mzg2NiwiZXhwIjoxNjg2NDY1MzA2fQ.VaduI3MQZnP8J9JreMZtsGa7in5tukyhZ9vWELRiuVM"}`}
-  }
   const toggleAddEmployeeModal = () => {
     console.log('test_data');
 }
@@ -34,7 +31,6 @@ function DaftarPenjualanTelur({navigation}){
         console.log(res.data);
         setLoading(false)
         setErrorMessage('')
-        // setsaleEgg(res.context)
       })
       .catch((e)=>{
         console.error(e)
@@ -46,7 +42,7 @@ function DaftarPenjualanTelur({navigation}){
     .then (res =>{
       console.log(res.data)
       setLoading(false)
-      saleEgg(res.data.content)
+      // saleEgg(res.data.content)
       GetData()
     })
     .catch((e) => {
@@ -64,31 +60,30 @@ function DaftarPenjualanTelur({navigation}){
 
   renderItem=({item})=>{
     return(
-      <View style={styles.container}>
+    <View style={styles.container}>
         <TouchableOpacity
-                onPress={toggleAddEmployeeModal} style={styles.button}>
-                <Text style={styles.buttonText}>{item.date}</Text>
-          </TouchableOpacity>
+                  onPress={toggleAddEmployeeModal} style={styles.button}>
+                  <Text style={styles.buttonText}>{item.date}</Text>
+        </TouchableOpacity>
       <View style={styles.employeeListContainer}>
-        <Text style={styles.listItem}>Jumlah Pendapatan Telur : {item.quantity}</Text>
-        <Text style={styles.listItem}>Jumlah telur : {item.amount}</Text>
-        <Text style={styles.listItem}>Tanggal : {item.date}</Text>
-          
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity
-                    onPress={() => {DeleteData(item.id)}}
-                    style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                    <Text style={styles.buttonText}>Delete</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-                    onPress={() => navigation.navigate ('UpdatePenjualanTelur',{id:item.id})} 
-                    onLongPress={()=> navigation.navigate('UpdatePenjualanTelur',{id:item.id})}
-                    style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                    <Text style={styles.buttonText}>Edit</Text>
-                </TouchableOpacity>
+            <Text style={styles.listItem}>Jumlah Pendapatan Telur : {item.quantity}</Text>
+            <Text style={styles.listItem}>Jumlah telur : {item.amount}</Text>
+            <Text style={styles.listItem}>Tanggal : {item.date}</Text>   
+          <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                        onPress={() => {DeleteData(item.id)}}
+                        style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                        <Text style={styles.buttonText}>Delete</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                        onPress={() => navigation.navigate ('UpdatePenjualanTelur',{id:item.id})} 
+                        onLongPress={()=> navigation.navigate('UpdatePenjualanTelur',{id:item.id})}
+                        style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                        <Text style={styles.buttonText}>Edit</Text>
+              </TouchableOpacity>
           </View>
-          </View>
-      </View>
+        </View>
+    </View>
     )
   };
 
@@ -100,12 +95,12 @@ function DaftarPenjualanTelur({navigation}){
           console.log("HandleLoadMore 1 = ",totalpage)
           setpageCurrent(pageCurrent+1)
           //getData()
-          setLoading(true)
-        }else if( page) {
+          setLoading(false)
+        }else {
           console.log("HandleLoadMore 2 = ",totalpage)
           setpageCurrent(pageCurrent+1)
           //getData()
-          setLoading(true)
+          setLoading(false)
         }
   }
   renderFooter=()=>{

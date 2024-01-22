@@ -14,15 +14,15 @@ const AuthProvider = ({children}) =>{
     });
 
     const getAccessToken = () => {
-        console.log("getAccessToken",authState.accessToken);
-        return authState.accessToken; 
+        console.log("getAccessToken1",authState.accessToken.token);
+        return authState.accessToken.token; 
     };
 
     return (
       <Provider value={{
         authState,
-        getAccessToken,
         setAuthState,    
+        getAccessToken
         }}>
         {children}
       </Provider>

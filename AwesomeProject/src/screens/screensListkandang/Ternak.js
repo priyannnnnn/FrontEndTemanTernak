@@ -77,8 +77,8 @@ function Ternak({navigation, props}) {
       console.log("URLLL ternak = ")
       console.log("token = ",config)
       console.log("Token2 ", config.headers.Authorization)
-    // axiosContext.authAxios.post(`/api/v1/livestock`, data)
-    axios.post(`http://localhost:8000/api/v1/livestock`,data, config)
+    axiosContext.authAxios.post(`/api/v1/livestock`, data)
+    // axios.post(`http://localhost:8000/api/v1/livestock`,data, config)
     // console.log("succes URL")
       .then(res => {
         console.log(res.data)

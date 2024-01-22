@@ -63,7 +63,7 @@ function UpdatePendapatanTelur(props){
             .then (res =>{
               console.log("",res.data)
               navigation.navigate ('DaftarPendapatanTelur')
-              // getData()
+              getData()
               //console.log(res, "ress")
             })
             

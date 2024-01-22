@@ -60,7 +60,7 @@ function Penjualan({navigation}){
         return;
       }
 
-    axiosContext.authAxios.post(`http://139.162.6.202:8000/api/v1/saleEgg`, data)
+    axiosContext.authAxios.post(`/api/v1/saleEgg`, data)
     .then(res => {
       console.info("succes sellegg")
       navigation.navigate('DaftarPenjualanTelur', {name: 'DaftarPenjualanTelur'})

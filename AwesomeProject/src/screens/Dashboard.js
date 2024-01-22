@@ -18,20 +18,21 @@ export default function Dashboard({ navigation }) {
   return (
     <Tab.Navigator
       screenOptions={{
-        headerStyle:{backgroundColor:'#32CD32'},
-        headerTintColor:'white',
-        tabBarStyle:{backgroundColor:'#32CD32',height:60,position:'absolute',bottom:20, borderRadius:90, marginHorizontal:25 },
+        headerStyle:{backgroundColor:'#E1F0DA'},
+        headerTintColor:'#65B741',
+        tabBarStyle:{backgroundColor:'#E1F0DA',height:60,position:'absolute',bottom:20, borderRadius:90, marginHorizontal:25 },
         //tabBarActiveBackgroundColor:'#EBF4FA',
       }}
       >
-      <Tab.Screen name='Kandang' component={AmountKandang}
+      <Tab.Screen name='Kandang'  component={AmountKandang}
         options={{tabBarIcon : ({focused})=> (
           <View style={{alignItems:'center', justifyContent:'center', top:10}}>
-            <Image source={require('../assets/123.png')} 
+            <Image source={require('../image/kandang.png')} 
               style={{ 
-                width: 40,
-                height: 40,
-                tintColor: focused ? '#e32f45' : '#748c94',
+                width: 60,
+                height: 60,
+                marginBottom:20,
+                tintColor: focused ? '#65B741' : '#65B741',
               }}/>
            {/* <Text style={{color: focused ? '#e32f45' : '#748c94', fontSize:12}}>Kandang</Text>  */}
           </View>
@@ -39,7 +40,7 @@ export default function Dashboard({ navigation }) {
         />
       <Tab.Screen name='Akun' component={Ternak} options={{tabBarIcon: ({focused}) => (
           <View style={{alignItems:'center', justifyContent:'center', top:10}}>
-              <AntDesign name="home" style={{color:'black', fontSize:40, tintColor: focused ? '#e32f45' : '#748c94',}}/>
+              <AntDesign name="home" style={{color:'green',marginBottom:20, fontSize:40, tintColor: focused ? '#e32f45' : '#748c94',}}/>
           </View>
       )}}/>
 
@@ -96,12 +97,12 @@ const styles=StyleSheet.create({
   },
   style:{
     position:'absolute', 
-          bottom:25,
-          right:20,
-          elevation:0,
-          backgroundColor:'#ffffff',
-          borderRadius:15,
-          height:90
+    bottom:25,
+    right:20,
+    elevation:0,
+    backgroundColor:'#ffffff',
+    borderRadius:15,
+    height:90
   }
  
 })

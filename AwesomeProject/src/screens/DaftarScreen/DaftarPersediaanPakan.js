@@ -6,6 +6,7 @@ import filter from "lodash.filter"
 import Button from "../../components/Button";
 import { useContext, useEffect, useState } from "react";
 import { AxiosContext } from "../../context/AxiosContext";
+import { AuthContext } from "../../context/AuthContext";
 
 function DaftarPersediaanPakan({navigation}){
 
@@ -15,11 +16,9 @@ function DaftarPersediaanPakan({navigation}){
   const [pageCurrent, setpageCurrent]= useState(0);
   const [totalpage, settotalpage]= useState(10);
   const axiosContext = useContext(AxiosContext);
+  const authContext = useContext(AuthContext);
   const [search, setsearch]= useState('');
 
-  // const config={
-  //   headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2MjE2NSwiZXhwIjoxNjg2NDYzNjA1fQ.zZdRLcc_6ul4aQu5eRy9i_hsF_afoSLGXPjKHxWfbEM"}`}
-  // }
   const toggleAddEmployeeModal = () => {
     console.log('test_data');}
 
@@ -27,8 +26,8 @@ function DaftarPersediaanPakan({navigation}){
     // if (totalpage < pageCurrent)
     // return;
 
-    console.log("get data")
     setLoading(true)
+    console.log("token = ",axiosContext.authAxios)
     axiosContext.authAxios.get(`/api/v1/feed?size=10&page=${pageCurrent}`)
     .then (res => {
       console.log("getdata_feed")
@@ -109,10 +108,24 @@ function DaftarPersediaanPakan({navigation}){
   };
 
   const handleLoadMore=()=>{
-    console.log("HandleLoadMore")
-    setpageCurrent(pageCurrent+1)
-    // getData()
-    setLoading(true)
+    // console.log("HandleLoadMore")
+    // setpageCurrent(pageCurrent+1)
+    // // getData()
+    // setLoading(true)
+    const page = pageCurrent > totalpage;
+    console.log("Page current =",pageCurrent)
+    console.log("Total page",totalpage)
+     if (pageCurrent < totalpage){
+       console.log("HandleLoadMore 1 = ",totalpage)
+       setpageCurrent(pageCurrent+1)
+       //getData()
+       setLoading(false)
+     }else {
+       console.log("HandleLoadMore 2 = ",totalpage)
+       setpageCurrent(pageCurrent+1)
+       //getData()
+       setLoading(false)
+     }
   };
 
   renderFooter=()=>{

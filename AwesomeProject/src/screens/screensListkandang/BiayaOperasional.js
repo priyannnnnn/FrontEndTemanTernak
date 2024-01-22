@@ -48,6 +48,8 @@ function BiayaOperasional({navigation}) {
       description : Operation?.description.value,
       amount : Operation?.amount?.value,
     }
+
+    console.log("Data = ", Data)
     axiosContext.authAxios.post(`/api/v1/operatingCosh`,Data)
     .then(res => {
       console.log("Get Data = ", res.data)
@@ -77,10 +79,10 @@ function BiayaOperasional({navigation}) {
 
             <Text style={styles.Text}>Deskripsi</Text>
             <TextInput
-            value={Operation?.description.value} onChangeText ={(text) => setOperation({...Operation, description:{value:text, error:''}})} label= 'Tanggal'/>
+            value={Operation?.description.value} onChangeText ={(text) => setOperation({...Operation, description:{value:text, error:''}})} label= 'deskripsi'/>
             <Text style={styles.Text}>Jumlah</Text>
             <TextInput
-            value = {Operation?.amount.value} onChangeText= {(text) => setOperation ({...Operation, amount: {value:text, error:''}})} label='Lain-lain'/>
+            value = {Operation?.amount.value} onChangeText= {(text) => setOperation ({...Operation, amount: {value:text, error:''}})} label='Jumlah-Operasional'/>
 
             <Button
             mode='contained'

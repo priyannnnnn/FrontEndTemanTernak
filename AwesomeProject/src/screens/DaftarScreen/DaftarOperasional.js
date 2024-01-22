@@ -44,12 +44,20 @@ function DaftarOperasional({navigation}){
         getData()
     },[pageCurrent])
 
-    const handleLoadMore=()=>{
-    
-      console.log("HandleLoadMore = ",pageCurrent)
-
-      setpageCurrent("Page current = ",pageCurrent+1)
-      setLoading(true)
+     handleLoadMore=()=>{
+      console.log("Page current =",pageCurrent)
+      console.log("Total page",totalpage)
+       if (pageCurrent < totalpage){
+         console.log("HandleLoadMore 1 = ",totalpage)
+         setpageCurrent(pageCurrent+1)
+         //getData()
+         setLoading(false)
+       }else {
+         console.log("HandleLoadMore 2 = ",totalpage)
+         setpageCurrent(pageCurrent+1)
+         //getData()
+         setLoading(false)
+       }
     }
     const handleSearch= (item) =>{
       setsearch(item);
@@ -111,7 +119,8 @@ function DaftarOperasional({navigation}){
         data={Operasional}
         renderItem={renderItem}
         keyExtractor={(item,index) => index.toString()}
-        onEndReachedThreshold={0}/>
+        onEndReachedThreshold={0}
+        onEndReached={this.handleLoadMore}/>
         </View>
     )
 }

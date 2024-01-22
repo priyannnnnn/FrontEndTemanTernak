@@ -109,21 +109,19 @@ renderItem=({item})=>{
   )
  }
  handleLoadMore=()=>{
-  const page = pageCurrent > totalpage;
-  console.log("Page current handleLoad=",pageCurrent)
-  console.log("Total page handleLoad",totalpage)
-  setpageCurrent(pageCurrent+1)
-  //  if (pageCurrent < totalpage){
-  //    //console.log("HandleLoadMore 1",totalpage)
-  //    setpageCurrent(pageCurrent+1)
-  //    //getData()
-  //    setLoading(true)
-  //  }else if( page) {
-  //    console.log("HandleLoadMore 2")
-  //    setpageCurrent(pageCurrent+1)
-  //    //getData()
-  //    setLoading(true)
-  //  }
+  console.log("Page current =",pageCurrent)
+    console.log("Total page",totalpage)
+     if (pageCurrent < totalpage){
+       console.log("HandleLoadMore 1 = ",totalpage)
+       setpageCurrent(pageCurrent+1)
+       //getData()
+       setLoading(false)
+     }else {
+       console.log("HandleLoadMore 2 = ",totalpage)
+       setpageCurrent(pageCurrent+1)
+       //getData()
+       setLoading(false)
+     }
  }
 
  const handleSearch= (item) =>{
