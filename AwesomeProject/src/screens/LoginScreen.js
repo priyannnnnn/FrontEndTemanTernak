@@ -18,14 +18,13 @@ import {BASE_URL} from "@env";
 import getUrl from '../api_url/Endpoint'
 
 function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState({ value: 'test_24@gmail.com', s: '' })
+  const [email, setEmail] = useState({ value: 'test_24@gmail.com',error: '' })
   const [password, setPassword] = useState({ value: '12345678', error: '' })
 
   const authContext = useContext(AuthContext);
   const publicAxios = useContext(AxiosContext);
 
   const onLoginPressed =async () => {
-    console.log("Login Any farm ")
     console.log("Login Any farm ")
     try{
       const dataLogin = {
@@ -39,12 +38,12 @@ function LoginScreen({ navigation }) {
         setPassword({ ...password, error: passwordError })
         return
       }console.log(" Data Login",dataLogin)
-      console.log("URLLLL")
-      console.log("before = ",response)
-      const url = (`${BASE_URL}`)
-      const response = await axios.post('http://139.162.6.202:8000/api/v1/login/email',dataLogin)
-      console.log("response Url = ")
-      // console.error("url = ",response.data)
+      console.log("URL login ")
+      const response = await axios.post('https://ternakpoyo.online/api/v1/login/email',dataLogin)
+      console.log("response Url status =",response.status)
+      // console.log("response Url config =",response.config.url)
+      // console.log("response Url request =",response.request.responseURL)
+      console.log("url = ",response.data)
       // console.log(response.token)
       const accessToken = response.data
       console.log("Acces Token")

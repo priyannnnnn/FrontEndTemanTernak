@@ -18,16 +18,54 @@ const Api =({navigation})=>{
             email:email?.value,
             password:password?.value
         }
+        const url = 'http://139.162.6.202:8000/api/v1/login/email'
+        const serverUrl = 'http://139.162.6.202'
         console.log(dataLogin)
-        axios.post('http://192.168.65.3:8000/api/v1/login/email',dataLogin)
-        .then(res => {
-            console.log("token = ", res.data)
+        console.log("Url = ",url)
+        axios.post(
+          ` https://ternakpoyo.online/api/v1/login/email`,dataLogin,
+          {
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+          },
+        )
+          .then(response => {
+            // Handle the response here
+            console.log(response.data);
             navigation.navigate("Dashboard")
-        })
-        .catch(err =>{
-            console.error("error ", err)
-        }) 
+          })
+          .catch(error => {
+            // Handle errors here
+            console.error(error);
+          });
+        // axios.post(url,dataLogin)
+        // .then(res => {
+        //     console.log("token = ", res.data)
+        //     navigation.navigate("Dashboard")
+        // })
+        // .catch(err =>{
+        //     console.error("error ", err)
+        // }) 
     }
+   
+    
+
+    const handleLogin = async () => {
+      const dataLogin = {
+        email:email?.value,
+        password:password?.value
+    }
+      try {
+        const response = await axios.post('http://139.162.6.202:8000/api/v1/login/email', dataLogin);
+       console.log("token = ",response)
+        navigation.navigate('Dashboard');
+      } catch (error) {
+        alert('Arrr matey! No treasure found. (Invalid credentials)');
+        console.log("error =",error)
+      }
+    };
         return(
             <Background>
             <BackButton goBack={navigation.goBack} />
