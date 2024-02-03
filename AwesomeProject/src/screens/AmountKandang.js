@@ -5,6 +5,7 @@ import { theme } from "../core/theme";
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import places from "../helpers/places";
+import places2 from "../helpers/places2";
 import { ImageBackground } from "react-native";
 import { Dimensions } from "react-native";
 const {width} = Dimensions.get('screen')
@@ -57,7 +58,7 @@ function AmountKandang({navigation}){
                 <TouchableOpacity onPress={() => navigation.navigate('PersediaanPakan')}>
                     <View style={styles.iconContainer}>
                     {/* <Icon name="alarm" size={25} color={'#04555c'} /> */}
-                    <Image source={require('../image/pakan.png')} style = {{width:120, height:50}}/>
+                    <Image source={require('../image/pakan12.png')} style = {{width:65, height:65}}/>
                     </View>
                 </TouchableOpacity>
                 <Text style={styles.text}>Persediaan Pakan</Text>
@@ -173,13 +174,6 @@ function AmountKandang({navigation}){
                 <ListCategories/>
                 <ListCategories2/>
                 <View style = {{marginTop: 30}}>
-                    {/* <FlatList
-                    contentContainerStyle={{paddingLeft: 20}}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    data={places}
-                    renderItem={({item}) => <Card place={item} />}
-                    /> */}
                     <Text style={styles.sectionTitle}>Recommended</Text>
                     <FlatList
                     snapToInterval={width - 20}
@@ -187,6 +181,16 @@ function AmountKandang({navigation}){
                     showsHorizontalScrollIndicator={false}
                     horizontal
                     data={places}
+                    renderItem={({item}) => <RecommendedCard place={item} />}
+                    />
+                </View>
+                <View style = {{marginTop: 30}}>
+                    <FlatList
+                    snapToInterval={width - 20}
+                    contentContainerStyle={{paddingLeft: 20, paddingBottom: 95}}
+                    showsHorizontalScrollIndicator={false}
+                    horizontal
+                    data={places2}
                     renderItem={({item}) => <RecommendedCard place={item} />}
                     />
                 </View>
