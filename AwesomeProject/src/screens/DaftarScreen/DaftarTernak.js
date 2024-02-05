@@ -30,7 +30,6 @@ function DaftarTernak({navigation}){
           .then(res => {
             console.log(res.data);
             setLoading(false)
-            //setEmployee(res.data)
             setEmployee(employee.concat(res.data.content))
             //settotalpage(res.data.totalpage)
           })
@@ -155,11 +154,13 @@ const contains= ({age, note, date, quantity, type, amount}, item) => {
 }
     return(
       <View>
-        <TextInput style={styles.input} placeholder="search" 
-              value={employee} 
-              clearButtonMode="always"
-              onChangeText={handleSearch}
-              autoCorrect={false}/>
+        <View>
+          <TextInput style={styles.input} placeholder="search" 
+                value={employee} 
+                clearButtonMode="always"
+                onChangeText={handleSearch}
+                autoCorrect={false}/>
+        </View>
       <FlatList
       style={styles.container12}
       data={employee}
@@ -253,6 +254,6 @@ const styles=StyleSheet.create({
         paddingLeft:20,
         margin:5,
         borderColor:'#009688',
-        backgroundColor:'blue',
+        backgroundColor:'#40A2E3',
       }
 })

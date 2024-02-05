@@ -22,7 +22,7 @@ function AmountKandang({navigation}){
         return (
           <View style={styles.categoryContainer}>
             <View style={styles.viewButton}>
-                <TouchableOpacity onPress={() => navigation.navigate('Ternak')}>
+                <TouchableOpacity onPress={() => navigation.navigate('DaftarTernak')}>
                     <View style={styles.iconContainer}>
                         {/* <Icon name="search" size={25} color={'#04555c'} /> */}
                         <Image source={require('../image/ternak.png')} style = {{width: 60, height:60}}/>
@@ -31,7 +31,7 @@ function AmountKandang({navigation}){
                 <Text style={styles.text}>Ternak</Text>
             </View>
             <View style={styles.viewButton}>
-                <TouchableOpacity onPress={() => navigation.navigate('PendapatanTelur')}>
+                <TouchableOpacity onPress={() => navigation.navigate('DaftarPendapatanTelur')}>
                     <View style={styles.iconContainer}>
                     {/* <Icon name="beach-access" size={25} color={'#04555c'} /> */}
                     <Image source={require('../image/pendapatan.png')} style = {{width: 70, height:50}}/>
@@ -43,7 +43,7 @@ function AmountKandang({navigation}){
                 <TouchableOpacity onPress={() => navigation.navigate('Penjualan')}>
                     <View style={styles.iconContainer}>
                     {/* <Icon name="near-me" size={25} color={'#04555c'} /> */}
-                    <Image source={require('../image/toko.png')} style = {{width: 70, height:50}}/>
+                    <Image source={require('../image/pendepatan.png')} style = {{width: 70, height:50}}/>
                     </View>
                 </TouchableOpacity>
                 <Text style={styles.text}>Pejualan</Text>
@@ -67,10 +67,10 @@ function AmountKandang({navigation}){
                 <TouchableOpacity onPress={() => navigation.navigate('BiayaOperasional')}>
                     <View style={styles.iconContainer}>
                     {/* <Icon name="beach-access" size={25} color={'#04555c'} /> */}
-                    <Image source={require('../image/opr.png')} style = {{width:60, height:60}}/>
+                    <Image source={require('../image/date.png')} style = {{marginLeft:5,width:63, height:63}}/>
                     </View>
                 </TouchableOpacity>
-                <Text style={styles.text}>BiayaOperasional</Text>
+                <Text style={styles.text}>Operasional</Text>
             </View> 
           </View>
         );
@@ -160,20 +160,20 @@ function AmountKandang({navigation}){
                 <View 
                 style={{
                  backgroundColor: '#04555c',
-                 height: 90,
+                 height: 22,
                  paddingHorizontal: 20,
                 }}>
-                <View style={{flex: 1,height:300}}>
+                <View style={{flex: 1,height:0}}>
                 <View style={styles.inputContainer}>
-                <TextInput
+                {/* <TextInput
                     placeholder="Search place"
-                    style={{color:'#dddedd',height:80}}/>
+                    style={{color:'#dddedd',height:80}}/> */}
                 </View>
                 </View>
                 </View>
                 <ListCategories/>
                 <ListCategories2/>
-                <View style = {{marginTop: 30}}>
+                <View style = {{marginTop: 60}}>
                     <Text style={styles.sectionTitle}>Recommended</Text>
                     <FlatList
                     snapToInterval={width - 20}
@@ -208,8 +208,9 @@ const styles= StyleSheet.create({
         alignSelf:'baseline'
     },
     text:{
-        fontSize:12,
+        fontSize:13,
         alignSelf:'center',
+        marginLeft:20,
         height: 70,
         width: 90,
     },
@@ -254,10 +255,10 @@ const styles= StyleSheet.create({
         backgroundColor: '#04555c'
       },
       inputContainer: {
-        height: 80,
+        height: 270,
         width: '100%',
-        backgroundColor: '#000000',
-        borderRadius: 10,
+        backgroundColor: '#F2F597',
+        borderRadius: 30,
         position: 'absolute',
         top: 50,
         flexDirection: 'row',
@@ -272,9 +273,9 @@ const styles= StyleSheet.create({
         justifyContent:'space-evenly',
       },
       iconContainer: {
-        height: 70,
-        width: 70,
-        backgroundColor: '#e1e8e9',
+        height: 72,
+        width: 72,
+        backgroundColor: '#0D9276',
         justifyContent: 'center',
         alignItems: 'center',
         borderRadius: 10,

@@ -114,7 +114,7 @@ function PersediaanPakan({navigation}) {
             <Button 
             mode='contained'
                 onPress={() => navigation.reset({ index: 0,
-                routes: [{ name: 'AmountKandang' }], })}>Kembali</Button>
+                routes: [{ name: 'Dashboard' }], })}>Kembali</Button>
         </View>
        </ScrollView>
     )

@@ -4,34 +4,7 @@
  *
  * @format
  */
-
-// import React from 'react';
-
-
-// import { View,Text,StyleSheet } from 'react-native';
-
-// function app (){
-//   return(
-//     <View style={style.View}>
-//     <Text >fddyy</Text>
-//   </View>
-//       )
-    
-// }
-// export default app;
-// const style=StyleSheet.create({
-//   View:{
-//     flex:1,
-//     alignItems:'center',
-//     justifyContent:'center'
-//   },
-//   Text:{
-// fontSize:70
-//   }
-// })
-
 import React from 'react';
-
 import { Provider } from 'react-native-paper'
 import { NavigationContainer } from '@react-navigation/native'
 

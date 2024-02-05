@@ -110,7 +110,7 @@ function PendapatanTelur({ navigation }) {
           onPress={() =>
             navigation.reset({
               index: 0,
-              routes: [{ name: 'AmountKandang' }],
+              routes: [{ name: 'Dashboard' }],
             })
           }
         >Kembali</Button>

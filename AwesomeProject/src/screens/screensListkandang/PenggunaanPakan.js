@@ -121,7 +121,7 @@ function PenggunaanPakan({navigation}) {
             )}
 
             <Button mode='contained' style={{ marginTop: 4 }} onPress={onSubmit}>Simpan</Button>
-            <Button mode='contained'onPress={() =>navigation.reset({index: 0,routes: [{ name: 'ListKandang' }],})}>Kembali</Button>
+            <Button mode='contained'onPress={() =>navigation.reset({index: 0,routes: [{ name: 'Dashboard' }],})}>Kembali</Button>
         </View>
       </ScrollView>
     )

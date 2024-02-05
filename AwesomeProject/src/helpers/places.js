@@ -9,7 +9,7 @@ const places =[
     {
         id: '2',
         name: 'Kenali TernakMu',
-        location: 'Italy',
+        location: 'Indonesia',
         image: require('../image/terbaru2.jpg'),
         details: `Penyebab dan produktif perpuyuhanmu`,
     },
