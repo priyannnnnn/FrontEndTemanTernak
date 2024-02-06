@@ -8,6 +8,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import filter from "lodash.filter"
 import { TouchableOpacity } from "react-native";
 import { AxiosContext } from "../../context/AxiosContext";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 function DaftarTernak({navigation}){
     const axiosContext = useContext(AxiosContext);
@@ -17,10 +18,6 @@ function DaftarTernak({navigation}){
     const [pageCurrent, setpageCurrent]= useState(0)
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
-
-    const toggleAddEmployeeModal = () => {
-        console.log('test_data');
-    }
 
     const getData = () => {
       // if(totalpage<pageCurrent)
@@ -71,7 +68,7 @@ renderItem=({item})=>{
   return(
     <View style={styles.container} key={item.id}>
       <TouchableOpacity
-                onPress={toggleAddEmployeeModal} style={styles.button}>
+              style={styles.button}>
                 <Text style={styles.buttonText}>{item.date}</Text>
         </TouchableOpacity>
         <View style={styles.employeeListContainer}>
@@ -153,13 +150,24 @@ const contains= ({age, note, date, quantity, type, amount}, item) => {
   return false;
 }
     return(
-      <View>
-        <View>
-          <TextInput style={styles.input} placeholder="search" 
-                value={employee} 
-                clearButtonMode="always"
-                onChangeText={handleSearch}
-                autoCorrect={false}/>
+      <View style={{backgroundColor:'#F5EEE6'}}>
+        <View style={{flexDirection:'row'}}>
+          <View style={styles.input}>
+          <Icon name="search" size={25} color={'#1F2544'} style={{marginTop:10}}/>
+            <TextInput style={{fontSize:15, color:'#1F2544'}} 
+              placeholder="search" 
+              placeholderTextColor="#000"
+              value={employee} 
+              clearButtonMode="always"
+              onChangeText={handleSearch}
+              autoCorrect={false}/>
+          </View>
+          <TouchableOpacity
+              onPress={() => navigation.navigate ('Ternak')} 
+              style={{ marginVertical: 0, marginLeft: 0 ,flexDirection:'row'}}>
+              <Icon name="add" size={40} color={'#1F2544'} style={{marginTop:20,}}/>
+              <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
+          </TouchableOpacity>
         </View>
       <FlatList
       style={styles.container12}
@@ -250,10 +258,13 @@ const styles=StyleSheet.create({
       },
       input: {
         height:45,
+        width:290,
         borderWidth:1,
         paddingLeft:20,
         margin:5,
         borderColor:'#009688',
-        backgroundColor:'#40A2E3',
+        backgroundColor:'#FFF6E9',
+        flexDirection:'row',
+        top:13
       }
 })

@@ -40,7 +40,7 @@ function AmountKandang({navigation}){
                 <Text style={styles.text}>Pendapatan</Text>
             </View>
             <View style={styles.viewButton}>
-                <TouchableOpacity onPress={() => navigation.navigate('Penjualan')}>
+                <TouchableOpacity onPress={() => navigation.navigate('DaftarPenjualanTelur')}>
                     <View style={styles.iconContainer}>
                     {/* <Icon name="near-me" size={25} color={'#04555c'} /> */}
                     <Image source={require('../image/pendepatan.png')} style = {{width: 70, height:50}}/>
@@ -55,7 +55,7 @@ function AmountKandang({navigation}){
         return (
           <View style={styles.categoryContainer2}>
             <View style={styles.viewButton}>
-                <TouchableOpacity onPress={() => navigation.navigate('PersediaanPakan')}>
+                <TouchableOpacity onPress={() => navigation.navigate('DaftarPersediaanPakan')}>
                     <View style={styles.iconContainer}>
                     {/* <Icon name="alarm" size={25} color={'#04555c'} /> */}
                     <Image source={require('../image/pakan12.png')} style = {{width:65, height:65}}/>
@@ -64,7 +64,7 @@ function AmountKandang({navigation}){
                 <Text style={styles.text}>Persediaan Pakan</Text>
             </View>
             <View style={styles.viewButton}>
-                <TouchableOpacity onPress={() => navigation.navigate('BiayaOperasional')}>
+                <TouchableOpacity onPress={() => navigation.navigate('DaftarOperasional')}>
                     <View style={styles.iconContainer}>
                     {/* <Icon name="beach-access" size={25} color={'#04555c'} /> */}
                     <Image source={require('../image/date.png')} style = {{marginLeft:5,width:63, height:63}}/>

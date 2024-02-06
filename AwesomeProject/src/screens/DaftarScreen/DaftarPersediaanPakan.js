@@ -3,10 +3,10 @@ import { TouchableOpacity } from "react-native";
 import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
 import filter from "lodash.filter"
-import Button from "../../components/Button";
 import { useContext, useEffect, useState } from "react";
 import { AxiosContext } from "../../context/AxiosContext";
 import { AuthContext } from "../../context/AuthContext";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 function DaftarPersediaanPakan({navigation}){
 
@@ -169,11 +169,15 @@ function DaftarPersediaanPakan({navigation}){
   
     return(
       <View>
-          <TextInput style={styles.input} placeholder="search" 
+        <View>
+          <View>
+            <TextInput style={styles.input} placeholder="search" 
               value={feed} 
               clearButtonMode="always"
               onChangeText={handleSearch}
               autoCorrect={false}/>
+          </View>
+        </View>
       <FlatList
       style={styles.container12}
       data={feed}

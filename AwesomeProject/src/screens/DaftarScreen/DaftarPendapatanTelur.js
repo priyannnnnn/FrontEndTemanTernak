@@ -1,18 +1,12 @@
-import { FlatList, StyleSheet, Text, View, ActivityIndicator, TextInput} from "react-native";
+import { FlatList, StyleSheet, Text, View, ActivityIndicator, TextInput, Alert} from "react-native";
 import Button from "../../components/Button";
 import { GlobalStyles } from "../../components/style";
 import { theme } from "../../core/theme";
-import {Ionicons} from 'react-native/vector-icons';
 import { useContext, useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
 import { AxiosContext, AxiosProvider } from "../../context/AxiosContext";
 import filter from "lodash.filter"
-import { AuthProvider } from "../../context/AuthContext";
-import { Feather, Entypo } from "@expo/vector-icons";
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import { set } from "react-native-reanimated";
-import axios from 'axios'
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 
@@ -25,8 +19,6 @@ function DaftarPendapatanTelur({navigation}){
     const [pageCurrent, setpageCurrent]= useState(1);
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
-    const [data, setData] = useState({});
-    const [apiData, setApiData] = useState(null);
 
     const axiosContext = useContext(AxiosContext);
 
@@ -38,12 +30,12 @@ function DaftarPendapatanTelur({navigation}){
       console.log("get Data = ")
       axiosContext.authAxios.get(`/api/v1/incomeEgg?size=10&page=${pageCurrent}`)
       .then(res => {
-        console.log("then = ",res.data)
-        console.log("then = ",totalpage)
+        // console.log("then = ",res.data)
+        // console.log("then = ",totalpage)
         setLoading(false)
        // setIncomeEgg(res.data.content)
         setIncomeEgg(IncomeEgg.concat(res.data.content))
-        console.log(res.data);
+        // console.log(res.data);
        setIncomeEgg([...IncomeEgg,...res.data.content])
       //   setErrorMessage('')
       //   setLoading(false)
@@ -54,11 +46,28 @@ function DaftarPendapatanTelur({navigation}){
         console.error(e)
         setErrorMessage("Network Error. Please try again.")
         }) 
-    }      
-    const DeleteData=(id)=>{
+    }
+    const [showBox, setShowBox] = useState(true);
 
+  const showConfirmDialog = (id) => {
+    console.log(id)
+    return Alert.alert(
+      "Apakah kamu yakin?",
+      "Apakah Kamu Yakin Untuk Menghapus Data?",
+      [
+        {
+          text: "Yes",
+          onPress:()=>DeleteData(id) ,
+        },
+        {
+          text: "No",
+        },
+      ]
+    );
+  };     
+    const DeleteData=(id)=>{
         console.log("Get data = ",id)
-        //axiosContext.authAxios.delete('/api/v1/incomeEgg/'+id)
+        axiosContext.authAxios.delete('/api/v1/incomeEgg/'+id)
         .then(res=> {
           console.log(res.data)
           setLoading(false)
@@ -69,7 +78,8 @@ function DaftarPendapatanTelur({navigation}){
         .catch((errror)=>{
           console.error(errror, "err")
         }
-    )}
+    )
+    }
 
     useEffect(() => {
     getData()
@@ -96,7 +106,7 @@ function DaftarPendapatanTelur({navigation}){
               <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => {DeleteData(item.id)}}
+              onPress={() => {showConfirmDialog(item.id)}}
               style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
               <Text style={styles.buttonText}>Delete</Text>
             </TouchableOpacity>
@@ -131,23 +141,6 @@ function DaftarPendapatanTelur({navigation}){
         </View> :null
         )
       }
-
-      // const searchFilter = (text) => {
-      //   if(text) {
-      //     const newData= IncomeEgg.filter ((item) =>{
-      //     // const newData= masterdata.filter((item)=> {
-      //       const itemData = item.quantity ? item.date.toUpperCase()
-      //       : ''.toUpperCase();
-      //       const textData = text.toUpperCase();
-      //       return itemData.indexOf(textData) > -1;
-      //     });
-      //     setIncomeEgg(newData)
-      //     setsearch(text)
-      //   }else{
-      //     setIncomeEgg(masterdata);
-      //     setsearch(text)
-      //   }
-      // }
 
       const handleSearch= (item) =>{
         setsearch(item);
