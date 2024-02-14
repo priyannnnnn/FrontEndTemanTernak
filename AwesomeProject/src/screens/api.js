@@ -18,6 +18,7 @@ const Api =({navigation})=>{
             email:email?.value,
             password:password?.value
         }
+        //anisa
         const url = 'http://139.162.6.202:8000/api/v1/login/email'
         const serverUrl = 'http://139.162.6.202'
         console.log(dataLogin)
