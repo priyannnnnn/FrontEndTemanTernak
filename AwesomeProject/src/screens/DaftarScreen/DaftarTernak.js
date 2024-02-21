@@ -1,4 +1,4 @@
-import { ActivityIndicator, FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TextInput, View } from "react-native";
 import Button from "../../components/Button";
 import { GlobalStyles } from "../../components/style";
 import { theme } from "../../core/theme";
@@ -23,21 +23,21 @@ function DaftarTernak({navigation}){
       // if(totalpage<pageCurrent)
       // return;
         setLoading(true)
-        axiosContext.authAxios.get(`/api/v1/livestock?size=${totalpage}&page=${pageCurrent}`)
+        axiosContext.authAxios.get(`/api/v1/livestock?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
           .then(res => {
-            console.log(res.data);
+            console.log(res.data.content);
             setLoading(false)
             setEmployee(employee.concat(res.data.content))
-            //settotalpage(res.data.totalpage)
+            // setEmployee(res.data.content)
           })
           .catch((e) => {
             setLoading(false)
             console.error(e, "getdata")
             setErrorMessage("Network Error. Please try again.")
           })
-      }
+    }
 
-      const DeleteData = (id) => {
+    const DeleteData = (id) => {
         console.log(id)
         setLoading(true)
         axiosContext.authAxios.delete('/api/v1/livestock/'+id)
@@ -53,13 +53,33 @@ function DaftarTernak({navigation}){
           setLoading(false)
           setErrorMessage("hdr")
         })
-      }
+    }
 
-      useEffect(() => {
-        console.log("PageCurrent UseEffect= ",pageCurrent)
-        setLoading(true)
-        getData()
-      }, [pageCurrent])
+    const showConfirmDialog = (id) => {
+      console.log(id)
+      return Alert.alert(
+        "Apakah kamu yakin?",
+        "Apakah Kamu Yakin Untuk Menghapus Data?",
+        [
+          {
+            text: "Yes",
+            onPress:()=>DeleteData(id) ,
+          },
+          {
+            text: "No",
+          },
+        ]
+      );
+    }; 
+
+
+
+    useEffect(() => {
+      console.log("PageCurrent UseEffect= ",pageCurrent)
+      setLoading(true)
+      console.log("Get Data = ")
+      getData()
+    }, [pageCurrent])
 
       // useEffect(()=>{
       //   DeleteData()
@@ -80,7 +100,7 @@ renderItem=({item})=>{
           <Text style={styles.listItem}>Tanggal : {item.date}</Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-                      onPress={() => {DeleteData(item.id)}}
+                      onPress={() => {showConfirmDialog(item.id)}}
                       style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
                       <Text style={styles.buttonText}>Delete</Text>
             </TouchableOpacity>

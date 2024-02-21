@@ -1,4 +1,4 @@
-import { ScrollView, View,Text, StyleSheet, FlatList,ActivityIndicator, TextInput } from "react-native";
+import { ScrollView, View,Text, StyleSheet, FlatList,ActivityIndicator, TextInput, Alert } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
@@ -25,7 +25,7 @@ function DaftarPenjualanTelur({navigation}){
   const GetData = () => {
     console.log("get data = ")
       setLoading(true)
-      axiosContext.authAxios.get(`/api/v1/saleEgg?size=10&page=${pageCurrent}`)
+      axiosContext.authAxios.get(`/api/v1/saleEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
       .then(res => {
         setsaleEgg(saleEgg.concat(res.data.content))
         console.log(res.data);
@@ -36,7 +36,7 @@ function DaftarPenjualanTelur({navigation}){
         console.error(e)
       })
   }
-    const DeleteData=(id)=>{
+  const DeleteData=(id)=>{
     console.log(id)
     axiosContext.authAxios.delete('/api/v1/saleEgg/'+id)
     .then (res =>{
@@ -48,8 +48,24 @@ function DaftarPenjualanTelur({navigation}){
     .catch((e) => {
       console.error(e)
     })
-   
-    }
+  }
+
+  const showConfirmDialog = (id) => {
+    console.log(id)
+    return Alert.alert(
+      "Apakah kamu yakin?",
+      "Apakah Kamu Yakin Untuk Menghapus Data?",
+      [
+        {
+          text: "Yes",
+          onPress:()=>DeleteData(id) ,
+        },
+        {
+          text: "No",
+        },
+      ]
+    );
+  };  
   useEffect(() => {
     console.log("PageCurrent",pageCurrent)
     setLoading(true)
@@ -71,7 +87,7 @@ function DaftarPenjualanTelur({navigation}){
             <Text style={styles.listItem}>Tanggal : {item.date}</Text>   
           <View style={styles.buttonContainer}>
               <TouchableOpacity
-                        onPress={() => {DeleteData(item.id)}}
+                        onPress={() => {showConfirmDialog(item.id)}}
                         style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
                         <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>

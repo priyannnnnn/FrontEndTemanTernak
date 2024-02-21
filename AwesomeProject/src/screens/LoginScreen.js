@@ -18,8 +18,8 @@ import {BASE_URL} from "@env";
 import getUrl from '../api_url/Endpoint'
 
 function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState({ value: 'test_24@gmail.com',error: '' })
-  const [password, setPassword] = useState({ value: '12345678', error: '' })
+  const [email, setEmail] = useState({ value: '',error: '' })
+  const [password, setPassword] = useState({ value: '', error: '' })
 
   const authContext = useContext(AuthContext);
   const publicAxios = useContext(AxiosContext);

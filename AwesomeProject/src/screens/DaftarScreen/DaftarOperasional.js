@@ -13,9 +13,10 @@ function DaftarOperasional({navigation}){
     const [pageCurrent, setpageCurrent]= useState(1);
     const axiosContext = useContext(AxiosContext);
     const [search, setsearch]= useState('');
+    const [totalpage, settotalpage]= useState(10);
 
     const getData = () => {
-        axiosContext.authAxios.get(`/api/v1/operatingCosh?size=10&page=${pageCurrent}`)
+        axiosContext.authAxios.get(`/api/v1/operatingCosh`)
         .then(res => {
             console.log("Get Data = ", res.data)
             setOperasional(Operasional.concat(res.data.content))
