@@ -168,15 +168,24 @@ function DaftarPersediaanPakan({navigation}){
   }
   
     return(
-      <View>
-        <View>
-          <View>
-            <TextInput style={styles.input} placeholder="search" 
+      <View style={{backgroundColor: '#F5EEE6'}}>
+        <View style={{flexDirection: 'row'}}>
+          <View style={styles.input}>
+            <TextInput placeholder="search"
+              placeholderTextColor="#000"
+              style={{ fontSize:15, color:'#1F2544' }}
               value={feed} 
               clearButtonMode="always"
               onChangeText={handleSearch}
               autoCorrect={false}/>
+            
           </View>
+          <TouchableOpacity
+              onPress={() => navigation.navigate ('Penjualan')} 
+              style={{ marginVertical: 0, marginLeft: 0 ,flexDirection:'row'}}>
+              <Icon name="add" size={40} color={'#1F2544'} style={{marginTop:20,}}/>
+              <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
+          </TouchableOpacity> 
         </View>
       <FlatList
       style={styles.container12}
@@ -184,7 +193,7 @@ function DaftarPersediaanPakan({navigation}){
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
       ListFooterComponent={this.renderFooter}
-      onEndReachedThreshold={0}
+      onEndReachedThreshold={this.handleLoadMore}
       onEndReached={handleLoadMore}
       />
       </View>)
@@ -286,10 +295,11 @@ const styles=StyleSheet.create({
       backgroundColor: "gray",
     },
     buttonText: {
-      color: "white",
+      color: '#7FFFD4',
       paddingVertical: 6,
       paddingHorizontal: 10,
-      fontSize: 16
+      fontSize: 16,
+      
     },
     title: {
       fontWeight: "bold",
