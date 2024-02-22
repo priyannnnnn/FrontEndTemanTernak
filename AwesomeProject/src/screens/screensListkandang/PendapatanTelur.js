@@ -26,9 +26,6 @@ function PendapatanTelur({ navigation }) {
     quantity: {value :'',error:''},
     date:     {value:`${moment(date).format('YYYY-MM-DD')}`, error:''}
   })
-  const config = {
-    headers: { Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTcwMDYzNDU3NCwiZXhwIjoxNzAwNjM2MDE0fQ.lNUeOD3LdJfu7xWD9suk2betHdVbpvvXqdh7o62PbP0"}` }
-};
 
   const onSubmit=()=>{
     const data={

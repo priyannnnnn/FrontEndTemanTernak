@@ -14,9 +14,9 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 function DaftarPendapatanTelur({navigation}){
 
     const [ IncomeEgg, setIncomeEgg ] = useState([])
-    const [ loading, setLoading ] = useState(false)
+    const [ loading, setLoading ] = useState(true)
     const [ errorMessage, setErrorMessage ] = useState('')
-    const [pageCurrent, setpageCurrent]= useState(1);
+    const [pageCurrent, setpageCurrent]= useState(0);
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
 
@@ -28,7 +28,7 @@ function DaftarPendapatanTelur({navigation}){
 
     const getData = () => {
       console.log("get Data = ")
-      axiosContext.authAxios.get(`/api/v1/incomeEgg?size=10&page=${pageCurrent}`)
+      axiosContext.authAxios.get(`/api/v1/incomeEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
       .then(res => {
         // console.log("then = ",res.data)
         // console.log("then = ",totalpage)
@@ -36,7 +36,7 @@ function DaftarPendapatanTelur({navigation}){
        // setIncomeEgg(res.data.content)
         setIncomeEgg(IncomeEgg.concat(res.data.content))
         // console.log(res.data);
-       setIncomeEgg([...IncomeEgg,...res.data.content])
+      //  setIncomeEgg([...IncomeEgg,...res.data.content])
       //   setErrorMessage('')
       //   setLoading(false)
            
@@ -82,8 +82,10 @@ function DaftarPendapatanTelur({navigation}){
     }
 
     useEffect(() => {
-    getData()
-    }, []);
+      setLoading(true)
+      getData()
+      return()=>{}
+    }, [pageCurrent]);
 
      const render=({item})=>{
       console.log(item)
@@ -119,19 +121,20 @@ function DaftarPendapatanTelur({navigation}){
       // _keyExtractor=(data,index)=> data.id.toString();
 
       handleLoadMore=()=>{
-        console.log("Page current =",pageCurrent)
-          console.log("Total page",totalpage)
-          if (pageCurrent < totalpage){
-            console.log("HandleLoadMore 1 = ",totalpage)
-            setpageCurrent(pageCurrent+1)
-            //getData()
-            setLoading(false)
-          }else {
-            console.log("HandleLoadMore 2 = ",totalpage)
-            setpageCurrent(pageCurrent+1)
-            //getData()
-            setLoading(false)
-          }    
+        const page = pageCurrent > totalpage;
+           console.log("Page current =",pageCurrent)
+           console.log("Total page",totalpage)
+            if (pageCurrent < totalpage){
+              console.log("HandleLoadMore 1 = ",totalpage)
+              setpageCurrent(pageCurrent+1)
+              //getData()
+              setLoading(false)
+            }else {
+              console.log("HandleLoadMore 2 = ",totalpage)
+              setpageCurrent(pageCurrent+1)
+              //getData()
+              setLoading(false)
+            }
       }
       renderFooter=()=>{
         return(
@@ -282,7 +285,7 @@ const styles=StyleSheet.create({
       },
       input: {
         height:45,
-        width:290,
+        width:265,
         borderWidth:1,
         paddingLeft:20,
         margin:5,

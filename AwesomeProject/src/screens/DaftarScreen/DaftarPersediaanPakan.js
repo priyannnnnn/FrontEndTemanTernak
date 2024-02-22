@@ -1,4 +1,4 @@
-import { ScrollView, View,Text, StyleSheet,FlatList,ActivityIndicator,TextInput } from "react-native";
+import { ScrollView, View,Text, StyleSheet,FlatList,ActivityIndicator,TextInput, Alert } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
@@ -28,7 +28,7 @@ function DaftarPersediaanPakan({navigation}){
 
     setLoading(true)
     console.log("token = ",axiosContext.authAxios)
-    axiosContext.authAxios.get(`/api/v1/feed?size=10&page=${pageCurrent}`)
+    axiosContext.authAxios.get(`/api/v1/feed?orders=createdAt-desc&size=10`)
     .then (res => {
       console.log("getdata_feed")
       setLoading(false)
@@ -61,17 +61,30 @@ function DaftarPersediaanPakan({navigation}){
       setLoading(false)
       console.error(error)
     })
-    }
+  }
 
-  //  const updateData = (id )=> {
-  //   console.log(id)
-  //   fetch ('http://139.162.6.202:8000/api/v1/feed/'+id, {method: "PUT" })
-  //  }
+  const showConfirmDialog = (id) => {
+    console.log(id)
+    return Alert.alert(
+      "Apakah kamu yakin?",
+      "Apakah Kamu Yakin Untuk Menghapus Data?",
+      [
+        {
+          text: "Yes",
+          onPress:()=>DeleteData(id) ,
+        },
+        {
+          text: "No",
+        },
+      ]
+    );
+  }; 
   
   
   useEffect(()=> {
     console.log("PageCurrent = ",pageCurrent)
     setLoading(true)
+    console.log("Get Data = ")
     getData()
     return()=>{}
   },[pageCurrent])
@@ -91,7 +104,7 @@ function DaftarPersediaanPakan({navigation}){
           
           <View style={styles.buttonContainer}>
           <TouchableOpacity
-                    onPress={() => {DeleteData(item.id)}}
+                    onPress={() => {showConfirmDialog(item.id)}}
                     style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
                     <Text style={styles.buttonText}>Delete</Text>
           </TouchableOpacity>
