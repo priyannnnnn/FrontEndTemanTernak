@@ -174,12 +174,12 @@ function DaftarPersediaanPakan({navigation}){
   }
   
     return(
-      <View>
-        <View style={{flexDirection:'row'}}>
+      <View style={{backgroundColor: '#F5EEE6'}}>
+        <View style={{flexDirection: 'row'}}>
           <View style={styles.input}>
-            <TextInput placeholder="search" 
+            <TextInput placeholder="search"
               placeholderTextColor="#000"
-              style={{fontSize:15,color:'#1F2544'}}
+              style={{ fontSize:15, color:'#1F2544' }}
               value={feed} 
               clearButtonMode="always"
               onChangeText={handleSearch}
@@ -191,7 +191,7 @@ function DaftarPersediaanPakan({navigation}){
               style={{ marginVertical: 0, marginLeft: 0 ,flexDirection:'row'}}>
               <Icon name="add" size={40} color={'#1F2544'} style={{marginTop:20,}}/>
               <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
-          </TouchableOpacity>  
+          </TouchableOpacity> 
         </View>
       <FlatList
       style={styles.container12}
