@@ -23,9 +23,6 @@ function DaftarPersediaanPakan({navigation}){
     console.log('test_data');}
 
   const getData = () =>{
-    // if (totalpage < pageCurrent)
-    // return;
-
     setLoading(true)
     console.log("token = ",axiosContext.authAxios)
     axiosContext.authAxios.get(`/api/v1/feed?orders=createdAt-desc&size=10`)
@@ -121,10 +118,6 @@ function DaftarPersediaanPakan({navigation}){
   };
 
   const handleLoadMore=()=>{
-    // console.log("HandleLoadMore")
-    // setpageCurrent(pageCurrent+1)
-    // // getData()
-    // setLoading(true)
     const page = pageCurrent > totalpage;
     console.log("Page current =",pageCurrent)
     console.log("Total page",totalpage)
@@ -191,6 +184,7 @@ function DaftarPersediaanPakan({navigation}){
               clearButtonMode="always"
               onChangeText={handleSearch}
               autoCorrect={false}/>
+            
           </View>
           <TouchableOpacity
               onPress={() => navigation.navigate ('Penjualan')} 
@@ -205,7 +199,7 @@ function DaftarPersediaanPakan({navigation}){
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
       ListFooterComponent={this.renderFooter}
-      onEndReachedThreshold={0}
+      onEndReachedThreshold={this.handleLoadMore}
       onEndReached={handleLoadMore}
       />
       </View>
@@ -241,10 +235,11 @@ const styles=StyleSheet.create({
       backgroundColor: "gray",
     },
     buttonText: {
-      color: "white",
+      color: '#7FFFD4',
       paddingVertical: 6,
       paddingHorizontal: 10,
-      fontSize: 16
+      fontSize: 16,
+      
     },
     title: {
       fontWeight: "bold",
