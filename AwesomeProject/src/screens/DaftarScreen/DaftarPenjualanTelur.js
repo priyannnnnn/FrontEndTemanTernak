@@ -28,7 +28,7 @@ function DaftarPenjualanTelur({navigation}){
       axiosContext.authAxios.get(`/api/v1/saleEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
       .then(res => {
         setsaleEgg(saleEgg.concat(res.data.content))
-        console.log(res.data);
+        console.log("Elements = ",res.data.totalElements);
         setLoading(false)
         setErrorMessage('')
       })
@@ -277,7 +277,7 @@ const styles=StyleSheet.create({
       },
       input: {
         height:45,
-        width:290,
+        width:265,
         borderWidth:1,
         paddingLeft:20,
         margin:5,
