@@ -102,7 +102,7 @@ renderItem=({item})=>{
             <TouchableOpacity
                       onPress={() => {showConfirmDialog(item.id)}}
                       style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                      <Text style={styles.buttonText}>Delete</Text>
+                      <Text style={styles.buttonText}>Hapus</Text>
             </TouchableOpacity>
             <TouchableOpacity
                       onPress={() => navigation.navigate ('UpdateTernak',{id:item.id})} 

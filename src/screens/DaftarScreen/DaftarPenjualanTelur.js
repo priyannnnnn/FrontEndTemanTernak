@@ -60,7 +60,7 @@ function DaftarPenjualanTelur({navigation}){
             <Text style={styles.listItem}>Jumlah Telur : {data.amount}</Text>
             <Text style={styles.listItem}>Tanggal : {data.date}</Text>
             <Text style={styles.listItem}>Total Pendapatan Telur  : {data.quantity}</Text>
-         
+        
        </View>)}
         </View>
         <Button 

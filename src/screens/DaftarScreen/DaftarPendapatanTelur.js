@@ -6,6 +6,7 @@ import {Ionicons} from '@expo/vector-icons';
 import { useEffect, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
+// import MaterialComunityIcons from 'react-native-vector-icons/MaterialComunityIcons'
 
 function DaftarPendapatanTelur({navigation}){
 
@@ -72,6 +73,12 @@ function DaftarPendapatanTelur({navigation}){
                 <Text style={styles.listItem}>Tanggal: {data.quantity}</Text>
               
                 <View style={styles.buttonContainer}>
+                  {/* <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnLeft]} onPress={onEdit}>
+                    <MaterialComunityIcons name="close-circle-outline" size={25} color="#fff" />
+                  </TouchableOpacity>
+                  <TouchableOpacity style={[styles.backRightBtn, styles.backRightBtnLeft]} onPress={onDelete}>
+                    <MaterialComunityIcons name="close-can-outline" size={25} color="#fff" />
+                  </TouchableOpacity> */}
                 <TouchableOpacity
                     onPress={() => navigation.navigate ('UpdatePendapatanTelur',{id:data.id})
                         
@@ -85,7 +92,7 @@ function DaftarPendapatanTelur({navigation}){
                     
                     }}
                     style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                    <Text style={styles.buttonText}>Delete</Text>
+                    <Text style={styles.buttonText}>Hapus</Text>
                 </TouchableOpacity>
                 </View>
             </View>)}

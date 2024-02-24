@@ -55,8 +55,10 @@ function DaftarPersediaanPakan({navigation, route}){
   useEffect(()=> {
     getData()
   },[])
-
-  
+// //letakkan definisi
+//   const renderItem = ({ item }) => {
+//     console.log(item.amount, item.type); // Tambahkan console.log di sini
+    
     return(
         <ScrollView>
             <View style={styles.container}>
@@ -87,7 +89,7 @@ function DaftarPersediaanPakan({navigation, route}){
                   navigation.navigate('UpdatePakan', {id: data.id})
                 } style={styles.buttonText}>Edit</Button>
 
-                <Button onPress={()=> deleteData(data.id)} style={styles.buttonText}>Delete</Button>
+                <Button onPress={()=> deleteData(data.id)} style={styles.buttonText}>Hapus</Button>
                 {/* <Button onPress={()=> updateData(data.id)} style={styles.buttonText}>Delete</Button> */}
                 
                

@@ -98,15 +98,15 @@ function DaftarPersediaanPakan({navigation}){
           </TouchableOpacity>
           <View style={styles.employeeListContainer}>
             <Text style={styles.listItem}>Jumlah Telur : {item.quantity}</Text>
-            <Text style={styles.listItem}>amount : {item.amount}</Text>
-            <Text style={styles.listItem}>Type : {item.type}</Text>
+            <Text style={styles.listItem}>Jumlah Ternak : {item.amount}</Text>
+            <Text style={styles.listItem}>Tipe : {item.type}</Text>
             <Text style={styles.listItem}>Tanggal : {item.date}</Text>
           
           <View style={styles.buttonContainer}>
           <TouchableOpacity
                     onPress={() => {showConfirmDialog(item.id)}}
                     style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                    <Text style={styles.buttonText}>Delete</Text>
+                    <Text style={styles.buttonText}>Hapus</Text>
           </TouchableOpacity>
           <TouchableOpacity
                     onPress={() => navigation.navigate ('UpdatePakan',{id:item.id})} 
