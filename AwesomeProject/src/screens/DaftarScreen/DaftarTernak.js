@@ -15,7 +15,7 @@ function DaftarTernak({navigation}){
     const [ employee, setEmployee ] = useState([])
     const [ loading, setLoading ] = useState(true)
     const [ errorMessage, setErrorMessage ] = useState('')
-    const [pageCurrent, setpageCurrent]= useState(0)
+    const [pageCurrent, setpageCurrent]= useState(1)
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
 
@@ -77,13 +77,10 @@ function DaftarTernak({navigation}){
     useEffect(() => {
       console.log("PageCurrent UseEffect= ",pageCurrent)
       setLoading(true)
-      console.log("Get Data = ")
       getData()
+     return()=>{}
     }, [pageCurrent])
 
-      // useEffect(()=>{
-      //   DeleteData()
-      // },[])
 renderItem=({item})=>{
   return(
     <View style={styles.container} key={item.id}>
@@ -127,17 +124,32 @@ renderItem=({item})=>{
  handleLoadMore=()=>{
   console.log("Page current =",pageCurrent)
     console.log("Total page",totalpage)
-     if (pageCurrent < totalpage){
-       console.log("HandleLoadMore 1 = ",totalpage)
-       setpageCurrent(pageCurrent+1)
-       //getData()
-       setLoading(false)
-     }else {
-       console.log("HandleLoadMore 2 = ",totalpage)
-       setpageCurrent(pageCurrent+1)
-       //getData()
-       setLoading(false)
-     }
+    // if (pageCurrent ===1){
+    //   setpageCurrent(pageCurrent+1)
+      
+    // }
+    //  if (pageCurrent < totalpage){
+    //    console.log("HandleLoadMore 1 = ",totalpage)
+    //    setpageCurrent(pageCurrent+1)
+    //    return
+    //    //getData()
+    //   //  setLoading(false)
+    //  }else {
+    //    console.log("HandleLoadMore 2 = ",totalpage)
+    //    setpageCurrent(pageCurrent+1)
+    //    //getData()
+    //    setLoading(false)
+    //  }
+    switch(pageCurrent){
+      case 0 :
+        pageCurrent === 1;
+        break;
+        // setpageCurrent(pageCurrent+1)
+        case 1 :
+          pageCurrent === 2;
+          setpageCurrent(pageCurrent+1) 
+          break;
+    }
  }
 
  const handleSearch= (item) =>{
@@ -278,7 +290,7 @@ const styles=StyleSheet.create({
       },
       input: {
         height:45,
-        width:290,
+        width:265,
         borderWidth:1,
         paddingLeft:20,
         margin:5,

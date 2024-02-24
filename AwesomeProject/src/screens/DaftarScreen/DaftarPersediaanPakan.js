@@ -23,9 +23,6 @@ function DaftarPersediaanPakan({navigation}){
     console.log('test_data');}
 
   const getData = () =>{
-    // if (totalpage < pageCurrent)
-    // return;
-
     setLoading(true)
     console.log("token = ",axiosContext.authAxios)
     axiosContext.authAxios.get(`/api/v1/feed?orders=createdAt-desc&size=10`)
@@ -121,10 +118,6 @@ function DaftarPersediaanPakan({navigation}){
   };
 
   const handleLoadMore=()=>{
-    // console.log("HandleLoadMore")
-    // setpageCurrent(pageCurrent+1)
-    // // getData()
-    // setLoading(true)
     const page = pageCurrent > totalpage;
     console.log("Page current =",pageCurrent)
     console.log("Total page",totalpage)
@@ -209,74 +202,8 @@ function DaftarPersediaanPakan({navigation}){
       onEndReachedThreshold={this.handleLoadMore}
       onEndReached={handleLoadMore}
       />
-      </View>)
-
-        // <ScrollView>
-        //     <View style={styles.container}>
-        //     <TouchableOpacity style={styles.button}>
-        //         <Text style={styles.buttonText}> PersediaanPakan</Text>
-        //     </TouchableOpacity>
-        //     <Text style={styles.title}>Daftar Persediaan Pakan</Text>
-        //     {feed.map((data, index) =>
-        //     <View style={styles.employeeListContainer} key={data.id}>
-        //         <Text style={{ ...styles.listItem, color:"tomato"}}>{data.date}</Text>
-        //         <Text style ={styles.name}>{data.feed_name}</Text>
-        //         <Text style={styles.listItem}>Pakan :{data.type}</Text>
-        //         <Text style={styles.listItem}>Jumlah/KG :{data.quantity}</Text>
-        //         <Text style={styles.listItem}>Tanggal :{data.date}</Text>
-        //         <Text style={styles.listItem}>Harga :{data.amount}</Text>
-
-        //         <View style={styles.buttonContainer}>
-
-
-        //         <TouchableOpacity
-        //             onPress={() => navigation.navigate ('UpdatePakan',{id:data.id})
-                        
-        //             } onLongPress={()=> navigation.navigate('UpdatePakan',{id:data.id})}
-        //             style={{ ...styles.button, marginVertical: 0 }}>
-        //             <Text style={styles.buttonText}>Edit</Text>
-        //         </TouchableOpacity>
-
-        //         <TouchableOpacity
-        //             onPress={() => {deleteData(data.id)
-                    
-        //             }}
-        //             style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-        //             <Text style={styles.buttonText}>Delete</Text>
-        //         </TouchableOpacity>
-                {/* <TouchableOpacity
-                    onPress={() => {
-                        
-                    }}
-                    style={{ ...styles.button, marginVertical: 0 }}>
-                  
-                </TouchableOpacity> */}
-  
-                {/* <Button mode='contained'
-                onPress={() =>
-                  navigation.navigate('UpdatePakan', {id: data.id})
-                } style={styles.buttonText}>Edit</Button>
-
-                <Button onPress={()=> deleteData(data.id)} style={styles.buttonText}>Delete</Button> */}
-                {/* <Button onPress={()=> updateData(data.id)} style={styles.buttonText}>Delete</Button> */}
-                
-               
-//                 </View>
-//             </View> )}
-//             </View>
-//             <Button 
-//             mode='contained'
-//                 onPress={() =>
-//                   navigation.reset({
-//                     index: 0,
-//                     routes: [{ name: 'PersediaanPakan' }],
-//                   })
-//                 }
-//             >Kembali</Button>
-//         </ScrollView>
-//     )
- 
- 
+      </View>
+    )  
 }
 export default DaftarPersediaanPakan;
 const styles=StyleSheet.create({
@@ -353,21 +280,16 @@ const styles=StyleSheet.create({
     container12:{
       marginTop:20,
       backgroundColor:'#7FFFD4'
-    }, input: {
+    }, 
+    input: {
       height:45,
+      width:265,
       borderWidth:1,
       paddingLeft:20,
       margin:5,
       borderColor:'#009688',
-      backgroundColor:'blue',
-      // paddingHorizontal:20,
-      // paddingVertical:10,
-      // borderEndWidth:1,
-      // borderRadius:8,
-      // borderEndColor:'#cccccc'
-      // fontSize: 20,
-      // marginLeft: 10,
-      // width: "90%",
-      // color:'#000000'
+      backgroundColor:'#FFF6E9',
+      flexDirection:'row',
+      top:13
     },
 })
