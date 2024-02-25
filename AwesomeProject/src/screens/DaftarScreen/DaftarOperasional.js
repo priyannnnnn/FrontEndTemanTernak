@@ -103,10 +103,14 @@ function DaftarOperasional({navigation}){
         console.log(item)
         return (
             <View style={styles.container}>
+               <TouchableOpacity
+                style={styles.button}>
+                <Text style={styles.buttonText}>Dibuat : {item.date}</Text>
+          </TouchableOpacity>
                 <View style={styles.employeeListContainer}>
                     <Text style={styles.listItem}> Deskripsi : {item.description}</Text>
-                    <Text style={styles.listItem}>Tanggal : {item.date} </Text>
                     <Text style={styles.listItem}> Jumlah : {item.amount}</Text>
+                    <Text style={styles.listItem}>Tanggal : {item.date} </Text>
                         <View style={styles.buttonContainer}>                            
                             <TouchableOpacity
                             onPress={() => navigation.navigate ('UpdatePendapatanTelur',{id:item.id})} 
@@ -117,7 +121,7 @@ function DaftarOperasional({navigation}){
                             <TouchableOpacity
                             onPress={() => {showConfirmDialog(item.id)}}
                             style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                            <Text style={styles.buttonText}>Delete</Text>
+                            <Text style={styles.buttonText}>Hapus</Text>
                             </TouchableOpacity>
                         </View>
                 </View>
@@ -236,5 +240,17 @@ const styles = StyleSheet.create({
         backgroundColor:'#FFF6E9',
         flexDirection:'row',
         top:13
-      }
+      },
+      button: {
+        borderRadius: 5,
+        marginVertical: 20,
+        alignSelf: 'flex-start',
+        backgroundColor: "gray",
+      },
+      buttonText: {
+        color: '#7FFFD4',
+        paddingVertical: 6,
+        paddingHorizontal: 10,
+        fontSize: 16,     
+      },
 })

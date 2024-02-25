@@ -29,7 +29,7 @@ function DaftarPersediaanPakan({navigation}){
     .then (res => {
       console.log("getdata_feed")
       setLoading(false)
-      //setfeed(res.data.content)
+      setfeed(res.data.content)
       //setfeed([...feed,...res.data.content])
     setfeed(feed.concat(res.data.content))
      // settotalpage(res+1)
@@ -52,7 +52,9 @@ function DaftarPersediaanPakan({navigation}){
       console.log(res)
       setLoading(false)
       setErrorMessage('')
-      getData()
+      navigation.navigate("DaftarPersediaanPakan")
+      // getData()
+      // return()=>{}
     })
     .catch((error)=> {
       setLoading(false)
@@ -91,11 +93,11 @@ function DaftarPersediaanPakan({navigation}){
       <View style={styles.container} >
           <TouchableOpacity
                 onPress={toggleAddEmployeeModal} style={styles.button}>
-                <Text style={styles.buttonText}>{item.date}</Text>
+                <Text style={styles.buttonText}>Dibuat : {item.date}</Text>
           </TouchableOpacity>
           <View style={styles.employeeListContainer}>
             <Text style={styles.listItem}>Jumlah Telur : {item.quantity}</Text>
-            <Text style={styles.listItem}>amount : {item.amount}</Text>
+            <Text style={styles.listItem}>Jumlah Harga : {item.amount}</Text>
             <Text style={styles.listItem}>Type : {item.type}</Text>
             <Text style={styles.listItem}>Tanggal : {item.date}</Text>
           
@@ -103,7 +105,7 @@ function DaftarPersediaanPakan({navigation}){
           <TouchableOpacity
                     onPress={() => {showConfirmDialog(item.id)}}
                     style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                    <Text style={styles.buttonText}>Delete</Text>
+                    <Text style={styles.buttonText}>Hapus</Text>
           </TouchableOpacity>
           <TouchableOpacity
                     onPress={() => navigation.navigate ('UpdatePakan',{id:item.id})} 
@@ -238,8 +240,7 @@ const styles=StyleSheet.create({
       color: '#7FFFD4',
       paddingVertical: 6,
       paddingHorizontal: 10,
-      fontSize: 16,
-      
+      fontSize: 16,     
     },
     title: {
       fontWeight: "bold",
