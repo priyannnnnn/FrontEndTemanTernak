@@ -26,10 +26,6 @@ function UpdatePendapatanTelur(props){
     useEffect(()=> {
         getData(id)
     },[])
-
-    const config={
-      headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4ODgyODI1MiwiZXhwIjoxNjg4ODI5NjkyfQ.ZJfT-nqpnOkjb5rYa7NUXHt2VhC7Kg3EbnlkOSyVuqA"}`}
-    }
     
     const getData=(id)=>{
       console.log("id = ", id)

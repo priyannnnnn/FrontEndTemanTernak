@@ -18,8 +18,8 @@ import {BASE_URL} from "@env";
 import getUrl from '../api_url/Endpoint'
 
 function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState({ value: 'test_24@gmail.com',error: '' })
-  const [password, setPassword] = useState({ value: '12345678', error: '' })
+  const [email, setEmail] = useState({ value: '',error: '' })
+  const [password, setPassword] = useState({ value: '', error: '' })
 
   const authContext = useContext(AuthContext);
   const publicAxios = useContext(AxiosContext);
@@ -41,14 +41,8 @@ function LoginScreen({ navigation }) {
       console.log("URL login ")
       const response = await axios.post('https://ternakpoyo.online/api/v1/login/email',dataLogin)
       console.log("response Url status =",response.status)
-      // console.log("response Url config =",response.config.url)
-      // console.log("response Url request =",response.request.responseURL)
       console.log("url = ",response.data)
-      // console.log(response.token)
       const accessToken = response.data
-      console.log("Acces Token")
-      console.log('accesssToken=',accessToken)
-      console.log("Token = ",accessToken)
       authContext.setAuthState({
         authenticated: true,
         accessToken:accessToken,
@@ -61,9 +55,6 @@ function LoginScreen({ navigation }) {
         }),
         navigation.navigate("Dashboard")
       );
-
-      
-
     }catch(error){
       console.error(error)
       console.log("Url Error")

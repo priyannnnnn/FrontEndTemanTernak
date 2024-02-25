@@ -1,4 +1,4 @@
-import { ScrollView, View,Text, StyleSheet, FlatList,ActivityIndicator, TextInput } from "react-native";
+import { ScrollView, View,Text, StyleSheet, FlatList,ActivityIndicator, TextInput, Alert } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
@@ -25,10 +25,10 @@ function DaftarPenjualanTelur({navigation}){
   const GetData = () => {
     console.log("get data = ")
       setLoading(true)
-      axiosContext.authAxios.get(`/api/v1/saleEgg?size=10&page=${pageCurrent}`)
+      axiosContext.authAxios.get(`/api/v1/saleEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
       .then(res => {
         setsaleEgg(saleEgg.concat(res.data.content))
-        console.log(res.data);
+        console.log("Elements = ",res.data.totalElements);
         setLoading(false)
         setErrorMessage('')
       })
@@ -36,7 +36,7 @@ function DaftarPenjualanTelur({navigation}){
         console.error(e)
       })
   }
-    const DeleteData=(id)=>{
+  const DeleteData=(id)=>{
     console.log(id)
     axiosContext.authAxios.delete('/api/v1/saleEgg/'+id)
     .then (res =>{
@@ -48,8 +48,24 @@ function DaftarPenjualanTelur({navigation}){
     .catch((e) => {
       console.error(e)
     })
-   
-    }
+  }
+
+  const showConfirmDialog = (id) => {
+    console.log(id)
+    return Alert.alert(
+      "Apakah kamu yakin?",
+      "Apakah Kamu Yakin Untuk Menghapus Data?",
+      [
+        {
+          text: "Yes",
+          onPress:()=>DeleteData(id) ,
+        },
+        {
+          text: "No",
+        },
+      ]
+    );
+  };  
   useEffect(() => {
     console.log("PageCurrent",pageCurrent)
     setLoading(true)
@@ -71,7 +87,7 @@ function DaftarPenjualanTelur({navigation}){
             <Text style={styles.listItem}>Tanggal : {item.date}</Text>   
           <View style={styles.buttonContainer}>
               <TouchableOpacity
-                        onPress={() => {DeleteData(item.id)}}
+                        onPress={() => {showConfirmDialog(item.id)}}
                         style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
                         <Text style={styles.buttonText}>Delete</Text>
               </TouchableOpacity>
@@ -129,12 +145,24 @@ function DaftarPenjualanTelur({navigation}){
     }
 
     return(
-      <View>
-        <TextInput style={styles.input} placeholder="search" 
+      <View style={{backgroundColor:'#F5EEE6'}}>
+        <View style={{flexDirection:'row'}}>
+          <View style={styles.input}>
+            <TextInput placeholder="search" 
+              placeholderTextColor="#000"
+              style={{fontSize:15,color:'#1F2544'}}
               value={saleEgg} 
               clearButtonMode="always"
               onChangeText={handleSearch}
               autoCorrect={false}/>
+          </View>
+          <TouchableOpacity
+              onPress={() => navigation.navigate ('Penjualan')} 
+              style={{ marginVertical: 0, marginLeft: 0 ,flexDirection:'row'}}>
+              <Icon name="add" size={40} color={'#1F2544'} style={{marginTop:20,}}/>
+              <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
+          </TouchableOpacity>  
+        </View>
       <FlatList
       style={styles.container12}
       data={saleEgg}
@@ -246,12 +274,16 @@ const styles=StyleSheet.create({
       container12:{
         marginTop:20,
         backgroundColor:'#7FFFD4'
-      },input: {
+      },
+      input: {
         height:45,
+        width:265,
         borderWidth:1,
         paddingLeft:20,
         margin:5,
-        borderColor:'#008000',
-        backgroundColor:'blue',
+        borderColor:'#009688',
+        backgroundColor:'#FFF6E9',
+        flexDirection:'row',
+        top:13
       }
 })
