@@ -79,7 +79,7 @@ function DaftarPenjualanTelur({navigation}){
     <View style={styles.container}>
         <TouchableOpacity
                   onPress={toggleAddEmployeeModal} style={styles.button}>
-                  <Text style={styles.buttonText}>{item.date}</Text>
+                  <Text style={styles.buttonText}>Dibuat : {item.date}</Text>
         </TouchableOpacity>
       <View style={styles.employeeListContainer}>
             <Text style={styles.listItem}>Jumlah Pendapatan Telur : {item.quantity}</Text>
@@ -89,7 +89,7 @@ function DaftarPenjualanTelur({navigation}){
               <TouchableOpacity
                         onPress={() => {showConfirmDialog(item.id)}}
                         style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                        <Text style={styles.buttonText}>Delete</Text>
+                        <Text style={styles.buttonText}>Hapus</Text>
               </TouchableOpacity>
               <TouchableOpacity
                         onPress={() => navigation.navigate ('UpdatePenjualanTelur',{id:item.id})} 
