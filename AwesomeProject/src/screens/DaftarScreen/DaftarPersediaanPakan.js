@@ -96,8 +96,8 @@ function DaftarPersediaanPakan({navigation}){
                 <Text style={styles.buttonText}>Dibuat : {item.date}</Text>
           </TouchableOpacity>
           <View style={styles.employeeListContainer}>
-            <Text style={styles.listItem}>Jumlah Telur : {item.quantity}</Text>
-            <Text style={styles.listItem}>Jumlah Harga : {item.amount}</Text>
+            <Text style={styles.listItem}>Jumlah Pakan : {item.quantity.toLocaleString()} KG</Text>
+            <Text style={styles.listItem}>Jumlah Harga : {item.amount.toLocaleString()}</Text>
             <Text style={styles.listItem}>Type : {item.type}</Text>
             <Text style={styles.listItem}>Tanggal : {item.date}</Text>
           
@@ -189,7 +189,7 @@ function DaftarPersediaanPakan({navigation}){
             
           </View>
           <TouchableOpacity
-              onPress={() => navigation.navigate ('Penjualan')} 
+              onPress={() => navigation.navigate ('PersediaanPakan')} 
               style={{ marginVertical: 0, marginLeft: 0 ,flexDirection:'row'}}>
               <Icon name="add" size={40} color={'#1F2544'} style={{marginTop:20,}}/>
               <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
@@ -262,8 +262,9 @@ const styles=StyleSheet.create({
       fontSize: 16
     },
     listItem: {
-      fontSize: 16,
-      color:'#800000'
+      fontSize: 18,
+        color:'#800000',
+        fontWeight:"500"
     },
     buttonContainer: {
       marginTop: 10,

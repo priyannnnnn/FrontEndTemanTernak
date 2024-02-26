@@ -97,8 +97,8 @@ function DaftarPendapatanTelur({navigation}){
                   <Text style={styles.buttonText}>Dibuat : {item.date}</Text>
             </TouchableOpacity>
             <View style={styles.employeeListContainer}>
-              <Text style={styles.listItem}>Jumlah Telur : {item.quantity}</Text>
-              <Text style={styles.listItem}>Tanggal : {item.date}</Text>
+              <Text style={styles.listItem}>Jumlah Telur : {item.quantity.toLocaleString()}</Text>
+              <Text style={styles.listItem}>Tanggal : {item.date.toLocaleString()}</Text>
             
             <View style={styles.buttonContainer}>
             <TouchableOpacity
@@ -263,8 +263,9 @@ const styles=StyleSheet.create({
         fontSize: 16
       },
       listItem: {
-        fontSize: 16,
-        color:'#800000'
+        fontSize: 18,
+        color:'#800000',
+        fontWeight:"500"
       },
       buttonContainer: {
         marginTop: 10,

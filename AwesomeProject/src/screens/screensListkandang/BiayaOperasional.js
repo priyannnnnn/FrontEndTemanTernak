@@ -80,7 +80,7 @@ function BiayaOperasional({navigation}) {
             <Text style={styles.Text}>Deskripsi</Text>
             <TextInput
             value={Operation?.description.value} onChangeText ={(text) => setOperation({...Operation, description:{value:text, error:''}})} label= 'deskripsi'/>
-            <Text style={styles.Text}>Jumlah</Text>
+            <Text style={styles.Text}>Total Biaya Operasional</Text>
             <TextInput
             value = {Operation?.amount.value} onChangeText= {(text) => setOperation ({...Operation, amount: {value:text, error:''}})} label='Jumlah-Operasional'/>
 

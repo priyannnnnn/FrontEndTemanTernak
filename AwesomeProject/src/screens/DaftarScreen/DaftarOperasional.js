@@ -17,7 +17,7 @@ function DaftarOperasional({navigation}){
     const [totalpage, settotalpage]= useState(10);
 
     const getData = () => {
-        axiosContext.authAxios.get(`/api/v1/operatingCosh`)
+        axiosContext.authAxios.get(`/api/v1/operatingCosh?orders=createdAt-desc`)
         .then(res => {
             console.log("Get Data = ", res.data)
             setOperasional(Operasional.concat(res.data.content))
@@ -109,7 +109,7 @@ function DaftarOperasional({navigation}){
           </TouchableOpacity>
                 <View style={styles.employeeListContainer}>
                     <Text style={styles.listItem}> Deskripsi : {item.description}</Text>
-                    <Text style={styles.listItem}> Jumlah : {item.amount}</Text>
+                    <Text style={styles.listItem}> Biaya Operasional : {item.amount.toLocaleString()}</Text>
                     <Text style={styles.listItem}>Tanggal : {item.date} </Text>
                         <View style={styles.buttonContainer}>                            
                             <TouchableOpacity
@@ -141,7 +141,7 @@ function DaftarOperasional({navigation}){
               autoCorrect={false}/>
           </View>
           <TouchableOpacity
-              onPress={() => navigation.navigate ('Penjualan')} 
+              onPress={() => navigation.navigate ('BiayaOperasional')} 
               style={{ marginVertical: 0, marginLeft: 0 ,flexDirection:'row'}}>
               <Icon name="add" size={40} color={'#1F2544'} style={{marginTop:20,}}/>
               <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
@@ -214,8 +214,9 @@ const styles = StyleSheet.create({
         fontSize: 16
       },
       listItem: {
-        fontSize: 16,
-        color:'#800000'
+        fontSize: 18,
+        color:'#800000',
+        fontWeight:"500"
       },
       buttonContainer: {
         marginTop: 10,
