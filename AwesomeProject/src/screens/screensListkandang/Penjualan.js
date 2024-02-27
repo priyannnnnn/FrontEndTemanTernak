@@ -87,7 +87,7 @@ function Penjualan({navigation}){
               is24Hour={true}
               onChange={onChange}/>
             )}
-            <Text style={styles.Text}>Total Pendapatan Telur</Text>
+            <Text style={styles.Text}>Total Harga Telur</Text>
             <TextInput value={saleEgg?.amount.value} onChangeText={(text) => setsaleEgg({ ...saleEgg, amount: {value: text, error: ''}  })} label='Pendapatan Total' keyboardType="numeric"/>
 
         <Button mode='contained' style={{margin:4}} onPress={onSubmit}>Simpan</Button>  

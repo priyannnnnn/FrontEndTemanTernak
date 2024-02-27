@@ -90,8 +90,8 @@ renderItem=({item})=>{
         </TouchableOpacity>
         <View style={styles.employeeListContainer}>
           <Text style={styles.listItem}>Umur : {item.age}</Text>
-          <Text style={styles.listItem}>Jumlah : {item.quantity}</Text>
-          <Text style={styles.listItem}>Harga :{item.amount}</Text>
+          <Text style={styles.listItem}>Jumlah : {item.quantity.toLocaleString()}</Text>
+          <Text style={styles.listItem}>Harga :{item.amount.toLocaleString()}</Text>
           <Text style={styles.listItem}>Jenis : {item.type}</Text>
           <Text style={styles.listItem}>Catatan : {item.note}</Text>
           <Text style={styles.listItem}>Tanggal : {item.date}</Text>
@@ -268,8 +268,9 @@ const styles=StyleSheet.create({
         fontSize: 16
       },
       listItem: {
-        fontSize: 16,
-        color:'#DC143C'
+        fontSize: 18,
+        color:'#800000',
+        fontWeight:"500"
       },
       buttonContainer: {
         marginTop: 10,

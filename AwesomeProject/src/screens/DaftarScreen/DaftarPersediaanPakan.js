@@ -29,7 +29,7 @@ function DaftarPersediaanPakan({navigation}){
     .then (res => {
       console.log("getdata_feed")
       setLoading(false)
-      //setfeed(res.data.content)
+      setfeed(res.data.content)
       //setfeed([...feed,...res.data.content])
     setfeed(feed.concat(res.data.content))
      // settotalpage(res+1)
@@ -52,7 +52,9 @@ function DaftarPersediaanPakan({navigation}){
       console.log(res)
       setLoading(false)
       setErrorMessage('')
-      getData()
+      navigation.navigate("DaftarPersediaanPakan")
+      // getData()
+      // return()=>{}
     })
     .catch((error)=> {
       setLoading(false)
@@ -91,7 +93,7 @@ function DaftarPersediaanPakan({navigation}){
       <View style={styles.container} >
           <TouchableOpacity
                 onPress={toggleAddEmployeeModal} style={styles.button}>
-                <Text style={styles.buttonText}>{item.date}</Text>
+                <Text style={styles.buttonText}>Dibuat : {item.date}</Text>
           </TouchableOpacity>
           <View style={styles.employeeListContainer}>
             <Text style={styles.listItem}>Jumlah Telur : {item.quantity}</Text>
@@ -187,7 +189,7 @@ function DaftarPersediaanPakan({navigation}){
             
           </View>
           <TouchableOpacity
-              onPress={() => navigation.navigate ('Penjualan')} 
+              onPress={() => navigation.navigate ('PersediaanPakan')} 
               style={{ marginVertical: 0, marginLeft: 0 ,flexDirection:'row'}}>
               <Icon name="add" size={40} color={'#1F2544'} style={{marginTop:20,}}/>
               <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
@@ -238,8 +240,7 @@ const styles=StyleSheet.create({
       color: '#7FFFD4',
       paddingVertical: 6,
       paddingHorizontal: 10,
-      fontSize: 16,
-      
+      fontSize: 16,     
     },
     title: {
       fontWeight: "bold",
@@ -261,8 +262,9 @@ const styles=StyleSheet.create({
       fontSize: 16
     },
     listItem: {
-      fontSize: 16,
-      color:'#800000'
+      fontSize: 18,
+        color:'#800000',
+        fontWeight:"500"
     },
     buttonContainer: {
       marginTop: 10,

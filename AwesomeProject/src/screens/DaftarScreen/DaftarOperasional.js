@@ -17,7 +17,7 @@ function DaftarOperasional({navigation}){
     const [totalpage, settotalpage]= useState(10);
 
     const getData = () => {
-        axiosContext.authAxios.get(`/api/v1/operatingCosh`)
+        axiosContext.authAxios.get(`/api/v1/operatingCosh?orders=createdAt-desc`)
         .then(res => {
             console.log("Get Data = ", res.data)
             setOperasional(Operasional.concat(res.data.content))
@@ -103,11 +103,20 @@ function DaftarOperasional({navigation}){
         console.log(item)
         return (
             <View style={styles.container}>
+               <TouchableOpacity
+                style={styles.button}>
+                <Text style={styles.buttonText}>Dibuat : {item.date}</Text>
+          </TouchableOpacity>
                 <View style={styles.employeeListContainer}>
                     <Text style={styles.listItem}> Deskripsi : {item.description}</Text>
+                    <Text style={styles.listItem}> Biaya Operasional : {item.amount.toLocaleString()}</Text>
                     <Text style={styles.listItem}>Tanggal : {item.date} </Text>
+<<<<<<< HEAD
                     <Text style={styles.listItem}> Jumlah : {item.amount}</Text>
                         {/* {/* {/* {/* <View style={styles.buttonContainer}>
+=======
+                        <View style={styles.buttonContainer}>                            
+>>>>>>> 9eeca8f5d45f55ce66bd47e1bb0163841e04e8c4
                             <TouchableOpacity
                               onPress={() => {Delete(item.id)}}
                               style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
@@ -120,8 +129,13 @@ function DaftarOperasional({navigation}){
                             <Text style={styles.buttonText}>Edit</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
+<<<<<<< HEAD
                               onPress={() => {showConfirmDialog(item.id)}}
                               style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+=======
+                            onPress={() => {showConfirmDialog(item.id)}}
+                            style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+>>>>>>> 9eeca8f5d45f55ce66bd47e1bb0163841e04e8c4
                             <Text style={styles.buttonText}>Hapus</Text>
                             </TouchableOpacity>
                         </View> *k/}
@@ -142,7 +156,7 @@ function DaftarOperasional({navigation}){
               autoCorrect={false}/>
           </View>
           <TouchableOpacity
-              onPress={() => navigation.navigate ('Penjualan')} 
+              onPress={() => navigation.navigate ('BiayaOperasional')} 
               style={{ marginVertical: 0, marginLeft: 0 ,flexDirection:'row'}}>
               <Icon name="add" size={40} color={'#1F2544'} style={{marginTop:20,}}/>
               <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
@@ -215,8 +229,9 @@ const styles = StyleSheet.create({
         fontSize: 16
       },
       listItem: {
-        fontSize: 16,
-        color:'#800000'
+        fontSize: 18,
+        color:'#800000',
+        fontWeight:"500"
       },
       buttonContainer: {
         marginTop: 10,
@@ -241,5 +256,17 @@ const styles = StyleSheet.create({
         backgroundColor:'#FFF6E9',
         flexDirection:'row',
         top:13
-      }
+      },
+      button: {
+        borderRadius: 5,
+        marginVertical: 20,
+        alignSelf: 'flex-start',
+        backgroundColor: "gray",
+      },
+      buttonText: {
+        color: '#7FFFD4',
+        paddingVertical: 6,
+        paddingHorizontal: 10,
+        fontSize: 16,     
+      },
 })
