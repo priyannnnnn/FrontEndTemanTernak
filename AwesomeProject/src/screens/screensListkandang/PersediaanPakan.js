@@ -132,7 +132,7 @@ const styles=StyleSheet.create({
   },
   Text:{
     textAlign:'left',
-    fontSize:18,
+    fontSize:24,
     fontWeight: '500',
     color:'#000000'
   },

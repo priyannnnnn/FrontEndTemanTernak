@@ -111,23 +111,38 @@ function DaftarOperasional({navigation}){
                     <Text style={styles.listItem}> Deskripsi : {item.description}</Text>
                     <Text style={styles.listItem}> Biaya Operasional : {item.amount.toLocaleString()}</Text>
                     <Text style={styles.listItem}>Tanggal : {item.date} </Text>
+<<<<<<< HEAD
+                    <Text style={styles.listItem}> Jumlah : {item.amount}</Text>
+                        {/* {/* {/* {/* <View style={styles.buttonContainer}>
+=======
                         <View style={styles.buttonContainer}>                            
+>>>>>>> 9eeca8f5d45f55ce66bd47e1bb0163841e04e8c4
                             <TouchableOpacity
-                            onPress={() => navigation.navigate ('UpdatePendapatanTelur',{id:item.id})} 
-                            onLongPress={()=> navigation.navigate('UpdatePendapatanTelur',{id:item.id})}
-                            style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                              onPress={() => {Delete(item.id)}}
+                              style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                            <Text style={styles.buttonText}>Hapus</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                              onPress={() => navigation.navigate ('UpdatePendapatanTelur',{id:item.id})} 
+                              onLongPress={()=> navigation.navigate('UpdatePendapatanTelur',{id:item.id})}
+                              style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
                             <Text style={styles.buttonText}>Edit</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
+<<<<<<< HEAD
+                              onPress={() => {showConfirmDialog(item.id)}}
+                              style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+=======
                             onPress={() => {showConfirmDialog(item.id)}}
                             style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+>>>>>>> 9eeca8f5d45f55ce66bd47e1bb0163841e04e8c4
                             <Text style={styles.buttonText}>Hapus</Text>
                             </TouchableOpacity>
-                        </View>
+                        </View> *k/}
                 </View>
-            </View>
+            </View> */}
         )
-    }
+    }  */}
     return (
       <View>
         <View style={{flexDirection:'row'}}>

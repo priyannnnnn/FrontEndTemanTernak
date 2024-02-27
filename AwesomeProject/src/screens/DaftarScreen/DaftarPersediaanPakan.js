@@ -97,9 +97,9 @@ function DaftarPersediaanPakan({navigation}){
                 <Text style={styles.buttonText}>Dibuat : {item.date}</Text>
           </TouchableOpacity>
           <View style={styles.employeeListContainer}>
-            <Text style={styles.listItem}>Jumlah Pakan : {item.quantity.toLocaleString()} KG</Text>
-            <Text style={styles.listItem}>Jumlah Harga : {item.amount.toLocaleString()}</Text>
-            <Text style={styles.listItem}>Type : {item.type}</Text>
+            <Text style={styles.listItem}>Jumlah Telur : {item.quantity}</Text>
+            <Text style={styles.listItem}>Jumlah Ternak : {item.amount}</Text>
+            <Text style={styles.listItem}>Tipe : {item.type}</Text>
             <Text style={styles.listItem}>Tanggal : {item.date}</Text>
           
           <View style={styles.buttonContainer}>

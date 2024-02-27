@@ -105,12 +105,12 @@ function DaftarPendapatanTelur({navigation}){
               onPress={() => navigation.navigate ('UpdatePendapatanTelur',{id:item.id})} 
               onLongPress={()=> navigation.navigate('UpdatePendapatanTelur',{id:item.id})}
               style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-              <Text style={styles.buttonText}>Edit</Text>
+              <Text style={styles.buttonText}>Hapus</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {showConfirmDialog(item.id)}}
               style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-              <Text style={styles.buttonText}>Hapus</Text>
+              <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
             </View>
             </View>

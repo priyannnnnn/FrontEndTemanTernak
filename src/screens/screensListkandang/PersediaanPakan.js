@@ -71,7 +71,7 @@ function PersediaanPakan({navigation}) {
             <Text style={styles.Text}>Jumlah per KG</Text>
             <TextInput value={feed?.quantity.value} onChangeText={(text)=> setFeed({...feed, quantity: { value: text, error:''} })} label='Masukkan Pakan' keyboardType='numeric'/>
 
-            <Text style={styles.Text}>Type</Text>
+            <Text style={styles.Text}>Tipe</Text>
             <View style={{ borderRadius:5,borderWidth:1,borderColor:'#708090',overflow:'hidden',}}>
             <Picker style={{backgroundColor:'#FFFAFA',width:"100%",height:50,textAlign:'center',marginTop:-8,marginBottom:7}}
               selectedValue={feed?.type.value}
