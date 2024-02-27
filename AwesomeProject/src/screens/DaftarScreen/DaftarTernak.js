@@ -28,6 +28,7 @@ function DaftarTernak({navigation}){
             console.log(res.data.content);
             setLoading(false)
             setEmployee(employee.concat(res.data.content))
+            // setEmployee(employee.concat(res.data.content))
             // setEmployee(res.data.content)
           })
           .catch((e) => {
@@ -121,9 +122,29 @@ renderItem=({item})=>{
     </View> :null
   )
  }
- handleLoadMore=()=>{
+//  const fetchMore = async () => {
+//   if (isLoading) return;
+
+//   setIsLoading(true);
+
+//   const nextPage = currentPage + 1;
+//   const newData = await fetchBooks(nextPage);
+
+//   setCurrentPage(nextPage);
+//   setIsLoading(false);
+//   setBooks(prevData => [...prevData, ...newData]);
+// }
+ handleLoadMore= async()=>{
   console.log("Page current =",pageCurrent)
     console.log("Total page",totalpage)
+    if(loading)return;
+    setLoading(true)
+    const nextPage = pageCurrent + 1
+    const newData = await setpageCurrent(nextPage);
+    setLoading(false)
+    // setpageCurrent(prevData => [...prevData, ...newData])
+
+
     // if (pageCurrent ===1){
     //   setpageCurrent(pageCurrent+1)
       
@@ -140,16 +161,16 @@ renderItem=({item})=>{
     //    //getData()
     //    setLoading(false)
     //  }
-    switch(pageCurrent){
-      case 0 :
-        pageCurrent === 1;
-        break;
-        // setpageCurrent(pageCurrent+1)
-        case 1 :
-          pageCurrent === 2;
-          setpageCurrent(pageCurrent+1) 
-          break;
-    }
+    // switch(pageCurrent){
+    //   case 0 :
+    //     pageCurrent === 1;
+    //     break;
+    //     // setpageCurrent(pageCurrent+1)
+    //     case 1 :
+    //       pageCurrent === 2;
+    //       setpageCurrent(pageCurrent+1) 
+    //       break;
+    // }
  }
 
  const handleSearch= (item) =>{

@@ -29,8 +29,8 @@ function DaftarPenjualanTelur({navigation}){
       .then(res => {
         setsaleEgg(saleEgg.concat(res.data.content))
         console.log("Elements = ",res.data.totalElements);
-        setLoading(false)
-        setErrorMessage('')
+        // setLoading(false)
+        // setErrorMessage('')
       })
       .catch((e)=>{
         console.error(e)
@@ -68,7 +68,7 @@ function DaftarPenjualanTelur({navigation}){
   };  
   useEffect(() => {
     console.log("PageCurrent",pageCurrent)
-    setLoading(true)
+    // setLoading(true)
     GetData()
     return()=>{}
   },[pageCurrent])
@@ -82,7 +82,7 @@ function DaftarPenjualanTelur({navigation}){
                   <Text style={styles.buttonText}>Dibuat : {item.date}</Text>
         </TouchableOpacity>
       <View style={styles.employeeListContainer}>
-            <Text style={styles.listItem}>Jumlah Pendapatan Telur : {item.quantity.toLocaleString()}</Text>
+            <Text style={styles.listItem}>Jumlah Pendapatan : {item.quantity.toLocaleString()}</Text>
             <Text style={styles.listItem}>Jumlah telur : {item.amount.toLocaleString()}</Text>
             <Text style={styles.listItem}>Tanggal : {item.date}</Text>   
           <View style={styles.buttonContainer}>
@@ -107,13 +107,17 @@ function DaftarPenjualanTelur({navigation}){
     const page = pageCurrent > totalpage;
        console.log("Page current =",pageCurrent)
        console.log("Total page",totalpage)
+       setLoading(true)
         if (pageCurrent < totalpage){
+          setLoading(true)
           console.log("HandleLoadMore 1 = ",totalpage)
           setpageCurrent(pageCurrent+1)
+          setLoading(true)
           //getData()
-          setLoading(false)
+          setLoading(true)
         }else {
           console.log("HandleLoadMore 2 = ",totalpage)
+          setLoading(true)
           setpageCurrent(pageCurrent+1)
           //getData()
           setLoading(false)

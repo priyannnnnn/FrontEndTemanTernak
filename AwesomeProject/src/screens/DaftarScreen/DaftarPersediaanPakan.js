@@ -50,6 +50,7 @@ function DaftarPersediaanPakan({navigation}){
     // .then(res => res.json())
     .then(res =>{
       console.log(res)
+      
       setLoading(false)
       setErrorMessage('')
       navigation.navigate("DaftarPersediaanPakan")

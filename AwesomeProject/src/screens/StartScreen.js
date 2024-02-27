@@ -42,8 +42,9 @@ function StartScreen({ navigation }) {
     // useEffect (() =>{
     //   loadJWT();
     // },[loadJWT])
-
-    if(authContext?.authState?.authenticated === false){
+    console.log("expired = ",authContext.accessToken)
+    console.log("token = ",authContext?.authState?.authenticated)
+    if(authContext?.authState?.authenticated === true){
       return (navigation.navigate('Dashboard'))
     }else {
       return (navigation.navigate('LoginScreen'))
