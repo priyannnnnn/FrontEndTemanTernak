@@ -39,7 +39,7 @@ function LoginScreen({ navigation }) {
         return
       }console.log(" Data Login",dataLogin)
       console.log("URL login ")
-      const response = await axios.post('https://ternakpoyo.online/api/v1/login/email',dataLogin)
+      const response = await axios.post('https://dev.ternakpoyo.online/api/v1/login/email',dataLogin)
       console.log("response Url status =",response.status)
       console.log("url = ",response.data)
       const accessToken = response.data
