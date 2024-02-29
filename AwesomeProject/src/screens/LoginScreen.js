@@ -62,7 +62,7 @@ function LoginScreen({ navigation }) {
   }
   return (
     <Background>
-      <BackButton goBack={navigation.goBack} />
+      {/* <BackButton goBack={navigation.goBack} /> */}
       <SafeAreaView style={styles.save}>
       <ScrollView style={styles.f}>
       <View style={styles.f}>
