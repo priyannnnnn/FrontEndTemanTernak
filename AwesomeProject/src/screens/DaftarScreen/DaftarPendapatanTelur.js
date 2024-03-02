@@ -8,6 +8,7 @@ import { TouchableOpacity } from "react-native";
 import { AxiosContext, AxiosProvider } from "../../context/AxiosContext";
 import filter from "lodash.filter"
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import BackButton from "../../components/BackButton";
 
 
 
@@ -102,16 +103,16 @@ function DaftarPendapatanTelur({navigation}){
             
             <View style={styles.buttonContainer}>
             <TouchableOpacity
-              onPress={() => navigation.navigate ('UpdatePendapatanTelur',{id:item.id})} 
-              onLongPress={()=> navigation.navigate('UpdatePendapatanTelur',{id:item.id})}
+              onPress={() => {showConfirmDialog(item.id)}}
               style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
               <Text style={styles.buttonText}>Hapus</Text>
             </TouchableOpacity>
             <TouchableOpacity
-              onPress={() => {showConfirmDialog(item.id)}}
+              onPress={() => navigation.navigate ('UpdatePendapatanTelur',{id:item.id})} 
+              onLongPress={()=> navigation.navigate('UpdatePendapatanTelur',{id:item.id})}
               style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
               <Text style={styles.buttonText}>Edit</Text>
-            </TouchableOpacity>
+            </TouchableOpacity>          
             </View>
             </View>
           </View>
@@ -177,6 +178,7 @@ function DaftarPendapatanTelur({navigation}){
 
       return(
         <View style={{backgroundColor:'#F5EEE6'}}>
+          <BackButton goBack={navigation.goBack}/>
           <View style={{flexDirection:'row'}}>
             <View style={styles.input}>
               <Icon name="search" size={25} color={'#1F2544'} style={{marginTop:10}}/>

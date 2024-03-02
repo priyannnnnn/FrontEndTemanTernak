@@ -18,7 +18,6 @@ import {
   useColorScheme,
 } from 'react-native';
 import RegisterScreen from './RegisterScreen'
-import Api from './api'
 // import LoginScreen from './LoginScreen'
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
@@ -97,7 +96,7 @@ function StartScreen({ navigation }) {
     barStyle={isDarkMode ? 'light-content' : 'dark-content'}
     backgroundColor={backgroundStyle.backgroundColor}
   />
-  <Api />
+  <LoginScreen />
 </SafeAreaView>
   )
 }

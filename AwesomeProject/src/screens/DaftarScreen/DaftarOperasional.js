@@ -109,7 +109,7 @@ function DaftarOperasional({navigation}){
           </TouchableOpacity>
                 <View style={styles.employeeListContainer}>
                     <Text style={styles.listItem}> Deskripsi : {item.description}</Text>
-                    <Text style={styles.listItem}> Biaya Operasional : {item.amount.toLocaleString()}</Text>
+                    <Text style={styles.listItem}> Biaya Operasional : {item.amount}</Text>
                     <Text style={styles.listItem}>Tanggal : {item.date} </Text>
                         <View style={styles.buttonContainer}>                            
                             <TouchableOpacity

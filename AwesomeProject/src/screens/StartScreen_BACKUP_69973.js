@@ -18,7 +18,6 @@ import {
   useColorScheme,
 } from 'react-native';
 import RegisterScreen from './RegisterScreen'
-import Api from './api'
 // import LoginScreen from './LoginScreen'
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 
@@ -52,6 +51,26 @@ function StartScreen({ navigation }) {
     // useEffect (() =>{
     //   loadJWT();
     // },[loadJWT])
+<<<<<<< HEAD
+    console.log("expired = ",authContext.accessToken)
+    console.log("refresh Token = ",authContext.refreshToken )
+    console.log("token = ",authContext?.authState?.authenticated)
+    if(authContext?.authState?.authenticated === true){
+      return (navigation.navigate('Dashboard'))
+    }else {
+      return (navigation.navigate('LoginScreen'))
+    }
+  }
+||||||| 191ac4d
+    console.log("expired = ",authContext.accessToken)
+    console.log("token = ",authContext?.authState?.authenticated)
+    if(authContext?.authState?.authenticated === true){
+      return (navigation.navigate('Dashboard'))
+    }else {
+      return (navigation.navigate('LoginScreen'))
+    }
+  }
+=======
     // console.log("expired = ",authContext.accessToken)
     // console.log("token = ",authContext?.authState?.authenticated)
     // if(authContext?.authState?.authenticated === true){
@@ -67,7 +86,58 @@ function StartScreen({ navigation }) {
       SplashScreen.hide()
     },[])
   
+>>>>>>> 988477395043abeba7711dd3fd9cff2709f7a0ec
   return (
+<<<<<<< HEAD
+    <StartBackground >
+      <LogoStartScreen/>
+      {/* <Logo /> */}
+      {/* <Header>Login Template</Header> */}
+      {/* <Paragraph>
+        The easiest way to start with your amazing application.
+      </Paragraph> */}
+      <Button
+        mode="contained"
+        // onPress={onSubmit}
+        onPress={() => navigation.navigate('Api')}
+      >
+        MASUK
+      </Button>
+      <Button
+        mode="outlined"
+        onPress={() => navigation.navigate('RegisterScreen')}
+      >
+        DAFTAR
+      </Button>
+      <Text style={Styles.Text}>
+        Daftar jika Belum Punya Akun
+      </Text>
+    </StartBackground>
+||||||| 191ac4d
+    <StartBackground >
+      <LogoStartScreen/>
+      {/* <Logo /> */}
+      {/* <Header>Login Template</Header> */}
+      {/* <Paragraph>
+        The easiest way to start with your amazing application.
+      </Paragraph> */}
+      <Button
+        mode="contained"
+        onPress={onSubmit}
+      >
+        MASUK
+      </Button>
+      <Button
+        mode="outlined"
+        onPress={() => navigation.navigate('RegisterScreen')}
+      >
+        DAFTAR
+      </Button>
+      <Text style={Styles.Text}>
+        Daftar jika Belum Punya Akun
+      </Text>
+    </StartBackground>
+=======
   //   <StartBackground >
   //     <LogoStartScreen/>
   //     {/* <Logo /> */}
@@ -97,8 +167,9 @@ function StartScreen({ navigation }) {
     barStyle={isDarkMode ? 'light-content' : 'dark-content'}
     backgroundColor={backgroundStyle.backgroundColor}
   />
-  <Api />
+  <LoginScreen />
 </SafeAreaView>
+>>>>>>> 988477395043abeba7711dd3fd9cff2709f7a0ec
   )
 }
 export default StartScreen;
