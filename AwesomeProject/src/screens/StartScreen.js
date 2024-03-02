@@ -43,6 +43,7 @@ function StartScreen({ navigation }) {
     //   loadJWT();
     // },[loadJWT])
     console.log("expired = ",authContext.accessToken)
+    console.log("refresh Token = ",authContext.refreshToken )
     console.log("token = ",authContext?.authState?.authenticated)
     if(authContext?.authState?.authenticated === true){
       return (navigation.navigate('Dashboard'))
@@ -60,7 +61,8 @@ function StartScreen({ navigation }) {
       </Paragraph> */}
       <Button
         mode="contained"
-        onPress={onSubmit}
+        // onPress={onSubmit}
+        onPress={() => navigation.navigate('Api')}
       >
         MASUK
       </Button>

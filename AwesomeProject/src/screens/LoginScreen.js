@@ -42,18 +42,22 @@ function LoginScreen({ navigation }) {
       const response = await axios.post('https://dev.ternakpoyo.online/api/v1/login/email',dataLogin)
       console.log("response Url status =",response.status)
       console.log("url = ",response.data)
+      // const {accessToken, refreshToken} = response.data
       const accessToken = response.data
+      const refreshToken = response.data
       authContext.setAuthState({
         authenticated: true,
+        refreshToken:refreshToken,
         accessToken:accessToken,
       });
 
        await Keychain.setGenericPassword(
         'token',
         JSON.stringify({
-          accessToken
+          accessToken,
+          refreshToken,
         }),
-        navigation.navigate("Dashboard")
+        // navigation.navigate("Dashboard")
       );
     }catch(error){
       console.error(error)
@@ -62,7 +66,7 @@ function LoginScreen({ navigation }) {
   }
   return (
     <Background>
-      <BackButton goBack={navigation.goBack} />
+      {/* <BackButton goBack={navigation.goBack} /> */}
       <SafeAreaView style={styles.save}>
       <ScrollView style={styles.f}>
       <View style={styles.f}>
@@ -91,7 +95,7 @@ function LoginScreen({ navigation }) {
       />
       <View style={styles.forgotPassword}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('ResetPasswordScreen')}
+          onPress={() => navigation.navigate('DaftarPendapatanTelur')}
         >
           <Text style={styles.forgot}>Forgot your password?</Text>
         </TouchableOpacity>

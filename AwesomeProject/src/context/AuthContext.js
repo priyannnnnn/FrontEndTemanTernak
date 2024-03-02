@@ -10,11 +10,14 @@ const AuthProvider = ({children}) =>{
 
     const [authState, setAuthState] = useState({
         accessToken:null,
+        refreshToken:null,
         authenticated:null,
     });
 
     const getAccessToken = () => {
-        console.log("getAccessToken1",authState.accessToken);
+        console.log("getAccessToken1",authState);
+        console.log("RefreshToken1",authState.refreshToken);
+
         return authState.accessToken.token; 
     };
 

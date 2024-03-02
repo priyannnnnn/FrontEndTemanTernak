@@ -51,7 +51,7 @@ const AxiosProvider= ({children}) => {
         const options={
             method:'POST',
             data,
-            url:'http://192.168.61.3:8000'
+            url:BASE_URL
         };
 
         return axios(options)
