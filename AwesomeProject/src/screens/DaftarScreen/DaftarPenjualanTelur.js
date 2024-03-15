@@ -1,4 +1,4 @@
-import { ScrollView, View,Text, StyleSheet, FlatList,ActivityIndicator, TextInput, Alert } from "react-native";
+import { ScrollView, View,Text, StyleSheet, FlatList,ActivityIndicator, TextInput, Alert, Image } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
@@ -33,7 +33,10 @@ function DaftarPenjualanTelur({navigation}){
         // setErrorMessage('')
       })
       .catch((e)=>{
-        console.error(e)
+        return Alert.alert(
+          "Error",
+          "Silahkan Login Kembali?"
+        );
       })
   }
   const DeleteData=(id)=>{
@@ -128,6 +131,7 @@ function DaftarPenjualanTelur({navigation}){
       loading?
     <View style={styles.loader}>
       <ActivityIndicator size="large"/>
+      <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
     </View> :null
     )}
 
@@ -290,5 +294,10 @@ const styles=StyleSheet.create({
         backgroundColor:'#FFF6E9',
         flexDirection:'row',
         top:13
-      }
+      },
+      loader:{
+        marginTop:10,
+        marginBottom:35,
+        alignItems:"center"
+      },
 })

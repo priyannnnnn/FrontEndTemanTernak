@@ -13,7 +13,7 @@ const {width} = Dimensions.get('screen')
 function AmountKandang({navigation}){
     const categoryIcons = [
         <Icon name="search" size={25} color={'#04555c'} />,
-        <Icon name="beach-access" size={25} color={'#04555c'} />,
+        <Icon name="person" size={25} color={'#04555c'} />,
         <Icon name="near-me" size={25} color={'#04555c'} />,
         <Icon name="place" size={25} color={'#04555c'} />,
         
@@ -154,12 +154,22 @@ function AmountKandang({navigation}){
     return(
         <SafeAreaView style={{flex: 1, backgroundColor : "#A7D397"}} >
             <StatusBar translucent={false} backgroundColor="#b3ecb3"/>
-            {/* <View style={styles.header}>
-            </View> */}
+            <View style={styles.header}>
+              <View style={styles.dasboard}>
+              <Text style={styles.textdashboard}>Dashboard</Text>
+              </View>
+              <TouchableOpacity onPress={() => navigation.navigate('LoginScreen')}>
+                    <View >
+                    <Icon name="person" size={25} color={'#04555c'} /> 
+                    {/* <Icon name="beach-access" size={25} color={'#04555c'} /> */}
+                    {/* <Image source={require('../image/date.png')} style = {{marginLeft:5,width:63, height:63}}/> */}
+                    </View>
+                </TouchableOpacity>             
+            </View>
             <ScrollView>
                 <View 
                 style={{
-                 backgroundColor: '#04555c',
+                 backgroundColor: '#F2F597',
                  height: 22,
                  paddingHorizontal: 20,
                 }}>
@@ -252,7 +262,7 @@ const styles= StyleSheet.create({
         paddingHorizontal: 20,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        backgroundColor: '#04555c'
+        // backgroundColor: '#04555c'
       },
       inputContainer: {
         height: 270,
@@ -322,6 +332,14 @@ const styles= StyleSheet.create({
         flexDirection:'column',
         height: 70,
         width: 70,
-      }
-      
+      }, 
+      dasboard: {
+        marginLeft:120,
+        fontSize : 20
+      },
+      textdashboard: {
+        fontSize : 17,
+        fontWeight: 'bold',
+        color : '#124076'
+      }    
 })

@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, Text, View, ActivityIndicator, TextInput, Alert} from "react-native";
+import { FlatList, StyleSheet, Text, View, ActivityIndicator, TextInput, Alert, Image} from "react-native";
 import Button from "../../components/Button";
 import { GlobalStyles } from "../../components/style";
 import { theme } from "../../core/theme";
@@ -9,6 +9,7 @@ import { AxiosContext, AxiosProvider } from "../../context/AxiosContext";
 import filter from "lodash.filter"
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import BackButton from "../../components/BackButton";
+import Spinner from "../../helpers/Spiner";
 
 
 
@@ -17,9 +18,10 @@ function DaftarPendapatanTelur({navigation}){
     const [ IncomeEgg, setIncomeEgg ] = useState([])
     const [ loading, setLoading ] = useState(true)
     const [ errorMessage, setErrorMessage ] = useState('')
-    const [pageCurrent, setpageCurrent]= useState(0);
+    const [pageCurrent, setpageCurrent]= useState(1);
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
+    const [status, setStatus] = useState('loading');
 
     const axiosContext = useContext(AxiosContext);
 
@@ -28,27 +30,23 @@ function DaftarPendapatanTelur({navigation}){
     }
 
     const getData = () => {
-      console.log("get Data = ")
+      console.log("get data")
       axiosContext.authAxios.get(`/api/v1/incomeEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
       .then(res => {
-        // console.log("then = ",res.data)
-        // console.log("then = ",totalpage)
-        setLoading(false)
-       // setIncomeEgg(res.data.content)
+        renderFooter()
         setIncomeEgg(IncomeEgg.concat(res.data.content))
         // console.log(res.data);
       //  setIncomeEgg([...IncomeEgg,...res.data.content])
-      //   setErrorMessage('')
-      //   setLoading(false)
-           
       })
       .catch((e) => {
         setLoading(false)
         console.error(e)
-        setErrorMessage("Network Error. Please try again.")
-        }) 
+        return Alert.alert(
+          "Error",
+          "Silahkan Login Kembali?",
+        );
+      }) 
     }
-    const [showBox, setShowBox] = useState(true);
 
   const showConfirmDialog = (id) => {
     console.log(id)
@@ -67,13 +65,10 @@ function DaftarPendapatanTelur({navigation}){
     );
   };     
     const DeleteData=(id)=>{
-        console.log("Get data = ",id)
         axiosContext.authAxios.delete('/api/v1/incomeEgg/'+id)
         .then(res=> {
-          console.log(res.data)
-          setLoading(false)
+          renderFooter()
           setIncomeEgg(res.data.content)
-          console.log("Res Data",res.data)
           getData()
         })
         .catch((errror)=>{
@@ -83,13 +78,12 @@ function DaftarPendapatanTelur({navigation}){
     }
 
     useEffect(() => {
-      setLoading(true)
       getData()
       return()=>{}
     }, [pageCurrent]);
 
      const render=({item})=>{
-      console.log(item)
+      console.log("item =", item)
         return(
         <ScrollView>
           <View style={styles.container} key={item.id}>
@@ -117,31 +111,24 @@ function DaftarPendapatanTelur({navigation}){
             </View>
           </View>
         </ScrollView>
-        )}
-      
-      // _keyExtractor=(data,index)=> data.id.toString();
+      )
+    }
 
       handleLoadMore=()=>{
-        const page = pageCurrent > totalpage;
-           console.log("Page current =",pageCurrent)
-           console.log("Total page",totalpage)
             if (pageCurrent < totalpage){
-              console.log("HandleLoadMore 1 = ",totalpage)
+              renderFooter()
               setpageCurrent(pageCurrent+1)
-              //getData()
-              setLoading(false)
             }else {
-              console.log("HandleLoadMore 2 = ",totalpage)
+              renderFooter()
               setpageCurrent(pageCurrent+1)
-              //getData()
-              setLoading(false)
             }
       }
-      renderFooter=()=>{
+      const renderFooter=()=>{
         return(
           loading?
         <View style={styles.loader}>
           <ActivityIndicator size="large"/>
+          <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
         </View> :null
         )
       }
@@ -202,7 +189,7 @@ function DaftarPendapatanTelur({navigation}){
           data={IncomeEgg}
           renderItem={render}
           keyExtractor={(item,index)=> index.toString()}
-          ListFooterComponent={this.renderFooter}
+          ListFooterComponent={renderFooter}
           onEndReached={this.handleLoadMore}
           onEndReachedThreshold={0}
           >
@@ -280,6 +267,7 @@ const styles=StyleSheet.create({
       },
       loader:{
         marginTop:10,
+        marginBottom:35,
         alignItems:"center"
       },
       container12:{

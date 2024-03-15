@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, FlatList, StyleSheet, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Alert, FlatList, Image, StyleSheet, Text, TextInput, View } from "react-native";
 import Button from "../../components/Button";
 import { GlobalStyles } from "../../components/style";
 import { theme } from "../../core/theme";
@@ -114,63 +114,31 @@ renderItem=({item})=>{
   )
  }
 
- renderFooter=()=>{
+ const renderFooter=()=>{
   return(
     loading?
     <View style={styles.loader}>
       <ActivityIndicator size="large"/>
+      <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
     </View> :null
   )
  }
-//  const fetchMore = async () => {
-//   if (isLoading) return;
-
-//   setIsLoading(true);
-
-//   const nextPage = currentPage + 1;
-//   const newData = await fetchBooks(nextPage);
-
-//   setCurrentPage(nextPage);
-//   setIsLoading(false);
-//   setBooks(prevData => [...prevData, ...newData]);
-// }
  handleLoadMore= async()=>{
-  console.log("Page current =",pageCurrent)
-    console.log("Total page",totalpage)
-    if(loading)return;
-    setLoading(true)
-    const nextPage = pageCurrent + 1
-    const newData = await setpageCurrent(nextPage);
-    setLoading(false)
-    // setpageCurrent(prevData => [...prevData, ...newData])
-
-
-    // if (pageCurrent ===1){
+    // if (pageCurrent < totalpage){
+    //   renderFooter()
     //   setpageCurrent(pageCurrent+1)
-      
+    // }else {
+    //   renderFooter()
+    //   setpageCurrent(pageCurrent+1)
     // }
-    //  if (pageCurrent < totalpage){
-    //    console.log("HandleLoadMore 1 = ",totalpage)
-    //    setpageCurrent(pageCurrent+1)
-    //    return
-    //    //getData()
-    //   //  setLoading(false)
-    //  }else {
-    //    console.log("HandleLoadMore 2 = ",totalpage)
-    //    setpageCurrent(pageCurrent+1)
-    //    //getData()
-    //    setLoading(false)
-    //  }
-    // switch(pageCurrent){
-    //   case 0 :
-    //     pageCurrent === 1;
-    //     break;
-    //     // setpageCurrent(pageCurrent+1)
-    //     case 1 :
-    //       pageCurrent === 2;
-    //       setpageCurrent(pageCurrent+1) 
-    //       break;
-    // }
+    renderFooter()
+    if(loading)return;
+    renderFooter()
+    const nextPage = pageCurrent + 1
+    renderFooter()
+    const newData = await setpageCurrent(nextPage);
+    renderFooter()
+   
  }
 
  const handleSearch= (item) =>{
@@ -227,7 +195,7 @@ const contains= ({age, note, date, quantity, type, amount}, item) => {
       data={employee}
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
-      ListFooterComponent={this.renderFooter}
+      ListFooterComponent={renderFooter}
       onEndReached={this.handleLoadMore}
       onEndReachedThreshold={0}
       />
@@ -308,6 +276,7 @@ const styles=StyleSheet.create({
       },
       loader:{
         marginTop:10,
+        marginBottom:35,
         alignItems:"center"
       },
       input: {

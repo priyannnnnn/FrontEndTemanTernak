@@ -4,7 +4,7 @@ import Logo from '../components/Logo'
 import Header from '../components/Header'
 import Paragraph from '../components/Paragraph'
 import Button from '../components/Button'
-import { ScrollView, StyleSheet, Text, View,Image } from 'react-native'
+import { ScrollView, StyleSheet, Text, View,Image, TouchableOpacity } from 'react-native'
 import BackButton from '../components/BackButton'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import ListKandang from './ListKandang'
@@ -12,6 +12,7 @@ import Ternak from './screensListkandang/Ternak'
 import { theme } from '../core/theme'
 import AmountKandang from './AmountKandang'
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const Tab = createBottomTabNavigator();
 export default function Dashboard({ navigation }) {
@@ -24,9 +25,12 @@ export default function Dashboard({ navigation }) {
         //tabBarActiveBackgroundColor:'#EBF4FA',
       }}
       >
-      <Tab.Screen name='Kandang'  component={AmountKandang}
+      <Tab.Screen name='Kandang'  component={AmountKandang} 
         options={{tabBarIcon : ({focused})=> (
           <View style={{alignItems:'center', justifyContent:'center', top:10}}>
+            {/* <View style={styles.viewButton}>
+              <TouchableOpacity onPress={() => navigation.navigate('DaftarOperasional')}><Text>yan</Text></TouchableOpacity>
+            </View> */}
             <Image source={require('../image/kandang.png')} 
               style={{ 
                 width: 60,
@@ -103,6 +107,11 @@ const styles=StyleSheet.create({
     backgroundColor:'#ffffff',
     borderRadius:15,
     height:90
+  },
+  viewButton: {
+    height: 70,
+    width: 70,
+    backgroundColor:'#000000'
   }
  
 })

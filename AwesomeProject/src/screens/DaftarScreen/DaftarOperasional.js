@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { AxiosContext } from "../../context/AxiosContext";
 import { log } from "react-native-reanimated";
-import { Alert, FlatList, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Alert, FlatList, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
 import Button from "../../components/Button";
@@ -10,11 +10,12 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 
 function DaftarOperasional({navigation}){
     const [Operasional, setOperasional] = useState([])
-    const [Loading, setLoading] = useState()
+    const [Loading, setLoading] = useState(true)
     const [pageCurrent, setpageCurrent]= useState(1);
     const axiosContext = useContext(AxiosContext);
     const [search, setsearch]= useState('');
     const [totalpage, settotalpage]= useState(10);
+    
 
     const getData = () => {
         axiosContext.authAxios.get(`/api/v1/operatingCosh?orders=createdAt-desc`)
@@ -77,6 +78,17 @@ function DaftarOperasional({navigation}){
          setLoading(false)
        }
     }
+
+    const renderFooter=()=>{
+      return(
+        Loading?
+      <View style={styles.loader}>
+        <ActivityIndicator size="large"/>
+        <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
+      </View> :null
+      )
+    }
+
     const handleSearch= (item) =>{
       setsearch(item);
       const data =[];
@@ -109,7 +121,7 @@ function DaftarOperasional({navigation}){
           </TouchableOpacity>
                 <View style={styles.employeeListContainer}>
                     <Text style={styles.listItem}> Deskripsi : {item.description}</Text>
-                    <Text style={styles.listItem}> Biaya Operasional : {item.amount}</Text>
+                    <Text style={styles.listItem}> Biaya Operasional : {item.amount.toLocaleString()}</Text>
                     <Text style={styles.listItem}>Tanggal : {item.date} </Text>
                         <View style={styles.buttonContainer}>                            
                             <TouchableOpacity
@@ -152,6 +164,7 @@ function DaftarOperasional({navigation}){
         data={Operasional}
         renderItem={renderItem}
         keyExtractor={(item,index) => index.toString()}
+        ListFooterComponent={renderFooter}
         onEndReachedThreshold={0}
         onEndReached={this.handleLoadMore}/>
         </View>
@@ -253,5 +266,10 @@ const styles = StyleSheet.create({
         paddingVertical: 6,
         paddingHorizontal: 10,
         fontSize: 16,     
+      },
+      loader:{
+        marginTop:10,
+        marginBottom:35,
+        alignItems:"center"
       },
 })

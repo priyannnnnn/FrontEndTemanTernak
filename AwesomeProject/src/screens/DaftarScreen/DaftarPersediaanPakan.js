@@ -1,4 +1,4 @@
-import { ScrollView, View,Text, StyleSheet,FlatList,ActivityIndicator,TextInput, Alert } from "react-native";
+import { ScrollView, View,Text, StyleSheet,FlatList,ActivityIndicator,TextInput, Alert, Image } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { theme } from "../../core/theme";
 import { GlobalStyles } from "../../components/style";
@@ -125,23 +125,21 @@ function DaftarPersediaanPakan({navigation}){
     console.log("Page current =",pageCurrent)
     console.log("Total page",totalpage)
      if (pageCurrent < totalpage){
+      renderFooter()
        console.log("HandleLoadMore 1 = ",totalpage)
        setpageCurrent(pageCurrent+1)
-       //getData()
-       setLoading(false)
      }else {
-       console.log("HandleLoadMore 2 = ",totalpage)
+      renderFooter()
        setpageCurrent(pageCurrent+1)
-       //getData()
-       setLoading(false)
      }
   };
 
-  renderFooter=()=>{
+  const renderFooter=()=>{
     return(
       loading?
     <View style={styles.loader}>
       <ActivityIndicator size="large"/>
+      <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
     </View> :null
     )
   }
@@ -201,8 +199,8 @@ function DaftarPersediaanPakan({navigation}){
       data={feed}
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
-      ListFooterComponent={this.renderFooter}
-      onEndReachedThreshold={this.handleLoadMore}
+      ListFooterComponent={renderFooter}
+      onEndReachedThreshold={0}
       onEndReached={handleLoadMore}
       />
       </View>
@@ -278,6 +276,7 @@ const styles=StyleSheet.create({
     },
     loader:{
       marginTop:10,
+      marginBottom:35,
       alignItems:"center"
     },
     container12:{

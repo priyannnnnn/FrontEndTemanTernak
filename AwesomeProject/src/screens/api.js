@@ -17,6 +17,7 @@ import Dashboard from './Dashboard';
 const Api =({navigation})=>{
   const authContext = useContext(AuthContext);
   const [status, setStatus] = useState('loading');
+  const [ loading, setLoading ] = useState(true)
 
   const loadJWT = useCallback(async() => {
     try {
