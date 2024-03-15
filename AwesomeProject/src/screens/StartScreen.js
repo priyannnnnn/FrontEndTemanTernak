@@ -37,7 +37,7 @@ function StartScreen({ navigation }) {
     //       accessToken: Jwt.accessToken || null,
     //       authenticated: Jwt.accessToken !== null,
     //     });
-        
+        //supri
     //     setStatus("succes")
     //   }catch(error){
     //     setStatus(error)
