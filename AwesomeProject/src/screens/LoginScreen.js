@@ -37,12 +37,8 @@ function LoginScreen({ navigation }) {
         setEmail({ ...email, error: emailError })
         setPassword({ ...password, error: passwordError })
         return
-      }console.log(" Data Login",dataLogin)
-      console.log("URL login ")
+      }
       const response = await axios.post('https://ternakpoyo.online/api/v1/login/email',dataLogin)
-      console.log("response Url status =",response.status)
-      console.log("url = ",response.data)
-      // const {accessToken, refreshToken} = response.data
       const accessToken = response.data
       const refreshToken = response.data
       authContext.setAuthState({
