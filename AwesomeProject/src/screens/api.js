@@ -22,20 +22,25 @@ const Api =({navigation})=>{
   const loadJWT = useCallback(async() => {
     try {
       const value = await Keychain.getGenericPassword();
+      console.log("value = ",value)
+      console.log("Password = ",value.password)
+      console.log("service = ",value.service)
+      console.log("storage = ",value.storage)
+      console.log("username = ",value.username)
       const jwt = JSON.parse(value.password);
 
       authContext.setAuthState({
         accessToken: jwt.accessToken || null,
-        refreshToken: jwt.refreshToken || null,
+        // refreshToken: jwt.refreshToken || null,
         authenticated: jwt.accessToken !== null,
       });
       setStatus('success')
     } catch (error){
       setStatus('error');
-      console.log(`Keychain Error: ${error.message}`);
+      console.error(`Keychain Error: ${error.message}`);
       authContext.setAuthState({
         accessToken: null,
-        refreshToken: null,
+        // refreshToken: null,
         authenticated: false,
       });
     }

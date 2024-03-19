@@ -39,14 +39,28 @@ function DaftarPenjualanTelur({navigation}){
         );
       })
   }
+
+  const newGetData = () => {
+    console.log("get data = ")
+      setLoading(true)
+      axiosContext.authAxios.get(`/api/v1/saleEgg?orders=createdAt-desc?`)
+      .then(res => {
+        setsaleEgg(res.data.content)
+      })
+      .catch((e)=>{
+        return Alert.alert(
+          "Error",
+          "Silahkan Login Kembali?"
+        );
+      })
+  }
+
   const DeleteData=(id)=>{
     console.log(id)
     axiosContext.authAxios.delete('/api/v1/saleEgg/'+id)
     .then (res =>{
-      console.log(res.data)
-      setLoading(false)
-      // saleEgg(res.data.content)
-      GetData()
+      setsaleEgg(res.data.content)
+      newGetData()
     })
     .catch((e) => {
       console.error(e)
@@ -106,25 +120,14 @@ function DaftarPenjualanTelur({navigation}){
     )
   };
 
-  handleLoadMore=()=>{
-    const page = pageCurrent > totalpage;
-       console.log("Page current =",pageCurrent)
-       console.log("Total page",totalpage)
-       setLoading(true)
-        if (pageCurrent < totalpage){
-          setLoading(true)
-          console.log("HandleLoadMore 1 = ",totalpage)
-          setpageCurrent(pageCurrent+1)
-          setLoading(true)
-          //getData()
-          setLoading(true)
-        }else {
-          console.log("HandleLoadMore 2 = ",totalpage)
-          setLoading(true)
-          setpageCurrent(pageCurrent+1)
-          //getData()
-          setLoading(false)
-        }
+  handleLoadMore = async()=>{
+    renderFooter()
+    if(loading)return;
+    renderFooter()
+    const nextPage = pageCurrent + 1
+    renderFooter()
+    const newData = await setpageCurrent(nextPage);
+    renderFooter()
   }
   renderFooter=()=>{
     return(

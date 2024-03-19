@@ -29,14 +29,17 @@ function DaftarPersediaanPakan({navigation}){
     .then (res => {
       console.log("getdata_feed")
       setLoading(false)
-      setfeed(res.data.content)
-      //setfeed([...feed,...res.data.content])
     setfeed(feed.concat(res.data.content))
-     // settotalpage(res+1)
-      //setfeed(res.content)
-      setErrorMessage('');
-      setLoading(false);
-      console.log(res.data);
+    })
+    .catch((e)=> {
+      console.error(e)
+     })
+  }
+
+  const newgetData = () =>{
+    axiosContext.authAxios.get(`/api/v1/feed?orders=createdAt-desc&size=10`)
+    .then (res => {
+      setfeed(res.data.content)
     })
     .catch((e)=> {
       console.error(e)
@@ -47,15 +50,9 @@ function DaftarPersediaanPakan({navigation}){
     console.log(id);
     setLoading(true)
    axiosContext.authAxios.delete('/api/v1/feed/'+id)
-    // .then(res => res.json())
     .then(res =>{
-      console.log(res)
-      
-      setLoading(false)
-      setErrorMessage('')
-      navigation.navigate("DaftarPersediaanPakan")
-      // getData()
-      // return()=>{}
+      setfeed(res.data.content)
+      newgetData()
     })
     .catch((error)=> {
       setLoading(false)
@@ -120,18 +117,14 @@ function DaftarPersediaanPakan({navigation}){
     )
   };
 
-  const handleLoadMore=()=>{
-    const page = pageCurrent > totalpage;
-    console.log("Page current =",pageCurrent)
-    console.log("Total page",totalpage)
-     if (pageCurrent < totalpage){
-      renderFooter()
-       console.log("HandleLoadMore 1 = ",totalpage)
-       setpageCurrent(pageCurrent+1)
-     }else {
-      renderFooter()
-       setpageCurrent(pageCurrent+1)
-     }
+  const handleLoadMore = async()=>{
+    renderFooter()
+    if(loading)return;
+    renderFooter()
+    const nextPage = pageCurrent + 1
+    renderFooter()
+    const newData = await setpageCurrent(nextPage);
+    renderFooter()
   };
 
   const renderFooter=()=>{

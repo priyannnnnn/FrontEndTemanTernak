@@ -28,6 +28,20 @@ function DaftarTernak({navigation}){
             console.log(res.data.content);
             setLoading(false)
             setEmployee(employee.concat(res.data.content))
+          })
+          .catch((e) => {
+            setLoading(false)
+            console.error(e, "getdata")
+            setErrorMessage("Network Error. Please try again.")
+          })
+    }
+
+    const newgetData = () => {
+        axiosContext.authAxios.get(`/api/v1/livestock?orders=createdAt-desc`)
+          .then(res => {
+            console.log(res.data.content);
+            setLoading(false)
+            setEmployee(res.data.content)
             // setEmployee(employee.concat(res.data.content))
             // setEmployee(res.data.content)
           })
@@ -43,11 +57,8 @@ function DaftarTernak({navigation}){
         setLoading(true)
         axiosContext.authAxios.delete('/api/v1/livestock/'+id)
         .then(res =>{
-          console.log(res.data)
-          setLoading(false)
-          setErrorMessage('')
           setEmployee(res.data)
-          getData()
+          newgetData()
         })
         .catch((e)=> {
           console.error(e,"errror")

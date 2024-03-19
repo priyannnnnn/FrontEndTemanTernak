@@ -46,15 +46,14 @@ function LoginScreen({ navigation }) {
         refreshToken:refreshToken,
         accessToken:accessToken,
       });
-
        await Keychain.setGenericPassword(
         'token',
         JSON.stringify({
           accessToken,
           refreshToken,
         }),
-        // navigation.navigate("Dashboard")
-      );
+        );
+        navigation.navigate("Dashboard")
     }catch(error){
       console.error(error)
       console.log("Url Error")

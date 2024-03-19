@@ -18,7 +18,7 @@ function DaftarOperasional({navigation}){
     
 
     const getData = () => {
-        axiosContext.authAxios.get(`/api/v1/operatingCosh?orders=createdAt-desc`)
+        axiosContext.authAxios.get(`/api/v1/operatingCosh?`)
         .then(res => {
             console.log("Get Data = ", res.data)
             setOperasional(Operasional.concat(res.data.content))
@@ -28,12 +28,26 @@ function DaftarOperasional({navigation}){
             console.error(e)
         })
     }
+
+    const newgetData = () => {
+      axiosContext.authAxios.get(`/api/v1/operatingCosh?`)
+      .then(res => {
+          console.log("Get Data = ", res.data)
+          setOperasional(res.data.content)
+          console.log("data",res.data)
+      })
+      .catch((e) => {
+          console.error(e)
+      })
+  }
+
     const Delete = (id) => {
         console.log(id)
         axiosContext.authAxios.delete(`/api/v1/operatingCosh/`+id)
         .then(res => {
             console.log(res.data)
             setOperasional (res.data)
+            newgetData()
         })
         .catch((error) => {
             console.error(error)
@@ -63,20 +77,14 @@ function DaftarOperasional({navigation}){
         getData()
     },[pageCurrent])
 
-     handleLoadMore=()=>{
-      console.log("Page current =",pageCurrent)
-      console.log("Total page",totalpage)
-       if (pageCurrent < totalpage){
-         console.log("HandleLoadMore 1 = ",totalpage)
-         setpageCurrent(pageCurrent+1)
-         //getData()
-         setLoading(false)
-       }else {
-         console.log("HandleLoadMore 2 = ",totalpage)
-         setpageCurrent(pageCurrent+1)
-         //getData()
-         setLoading(false)
-       }
+    handleLoadMore = async()=>{
+      renderFooter()
+      if(loading)return;
+      renderFooter()
+      const nextPage = pageCurrent + 1
+      renderFooter()
+      const newData = await setpageCurrent(nextPage);
+      renderFooter()
     }
 
     const renderFooter=()=>{

@@ -31,10 +31,30 @@ function DaftarPendapatanTelur({navigation}){
 
     const getData = () => {
       console.log("get data")
+      setLoading(true)
       axiosContext.authAxios.get(`/api/v1/incomeEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
       .then(res => {
         renderFooter()
         setIncomeEgg(IncomeEgg.concat(res.data.content))
+        // console.log(res.data);
+      //  setIncomeEgg([...IncomeEgg,...res.data.content])
+      })
+      .catch((e) => {
+        setLoading(false)
+        console.error(e)
+        return Alert.alert(
+          "Error",
+          "Silahkan Login Kembali?",
+        );
+      }) 
+    }
+
+    const newgetData = () => {
+      console.log("get data")
+      axiosContext.authAxios.get(`/api/v1/incomeEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
+      .then(res => {
+        renderFooter()
+        setIncomeEgg(res.data.content)
         // console.log(res.data);
       //  setIncomeEgg([...IncomeEgg,...res.data.content])
       })
@@ -69,7 +89,7 @@ function DaftarPendapatanTelur({navigation}){
         .then(res=> {
           renderFooter()
           setIncomeEgg(res.data.content)
-          getData()
+          newgetData()
         })
         .catch((errror)=>{
           console.error(errror, "err")
@@ -83,7 +103,7 @@ function DaftarPendapatanTelur({navigation}){
     }, [pageCurrent]);
 
      const render=({item})=>{
-      console.log("item =", item)
+      // console.log("item =", item)
         return(
         <ScrollView>
           <View style={styles.container} key={item.id}>
@@ -114,15 +134,22 @@ function DaftarPendapatanTelur({navigation}){
       )
     }
 
-      handleLoadMore=()=>{
-            if (pageCurrent < totalpage){
-              renderFooter()
-              setpageCurrent(pageCurrent+1)
-            }else {
-              renderFooter()
-              setpageCurrent(pageCurrent+1)
-            }
-      }
+    handleLoadMore = async()=>{
+    //    if (pageCurrent < totalpage){
+    //   renderFooter()
+    //   setpageCurrent(pageCurrent+1)
+    // }else {
+    //   renderFooter()
+    //   setpageCurrent(pageCurrent+1)
+    // }
+    // renderFooter()
+    if(loading)return;
+    // renderFooter()
+    const nextPage = pageCurrent + 1
+    renderFooter()
+    const newData = await setpageCurrent(nextPage);
+    renderFooter()
+    }
       const renderFooter=()=>{
         return(
           loading?

@@ -16,8 +16,6 @@ const AuthProvider = ({children}) =>{
 
     const getAccessToken = () => {
         console.log("getAccessToken1",authState);
-        console.log("RefreshToken1",authState.refreshToken);
-
         return authState.accessToken.token; 
     };
 

@@ -12,7 +12,7 @@ const AxiosProvider= ({children}) => {
     const authContext= useContext(AuthContext);
 
     const authAxios=axios.create({
-        baseURL:BASE_URL,
+        baseURL:'https://ternakpoyo.online',
     });
 
     const publicAxios=axios.create({
