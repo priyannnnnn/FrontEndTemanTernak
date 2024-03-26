@@ -18,11 +18,9 @@ function DaftarTernak({navigation}){
     const [pageCurrent, setpageCurrent]= useState(1)
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
+        const [hasMoreData, setHasMoreData] = useState(true);
 
     const getData = () => {
-      // if(totalpage<pageCurrent)
-      // return;
-        setLoading(true)
         axiosContext.authAxios.get(`/api/v1/livestock?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
           .then(res => {
             console.log(res.data.content);
@@ -31,7 +29,7 @@ function DaftarTernak({navigation}){
           })
           .catch((e) => {
             setLoading(false)
-            console.error(e, "getdata")
+            console.error(e, "getdatay")
             setErrorMessage("Network Error. Please try again.")
           })
     }
@@ -42,8 +40,6 @@ function DaftarTernak({navigation}){
             console.log(res.data.content);
             setLoading(false)
             setEmployee(res.data.content)
-            // setEmployee(employee.concat(res.data.content))
-            // setEmployee(res.data.content)
           })
           .catch((e) => {
             setLoading(false)
@@ -84,10 +80,7 @@ function DaftarTernak({navigation}){
       );
     }; 
 
-
-
     useEffect(() => {
-      console.log("PageCurrent UseEffect= ",pageCurrent)
       setLoading(true)
       getData()
      return()=>{}
@@ -109,15 +102,15 @@ renderItem=({item})=>{
           <Text style={styles.listItem}>Tanggal : {item.date}</Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity
-                      onPress={() => {showConfirmDialog(item.id)}}
-                      style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                      <Text style={styles.buttonText}>Hapus</Text>
+                onPress={() => {showConfirmDialog(item.id)}}
+                style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                <Text style={styles.buttonText}>Hapus</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                      onPress={() => navigation.navigate ('UpdateTernak',{id:item.id})} 
-                      onLongPress={()=> navigation.navigate('UpdateTernak',{id:item.id})}
-                      style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                      <Text style={styles.buttonText}>Edit</Text>
+                onPress={() => navigation.navigate ('UpdateTernak',{id:item.id})} 
+                onLongPress={()=> navigation.navigate('UpdateTernak',{id:item.id})}
+                style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -126,22 +119,22 @@ renderItem=({item})=>{
  }
 
  const renderFooter=()=>{
-  return(
-    loading?
-    <View style={styles.loader}>
-      <ActivityIndicator size="large"/>
-      <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
-    </View> :null
-  )
+  axiosContext.authAxios.get(`/api/v1/livestock?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
+  .then(res => {
+    console.log("Ress",res.data.content);
+    if(res.data.content.length == 0){
+      console.log("`gtt",res.data.content.length);
+      return( <View style={styles.loader1}>
+        {/* <ActivityIndicator /> */}
+        <Text style={styles.buttonText}>Data  Umur</Text>
+        {/* <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/> */}
+      </View>)
+    }
+    // setLoading(false)
+    // setEmployee(employee.concat(res.data.content))
+  })
  }
  handleLoadMore= async()=>{
-    // if (pageCurrent < totalpage){
-    //   renderFooter()
-    //   setpageCurrent(pageCurrent+1)
-    // }else {
-    //   renderFooter()
-    //   setpageCurrent(pageCurrent+1)
-    // }
     renderFooter()
     if(loading)return;
     renderFooter()
@@ -163,7 +156,6 @@ renderItem=({item})=>{
   console.log("Format Query =",formattedQuery)
   console.log("Filter Data = ",filterData)
   setEmployee(filterData)
-  //console.log("String = []")
   if (data.toString() === filterData.toString()){
     console.log("get Text")
       return (
@@ -201,6 +193,11 @@ const contains= ({age, note, date, quantity, type, amount}, item) => {
               <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
           </TouchableOpacity>
         </View>
+        {loading?
+    <View style={styles.loader}>
+      <ActivityIndicator size="large"/>
+      {/* <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/> */}
+    </View> :null}
       <FlatList
       style={styles.container12}
       data={employee}
@@ -287,7 +284,7 @@ const styles=StyleSheet.create({
       },
       loader:{
         marginTop:10,
-        marginBottom:35,
+        marginBottom:16,
         alignItems:"center"
       },
       input: {
@@ -300,5 +297,11 @@ const styles=StyleSheet.create({
         backgroundColor:'#FFF6E9',
         flexDirection:'row',
         top:13
+      },
+      loader1:{
+        marginTop:10,
+          marginBottom:80,
+          alignItems:"center"
+
       }
 })

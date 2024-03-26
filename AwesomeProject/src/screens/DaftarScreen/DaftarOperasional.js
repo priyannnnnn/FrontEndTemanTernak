@@ -18,11 +18,10 @@ function DaftarOperasional({navigation}){
     
 
     const getData = () => {
-        axiosContext.authAxios.get(`/api/v1/operatingCosh?`)
+        axiosContext.authAxios.get(`/api/v1/operatingCosh?size=10&page=${pageCurrent}`)
         .then(res => {
             console.log("Get Data = ", res.data)
             setOperasional(Operasional.concat(res.data.content))
-            console.log("data",res.data)
         })
         .catch((e) => {
             console.error(e)
@@ -72,15 +71,15 @@ function DaftarOperasional({navigation}){
     };  
 
     useEffect(() => {
-        console.log("Get Data Useeffect = ",pageCurrent)
         setLoading(true)
         getData()
+        return()=>{}
     },[pageCurrent])
 
     handleLoadMore = async()=>{
-      renderFooter()
-      if(loading)return;
-      renderFooter()
+      console.log("loading")
+      if(Loading)return;
+      console.log("loading2")
       const nextPage = pageCurrent + 1
       renderFooter()
       const newData = await setpageCurrent(nextPage);
@@ -120,7 +119,6 @@ function DaftarOperasional({navigation}){
       return false;
     }
     const renderItem = ({item}) =>{
-        console.log(item)
         return (
             <View style={styles.container}>
                <TouchableOpacity
@@ -277,7 +275,12 @@ const styles = StyleSheet.create({
       },
       loader:{
         marginTop:10,
-        marginBottom:35,
+        marginBottom:16,
         alignItems:"center"
       },
+      loader1:{
+        marginTop:0,
+        marginBottom:80,
+        alignItems:"center"
+      }
 })

@@ -22,7 +22,6 @@ function DaftarPendapatanTelur({navigation}){
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
     const [status, setStatus] = useState('loading');
-
     const axiosContext = useContext(AxiosContext);
 
     const toggleAddEmployeeModal = () => {
@@ -40,12 +39,6 @@ function DaftarPendapatanTelur({navigation}){
       //  setIncomeEgg([...IncomeEgg,...res.data.content])
       })
       .catch((e) => {
-        setLoading(false)
-        console.error(e)
-        return Alert.alert(
-          "Error",
-          "Silahkan Login Kembali?",
-        );
       }) 
     }
 
@@ -55,8 +48,6 @@ function DaftarPendapatanTelur({navigation}){
       .then(res => {
         renderFooter()
         setIncomeEgg(res.data.content)
-        // console.log(res.data);
-      //  setIncomeEgg([...IncomeEgg,...res.data.content])
       })
       .catch((e) => {
         setLoading(false)
@@ -135,20 +126,13 @@ function DaftarPendapatanTelur({navigation}){
     }
 
     handleLoadMore = async()=>{
-    //    if (pageCurrent < totalpage){
-    //   renderFooter()
-    //   setpageCurrent(pageCurrent+1)
-    // }else {
-    //   renderFooter()
-    //   setpageCurrent(pageCurrent+1)
-    // }
-    // renderFooter()
-    if(loading)return;
-    // renderFooter()
-    const nextPage = pageCurrent + 1
-    renderFooter()
-    const newData = await setpageCurrent(nextPage);
-    renderFooter()
+      renderFooter()
+      if(loading)return;
+      renderFooter()
+      const nextPage = pageCurrent + 1
+      renderFooter()
+      const newData = await setpageCurrent(nextPage);
+      renderFooter()
     }
       const renderFooter=()=>{
         return(

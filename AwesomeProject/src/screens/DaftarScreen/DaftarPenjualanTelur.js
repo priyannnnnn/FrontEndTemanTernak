@@ -12,10 +12,11 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 function DaftarPenjualanTelur({navigation}){
 
   const [ saleEgg, setsaleEgg]=useState([])
-  const [loading, setLoading] = useState(false)
+  // const [loading, setLoading] = useState(true)
+  const [ loading, setLoading ] = useState(true)
   const [rrorMessage, setErrorMessage ] = useState('')
   const [totalpage, settotalpage]= useState(10);
-  const [pageCurrent, setpageCurrent]= useState(0);
+  const [pageCurrent, setpageCurrent]= useState(1);
   const axiosContext = useContext(AxiosContext);
   const [search, setsearch]= useState('');
 
@@ -27,12 +28,13 @@ function DaftarPenjualanTelur({navigation}){
       setLoading(true)
       axiosContext.authAxios.get(`/api/v1/saleEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
       .then(res => {
+        console.log("Elements = ",res.data);
         setsaleEgg(saleEgg.concat(res.data.content))
-        console.log("Elements = ",res.data.totalElements);
         // setLoading(false)
         // setErrorMessage('')
       })
       .catch((e)=>{
+        console.log(e)
         return Alert.alert(
           "Error",
           "Silahkan Login Kembali?"
@@ -121,9 +123,8 @@ function DaftarPenjualanTelur({navigation}){
   };
 
   handleLoadMore = async()=>{
-    renderFooter()
-    if(loading)return;
-    renderFooter()
+    // if(loading)return;
+    // renderFooter()
     const nextPage = pageCurrent + 1
     renderFooter()
     const newData = await setpageCurrent(nextPage);
