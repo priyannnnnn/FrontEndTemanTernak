@@ -173,6 +173,14 @@ const contains= ({age, note, date, quantity, type, amount}, item) => {
   }
   return false;
 }
+
+const emptyList = ()=>(
+    ( <View style={styles.loader1}>
+      {/* <ActivityIndicator /> */}
+      <Text style={styles.buttonEmpty}>Data Empty</Text>
+      {/* <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/> */}
+    </View>)
+)
     return(
       <View style={{backgroundColor:'#F5EEE6'}}>
         <View style={{flexDirection:'row'}}>
@@ -196,16 +204,17 @@ const contains= ({age, note, date, quantity, type, amount}, item) => {
         {loading?
     <View style={styles.loader}>
       <ActivityIndicator size="large"/>
-      {/* <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/> */}
+      <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
     </View> :null}
       <FlatList
       style={styles.container12}
       data={employee}
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
+      ListEmptyComponent={emptyList}
       ListFooterComponent={renderFooter}
       onEndReached={this.handleLoadMore}
-      onEndReachedThreshold={0}
+      onEndReachedThreshold={0.2}
       />
       </View>
     )
@@ -300,8 +309,13 @@ const styles=StyleSheet.create({
       },
       loader1:{
         marginTop:10,
-          marginBottom:80,
-          alignItems:"center"
-
-      }
+        marginBottom:80,
+        alignItems:"center"
+      },
+      buttonEmpty: {
+        color: "black",
+        paddingVertical: 6,
+        paddingHorizontal: 10,
+        fontSize: 16
+      },
 })
