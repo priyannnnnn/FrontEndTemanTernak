@@ -1,35 +1,82 @@
-import { Text, TouchableOpacity, View , StyleSheet, ScrollView, Alert} from "react-native";
+import { ScrollView, Text, StyleSheet, View, Alert } from "react-native";
 import BackButton from "../../components/BackButton";
-import Background from "../../components/StartBackground";
 import Button from "../../components/Button";
 import Header from "../../components/HeaderInputKandang";
-import TextInput from "../../components/TextInput";
 import { theme } from "../../core/theme";
-import { useContext, useEffect, useState } from "react";
+import TextInput from "../../components/TextInputKandang";
+import { useState,useContext } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
 import axios from "axios";
+import { axiosInstance } from "../../context/api";
+import { AuthContext } from "../../context/AuthContext";
+import { AxiosContext} from "../../context/AxiosContext";
+import * as Keychain from 'react-native-keychain';
+import { AuthProvider } from "../../context/AuthContext";
+// import { AxiosProvider } from "../../context/AxiosContext";
+import { AxiosProvider } from "../../context/AxiosContext";
 import { Picker } from "@react-native-picker/picker";
-import { AxiosContext } from "../../context/AxiosContext";
 
 
-function PersediaanPakan({navigation}) {
+function expost(props) {
+
+  const {navigation}=props;
+  const axiosContext = useContext(AxiosContext);
+  const authContext = useContext(AuthContext);
+
+//   const [IncomeEgg, setIncomeEgg]=useState({
+//     quantity: {value :'',error:''},
+//     date:     {value:`${moment(date).format('YYYY-MM-DD')}`, error:''}
+//   })
   const [feed, setFeed] = useState({
     quantity: { value : '',error:''},
     type:     { value : '', error: '' },
     amount:   { value : '', error: '' },
-    date:     { value : '', error: '' },
+    date:     {value:`${moment(date).format('YYYY-MM-DD')}`, error:''}
   })
+
+  const onSubmit = () => {
+    const data={
+        amount:feed?.amount?.value,
+        type:feed?.type?.value,
+        quantity:feed?.quantity?.value,
+        date:feed?.date?.value,
+          }
+    // const amount=!isNaN(data.amount) && data.amount>1;
+    // const quantity=!isNaN(data.quantity) && data.quantity>1;
+
+      // if(!amount || !quantity){
+      //   Alert.alert('Data Anda Salah',"Mohon Untuk Cek Kembali")
+      //   return;
+      // }
+
+    axiosContext.authAxios.post(`/api/v1/feed`, data)
+    .then(res => {
+      console.info("succes sellegg data = ")
+      console.log(res.data)
+      console.info("succes sellegg data content = ")
+      console.log(res.data.content)
+      navigation.navigate('IncomeEgg',{itemp:res.data})
+    })
+    .catch((error) => {
+    //   navigation.navigate('DaftarPendapatanTelur')
+      console.error(error);
+    })
+  }
 
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
-  const axiosContext = useContext(AxiosContext);
 
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
+    // const currentDate = selectedDate;
     setShow(false);
-    setDate(currentDate);
+    // setDate(currentDate);
+    // if (event?.type === 'dismissed') {
+      // setDate(date);
+      // return;
+  // }
+  // setDate(selectedDate);
   };
 
   const showMode = (currentMode) => {
@@ -43,43 +90,11 @@ function PersediaanPakan({navigation}) {
     showMode('date');
   };
 
-  useEffect(() => {
-    setFeed({...feed, date:{ value: `${moment(date).format('YYYY-MM-DD')}`, error: ''}})
-  }, [date])
-
-  const onSubmit=()=>{
-    const data={
-      amount:feed?.amount?.value,
-      type:feed?.type?.value,
-      quantity:feed?.quantity?.value,
-      date:feed?.date?.value,
-    }
-      const amount=!isNaN(data.amount) && data.amount>1;
-      const type=data.type.trim().length>0;
-      const quantity=!isNaN(data.quantity) && data.quantity>1;
-
-        if(!amount || !quantity || !type){
-          Alert.alert('Data Anda Salah',"Mohon Untuk Cek Kembali")
-          return;
-        }
-
-    console.log(data);
-    axiosContext.authAxios.post('/api/v1/feed',data)
-      .then(res => {
-        console.log(res.data)
-        navigation.navigate('DaftarPersediaanPakan',{itemp:res.data})
-      })
-      .catch((error) => {
-        console.error(error);
-      })
-  }
-
-  
-    return (
-      <ScrollView style={styles.ScrollView}>
-        <View style={styles.View}>
+  return (
+    <ScrollView style={styles.ScrollView}>
+      <View style={styles.View}>
             <BackButton goBack={navigation.goBack}/>
-            <Header>Persediaan Pakan</Header>
+            <Header>Persediaan Pakan ex</Header>
             <Text style={styles.Text}>Jumlah per KG</Text>
             <TextInput value={feed?.quantity.value} onChangeText={(text)=> setFeed({...feed, quantity: { value: text, error:''} })} label='Masukkan Pakan' keyboardType='numeric'/>
 
@@ -115,32 +130,30 @@ function PersediaanPakan({navigation}) {
                 onPress={() => navigation.reset({ index: 0,
                 routes: [{ name: 'Dashboard' }], })}>Kembali</Button>
         </View>
-       </ScrollView>
-    )
+    </ScrollView>
+    // <AuthProvider/>
+  )
 }
-export default PersediaanPakan;
-const styles=StyleSheet.create({
-    View:{
+export default expost;
+const styles = StyleSheet.create({
+  View: {
     flex: 1,
     width: '100%',
     backgroundColor: theme.colors.backgroundColor,
     padding: 20,
     alignSelf: 'center',
     justifyContent: 'center',
-    marginTop:20
   },
-  Text:{
-    textAlign:'left',
-    fontSize:24,
+  Text: {
+    textAlign: 'left',
+    fontSize: 18,
     fontWeight: '500',
     color:'#000000'
   },
-  ScrollView:{
-    flex:1,
-    backgroundColor:theme.colors.backgroundColor,
-    marginTop:15
-  },
-  title:{
-    color:'#000000'
+  ScrollView: {
+    flex: 1,
+    backgroundColor: theme.colors.backgroundColor,
+    marginTop: 0
   }
-}) 
+
+})

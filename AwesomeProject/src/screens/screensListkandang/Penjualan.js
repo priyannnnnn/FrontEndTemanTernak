@@ -10,7 +10,7 @@ import moment from "moment";
 import { AxiosContext } from "../../context/AxiosContext";
 import { AuthContext } from "../../context/AuthContext";
 
-function Penjualan({navigation}){
+function Penjualan(props){
 
   const axiosContext = useContext(AxiosContext);
   const authContext = useContext(AuthContext);
@@ -20,7 +20,7 @@ function Penjualan({navigation}){
       amount    : { value : '', error: '' },
       date      : { value : '', error: '' },
     })
-
+    const {navigation}=props;
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
@@ -63,7 +63,7 @@ function Penjualan({navigation}){
     axiosContext.authAxios.post(`/api/v1/saleEgg`, data)
     .then(res => {
       console.info("succes sellegg")
-      navigation.navigate('DaftarPenjualanTelur', {name: 'DaftarPenjualanTelur'})
+      navigation.navigate('DaftarPenjualanTelur', {itemp:res.data})
     })
     .catch((error) => {
       console.error(error);

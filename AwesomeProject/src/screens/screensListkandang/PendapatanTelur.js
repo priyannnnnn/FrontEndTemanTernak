@@ -17,8 +17,9 @@ import { AuthProvider } from "../../context/AuthContext";
 import { AxiosProvider } from "../../context/AxiosContext";
 
 
-function PendapatanTelur({ navigation }) {
+function PendapatanTelur(props) {
 
+  const {navigation}=props;
   const axiosContext = useContext(AxiosContext);
   const authContext = useContext(AuthContext);
 
@@ -27,25 +28,30 @@ function PendapatanTelur({ navigation }) {
     date:     {value:`${moment(date).format('YYYY-MM-DD')}`, error:''}
   })
 
-  const onSubmit=()=>{
+  const onSubmit = () => {
     const data={
-      quantity:IncomeEgg?.quantity?.value,
-      date: IncomeEgg?.date?.value
-    }
-    console.log("Data Pendapatan = ",data)
-    const quantity=!isNaN(data.quantity) && data.quantity>1;
+            quantity:IncomeEgg?.quantity?.value,
+            date: IncomeEgg?.date?.value
+          }
+    // const amount=!isNaN(data.amount) && data.amount>1;
+    // const quantity=!isNaN(data.quantity) && data.quantity>1;
 
-      if(!quantity){
-        Alert.alert('Data Anda Salah',"Mohon Untuk Cek Kembali")
-        return;
-      }
-    axiosContext.authAxios.post(`/api/v1/incomeEgg`,data)
-    .then(res =>{
-      console.log("succes sellegg")
-      navigation.navigate('DaftarPendapatanTelur')
+      // if(!amount || !quantity){
+      //   Alert.alert('Data Anda Salah',"Mohon Untuk Cek Kembali")
+      //   return;
+      // }
+
+    axiosContext.authAxios.post(`/api/v1/incomeEgg`, data)
+    .then(res => {
+      console.info("succes sellegg data = ")
+      console.log(res.data)
+      console.info("succes sellegg data content = ")
+      console.log(res.data.content)
+      navigation.navigate('IncomeEgg',{itemp:res.data.content})
     })
-    .catch((error)=>{
-      console.log(error)
+    .catch((error) => {
+      navigation.navigate('DaftarPendapatanTelur')
+      console.error(error);
     })
   }
 

@@ -1,168 +1,208 @@
-import { ScrollView, View,Text, StyleSheet, FlatList,ActivityIndicator, TextInput, Alert, Image } from "react-native";
-import { TouchableOpacity } from "react-native";
-import { theme } from "../../core/theme";
-import { GlobalStyles } from "../../components/style";
+import { ActivityIndicator, Alert, FlatList, Image, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 import Button from "../../components/Button";
+import { GlobalStyles } from "../../components/style";
+import { theme } from "../../core/theme";
+import {Ionicons} from '@expo/vector-icons';
 import { useContext, useEffect, useState } from "react";
-import axios from "axios";
-import { AxiosContext } from "../../context/AxiosContext";
+import { ScrollView } from "react-native-gesture-handler";
 import filter from "lodash.filter"
+import { TouchableOpacity } from "react-native";
+import { AxiosContext } from "../../context/AxiosContext";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import listStyle from "../../helpers/styles/list.style";
 
-function DaftarPenjualanTelur({navigation}){
+function DaftarTernak({route, navigation}){
+    const axiosContext = useContext(AxiosContext);
+    const [ saleEgg, setsaleEgg]=useState([])
+    const [ loading, setLoading ] = useState(true)
+    const [ errorMessage, setErrorMessage ] = useState('')
+    const [pageCurrent, setpageCurrent]= useState(1)
+    const [totalpage, settotalpage]= useState(10);
+    const [search, setsearch]= useState('');
+    const {item}= route.params;
+    const {itemp} = route.params;
 
-  const [ saleEgg, setsaleEgg]=useState([])
-  // const [loading, setLoading] = useState(true)
-  const [ loading, setLoading ] = useState(true)
-  const [rrorMessage, setErrorMessage ] = useState('')
-  const [totalpage, settotalpage]= useState(10);
-  const [pageCurrent, setpageCurrent]= useState(1);
-  const axiosContext = useContext(AxiosContext);
-  const [search, setsearch]= useState('');
+    const getData = () => {
+        axiosContext.authAxios.get(`/api/v1/saleEgg?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
+          .then(res => {
+            console.log("get data = ",res.data.content);
+            setLoading(false)
+            setsaleEgg(saleEgg.concat(res.data.content))
+            //setLoading(false)
+          })
+          .catch((e) => {
+            setLoading(false)
+            console.error(e, "getdatay")
+            setErrorMessage("Network Error. Please try again.")
+          })
+    }
 
-  const toggleAddEmployeeModal = () => {
-    console.log('test_data');
-}
-  const GetData = () => {
-    console.log("get data = ")
-      setLoading(true)
-      axiosContext.authAxios.get(`/api/v1/saleEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
-      .then(res => {
-        console.log("Elements = ",res.data);
-        setsaleEgg(saleEgg.concat(res.data.content))
-        // setLoading(false)
-        // setErrorMessage('')
-      })
-      .catch((e)=>{
-        console.log(e)
-        return Alert.alert(
-          "Error",
-          "Silahkan Login Kembali?"
-        );
-      })
-  }
+    const newgetData = () => {
+        axiosContext.authAxios.get(`/api/v1/saleEgg?orders=createdAt-desc`)
+          .then(res => {
+            //console.log(res.data.content);
+            setLoading(false)
+            setsaleEgg(res.data.content)
+          })
+          .catch((e) => {
+            setLoading(false)
+            console.error(e, "getdata")
+            setErrorMessage("Network Error. Please try again.")
+          })
+    }
 
-  const newGetData = () => {
-    console.log("get data = ")
-      setLoading(true)
-      axiosContext.authAxios.get(`/api/v1/saleEgg?orders=createdAt-desc?`)
-      .then(res => {
-        setsaleEgg(res.data.content)
-      })
-      .catch((e)=>{
-        return Alert.alert(
-          "Error",
-          "Silahkan Login Kembali?"
-        );
-      })
-  }
+    const DeleteData = (id) => {
+        console.log(id)
+        setLoading(true)
+        axiosContext.authAxios.delete('/api/v1/saleEgg/'+id)
+        .then(res =>{
+          setsaleEgg(res.data)
+          newgetData()
+        })
+        .catch((e)=> {
+          console.error(e,"errror")
+          setLoading(false)
+          setErrorMessage("hdr")
+        })
+    }
 
-  const DeleteData=(id)=>{
-    console.log(id)
-    axiosContext.authAxios.delete('/api/v1/saleEgg/'+id)
-    .then (res =>{
-      setsaleEgg(res.data.content)
-      newGetData()
-    })
-    .catch((e) => {
-      console.error(e)
-    })
-  }
+    const showConfirmDialog = (id) => {
+      console.log(id)
+      return Alert.alert(
+        "Apakah kamu yakin?",
+        "Apakah Kamu Yakin Untuk Menghapus Data?",
+        [
+          {
+            text: "Yes",
+            onPress:()=>DeleteData(id) ,
+          },
+          {
+            text: "No",
+          },
+        ]
+      );
+    }; 
 
-  const showConfirmDialog = (id) => {
-    console.log(id)
-    return Alert.alert(
-      "Apakah kamu yakin?",
-      "Apakah Kamu Yakin Untuk Menghapus Data?",
-      [
-        {
-          text: "Yes",
-          onPress:()=>DeleteData(id) ,
-        },
-        {
-          text: "No",
-        },
-      ]
-    );
-  };  
-  useEffect(() => {
-    console.log("PageCurrent",pageCurrent)
-    // setLoading(true)
-    GetData()
-    return()=>{}
-  },[pageCurrent])
-  
+    useEffect(() => {
+      console.log("itemp = ",itemp)
+      if (itemp !== undefined){
+        newgetData();
+      }else{
+        getData();
+      }  
+    }, [itemp, pageCurrent])
 
-  renderItem=({item})=>{
-    return(
-    <View style={styles.container}>
-        <TouchableOpacity
-                  onPress={toggleAddEmployeeModal} style={styles.button}>
-                  <Text style={styles.buttonText}>Dibuat : {item.date}</Text>
+renderItem=({item})=>{
+  return(
+    <View style={listStyle.container} key={item.id}>
+      <TouchableOpacity
+              style={stylistStyleles.button}>
+                <Text style={listStyle.buttonText}>{item.date}</Text>
         </TouchableOpacity>
-      <View style={styles.employeeListContainer}>
-            <Text style={styles.listItem}>Jumlah Pendapatan : {item.quantity.toLocaleString()}</Text>
-            <Text style={styles.listItem}>Jumlah telur : {item.amount.toLocaleString()}</Text>
-            <Text style={styles.listItem}>Tanggal : {item.date}</Text>   
-          <View style={styles.buttonContainer}>
-              <TouchableOpacity
-                        onPress={() => {showConfirmDialog(item.id)}}
-                        style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                        <Text style={styles.buttonText}>Hapus</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                        onPress={() => navigation.navigate ('UpdatePenjualanTelur',{id:item.id})} 
-                        onLongPress={()=> navigation.navigate('UpdatePenjualanTelur',{id:item.id})}
-                        style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                        <Text style={styles.buttonText}>Edit</Text>
-              </TouchableOpacity>
+        <View style={listStyle.employeeListContainer}>
+            <Text style={listStyle.listItem}>Jumlah Pendapatan : {item.quantity.toLocaleString()}</Text>
+            <Text style={listStyle.listItem}>Jumlah telur : {item.amount.toLocaleString()}</Text>
+            <Text style={listStyle.listItem}>Tanggal : {item.date}</Text>  
+          <View style={listStyle.buttonContainer}>
+            <TouchableOpacity
+                onPress={() => {showConfirmDialog(item.id)}}
+                style={{ ...listStyle.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                <Text style={listStyle.buttonText}>Hapus</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => navigation.navigate ('UpdatePenjualanTelur',{id:item.id})} 
+                onLongPress={()=> navigation.navigate('UpdatePenjualanTelur',{id:item.id})}
+                style={{ ...listStyle.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                <Text style={listStyle.buttonText}>Edit</Text>
+            </TouchableOpacity>
           </View>
         </View>
     </View>
-    )
-  };
+  )
+ }
 
-  handleLoadMore = async()=>{
-    // if(loading)return;
-    // renderFooter()
+ const renderFooter=()=>{
+  // axiosContext.authAxios.get(`/api/v1/livestock?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
+  // .then(res => {
+  //   // console.log("Ress",res.data.content);
+  //   if(res.data.content.length == 0){
+  //     console.log("`gtt",res.data.content.length);
+  //     return( <View style={styles.loader1}>
+  //       {/* <ActivityIndicator /> */}
+  //       <Text style={styles.buttonText}>Data  Umur</Text>
+  //       {/* <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/> */}
+  //     </View>)
+  //   }
+  //   // setLoading(false)
+  //   // setEmployee(employee.concat(res.data.content))
+  // })
+  // setLoading(false)
+  return(
+    loading?
+  <View style={listStyle.loader}>
+    <ActivityIndicator size="large"/>
+    <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
+  </View> :null)
+ }
+ handleLoadMore= async()=>{
+    if(loading)return;
+    renderFooter()
     const nextPage = pageCurrent + 1
-    renderFooter()
-    const newData = await setpageCurrent(nextPage);
-    renderFooter()
+    const newData = await setpageCurrent(nextPage);  
+ }
+
+ const handleSearch= (item) =>{
+  setsearch(item);
+  const data =[];
+  const formattedQuery = item.toLowerCase();
+  const filterData= filter(saleEgg, (item)=> {
+    return contains(item , formattedQuery)
+  })
+  console.log("Data = ",data)
+  console.log("Format Query =",formattedQuery)
+  console.log("Filter Data = ",filterData)
+  setsaleEgg(filterData)
+  if (data.toString() === filterData.toString()){
+    console.log("get Text")
+      return (
+        <Text style={styles.text}>Data Tidak Ada</Text>
+      )
+    }
+};
+const contains= ({age, note, date, quantity, type, amount}, item) => {
+  if( date.includes(item) || type.includes(item) 
+      || quantity.toString().includes(item)
+      || amount.toString().includes(item)
+      || age.toString().includes(item)
+      || note.toString().includes(item)){
+    return true;
   }
-  renderFooter=()=>{
+  return false;
+}
+
+const emptyList = ()=>{
+  return(
+    ( <View style={styles.loader1}>
+      {/* <ActivityIndicator /> */}
+      <Text style={styles.buttonEmpty}>Data Empty</Text>
+      {/* <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/> */}
+    </View>)
+  )}
+  
     return(
-      loading?
-    <View style={styles.loader}>
+      <SafeAreaView style={listStyle.safearea}>
+        {loading?
+    <View style={listStyle.loadingflatlist}>
       <ActivityIndicator size="large"/>
       <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
-    </View> :null
-    )}
-
-    const handleSearch= (item) =>{
-      setsearch(item);
-      const formattedQuery = item.toLowerCase();
-      const filterData= filter(saleEgg, (item)=> {
-        return contains(item , formattedQuery)
-      })
-      console.log("Format Query =",formattedQuery)
-      console.log("Filter Data = ",filterData)
-      setsaleEgg(filterData)
-    };
-    const contains= ({date, quantity,amount}, item) => {
-      if(date.includes(item) || quantity.toString().includes(item) || amount.toString().includes(item)){
-        return true;
-      }
-      return false;
-    }
-
-    return(
+    </View> :
       <View style={{backgroundColor:'#F5EEE6'}}>
         <View style={{flexDirection:'row'}}>
-          <View style={styles.input}>
-            <TextInput placeholder="search" 
+          <View style={listStyle.input}>
+          <Icon name="search" size={25} color={'#1F2544'} style={{marginTop:10}}/>
+            <TextInput style={{fontSize:15, color:'#1F2544'}} 
+              placeholder="search" 
               placeholderTextColor="#000"
-              style={{fontSize:15,color:'#1F2544'}}
               value={saleEgg} 
               clearButtonMode="always"
               onChangeText={handleSearch}
@@ -173,50 +213,25 @@ function DaftarPenjualanTelur({navigation}){
               style={{ marginVertical: 0, marginLeft: 0 ,flexDirection:'row'}}>
               <Icon name="add" size={40} color={'#1F2544'} style={{marginTop:20,}}/>
               <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
-          </TouchableOpacity>  
+          </TouchableOpacity>
         </View>
+        
       <FlatList
-      style={styles.container12}
       data={saleEgg}
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
-      ListFooterComponent={this.renderFooter}
+      ListFooterComponent={renderFooter}
+      // ListEmptyComponent={emptyList}
       onEndReached={this.handleLoadMore}
       onEndReachedThreshold={0}
-      />
-      </View>
-
-
-
-    //     <ScrollView>
-    //     <View style={styles.container}>
-    //     <TouchableOpacity style={styles.button}>
-         
-    //         <Text style={styles.buttonText}> DaftarPenjualanTelur</Text>
-    //     </TouchableOpacity>
-    //     <Text style={styles.title}>Penjualan Telur</Text>
-    //     {saleEgg.map((data, index)=>  <View
-    //         style={styles.employeeListContainer} 
-    //         key={data.id}>
-    //         <Text style={{...styles.listItem, color:"tomato"}}>{data.date}</Text>
-    //         <Text style={styles.name}>{data.saleEgg_name}</Text>
-    //         <Text style={styles.listItem}>Jumlah Telur : {data.amount}</Text>
-    //         <Text style={styles.listItem}>Tanggal : {data.date}</Text>
-    //         <Text style={styles.listItem}>Total Pendapatan Telur  : {data.quantity}</Text>
-    
-    //    </View>)}
-    //     </View>
-    //     <Button 
-    //         mode='contained' onPress={() => 
-    //             navigation.reset({index: 0,
-    //             routes: [{ name: 'Penjualan' }],})}
-    //     >Kembali</Button>
-        
-    // </ScrollView>
+      style={listStyle.container12}
+      >
+      </FlatList>
+      </View>}
+      </SafeAreaView>
     )
-
 }
-export default DaftarPenjualanTelur;
+export default DaftarTernak;
 const styles=StyleSheet.create({
     text:{
         fontSize:20,
@@ -288,6 +303,11 @@ const styles=StyleSheet.create({
         marginTop:20,
         backgroundColor:'#7FFFD4'
       },
+      loader:{
+        marginTop:10,
+        marginBottom:35,
+        alignItems:"center"
+      },
       input: {
         height:45,
         width:265,
@@ -299,9 +319,27 @@ const styles=StyleSheet.create({
         flexDirection:'row',
         top:13
       },
-      loader:{
+      loader1:{
         marginTop:10,
-        marginBottom:35,
+        marginBottom:80,
         alignItems:"center"
       },
+      buttonEmpty: {
+        color: "black",
+        paddingVertical: 6,
+        paddingHorizontal: 10,
+        fontSize: 16
+      },
+      loadingflatlist: {
+        marginTop:300,
+        // marginBottom:35,
+        // alignItems:"center"
+        // flex: 1, 
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor:'#F0F8FF'
+      },
+      safearea:{
+        flex:1,
+      }
 })

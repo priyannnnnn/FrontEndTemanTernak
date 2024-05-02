@@ -53,13 +53,9 @@ function UpdateTernak(props){
         type : livestock?.type?.value,
         note : livestock?.note?.value
       }
-      console.log("Data = ",Data)
-      console.log("ID = ",id)
-
       axiosContext.authAxios.put('/api/v1/livestock/'+id,Data)
       .then(res =>{
-        console.log("UPdate DAta", res.data)
-        navigation.navigate('DaftarTernak')
+        navigation.navigate('DaftarTernak', {itemp:res.data})
       })
       .catch((error) => {
         console.error(error)

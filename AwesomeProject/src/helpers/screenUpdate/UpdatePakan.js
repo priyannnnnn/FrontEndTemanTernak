@@ -59,12 +59,10 @@ function UpdatePakan(props){
                 quantity:parseInt(feed?.quantity?.value),
                 date:feed?.date?.value,
             }
-            console.log(data);
-            console.log ("UPdate Data = ",id)
             axiosContext.authAxios.put('/api/v1/feed/'+id,data)
             .then (res => {
                 console.log(res.data)
-                navigation.navigate('DaftarPersediaanPakan', {name : 'DaftarPersediaanPakan'})
+                navigation.navigate('DaftarPersediaanPakan',{itemp:res.data})
             })
             .catch ((error)=>{
                 console.log(error);

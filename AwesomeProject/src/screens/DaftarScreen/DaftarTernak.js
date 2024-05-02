@@ -1,4 +1,4 @@
-import { ActivityIndicator, Alert, FlatList, Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Alert, FlatList, Image, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
 import Button from "../../components/Button";
 import { GlobalStyles } from "../../components/style";
 import { theme } from "../../core/theme";
@@ -9,8 +9,9 @@ import filter from "lodash.filter"
 import { TouchableOpacity } from "react-native";
 import { AxiosContext } from "../../context/AxiosContext";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import listStyle from "../../helpers/styles/list.style";
 
-function DaftarTernak({navigation}){
+function DaftarTernak({route, navigation}){
     const axiosContext = useContext(AxiosContext);
     const [ employee, setEmployee ] = useState([])
     const [ loading, setLoading ] = useState(true)
@@ -18,14 +19,17 @@ function DaftarTernak({navigation}){
     const [pageCurrent, setpageCurrent]= useState(1)
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
-        const [hasMoreData, setHasMoreData] = useState(true);
+    const [hasMoreData, setHasMoreData] = useState(true);
+    // const {item}= route.params;
+    const {itemp} = route.params;
 
     const getData = () => {
         axiosContext.authAxios.get(`/api/v1/livestock?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
           .then(res => {
-            console.log(res.data.content);
+            console.log("get data = ",res.data.content);
             setLoading(false)
             setEmployee(employee.concat(res.data.content))
+            //setLoading(false)
           })
           .catch((e) => {
             setLoading(false)
@@ -37,7 +41,7 @@ function DaftarTernak({navigation}){
     const newgetData = () => {
         axiosContext.authAxios.get(`/api/v1/livestock?orders=createdAt-desc`)
           .then(res => {
-            console.log(res.data.content);
+            //console.log(res.data.content);
             setLoading(false)
             setEmployee(res.data.content)
           })
@@ -81,36 +85,39 @@ function DaftarTernak({navigation}){
     }; 
 
     useEffect(() => {
-      setLoading(true)
-      getData()
-     return()=>{}
-    }, [pageCurrent])
+      console.log("itemp = ",itemp)
+      if (itemp !== undefined){
+        newgetData();
+      }else{
+        getData();
+      }  
+    }, [itemp, pageCurrent])
 
 renderItem=({item})=>{
   return(
-    <View style={styles.container} key={item.id}>
+    <View style={listStyle.container} key={item.id}>
       <TouchableOpacity
-              style={styles.button}>
-                <Text style={styles.buttonText}>{item.date}</Text>
+              style={listStyle.button}>
+                <Text style={listStyle.buttonText}>{item.date}</Text>
         </TouchableOpacity>
-        <View style={styles.employeeListContainer}>
-          <Text style={styles.listItem}>Umur : {item.age}</Text>
-          <Text style={styles.listItem}>Jumlah : {item.quantity.toLocaleString()}</Text>
-          <Text style={styles.listItem}>Harga :{item.amount.toLocaleString()}</Text>
-          <Text style={styles.listItem}>Jenis : {item.type}</Text>
-          <Text style={styles.listItem}>Catatan : {item.note}</Text>
-          <Text style={styles.listItem}>Tanggal : {item.date}</Text>
-          <View style={styles.buttonContainer}>
+        <View style={listStyle.employeeListContainer}>
+          <Text style={listStyle.listItem}>Umur : {item.age}</Text>
+          <Text style={listStyle.listItem}>Jumlah : {item.quantity.toLocaleString()}</Text>
+          <Text style={listStyle.listItem}>Harga :{item.amount.toLocaleString()}</Text>
+          <Text style={listStyle.listItem}>Jenis : {item.type}</Text>
+          <Text style={listStyle.listItem}>Catatan : {item.note}</Text>
+          <Text style={listStyle.listItem}>Tanggal : {item.date}</Text>
+          <View style={listStyle.buttonContainer}>
             <TouchableOpacity
                 onPress={() => {showConfirmDialog(item.id)}}
-                style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                <Text style={styles.buttonText}>Hapus</Text>
+                style={{ ...listStyle.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                <Text style={listStyle.buttonText}>Hapus</Text>
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={() => navigation.navigate ('UpdateTernak',{id:item.id})} 
                 onLongPress={()=> navigation.navigate('UpdateTernak',{id:item.id})}
-                style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                <Text style={styles.buttonText}>Edit</Text>
+                style={{ ...styllistStylees.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                <Text style={listStyle.buttonText}>Edit</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -119,30 +126,33 @@ renderItem=({item})=>{
  }
 
  const renderFooter=()=>{
-  axiosContext.authAxios.get(`/api/v1/livestock?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
-  .then(res => {
-    console.log("Ress",res.data.content);
-    if(res.data.content.length == 0){
-      console.log("`gtt",res.data.content.length);
-      return( <View style={styles.loader1}>
-        {/* <ActivityIndicator /> */}
-        <Text style={styles.buttonText}>Data  Umur</Text>
-        {/* <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/> */}
-      </View>)
-    }
-    // setLoading(false)
-    // setEmployee(employee.concat(res.data.content))
-  })
+  // axiosContext.authAxios.get(`/api/v1/livestock?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
+  // .then(res => {
+  //   // console.log("Ress",res.data.content);
+  //   if(res.data.content.length == 0){
+  //     console.log("`gtt",res.data.content.length);
+  //     return( <View style={styles.loader1}>
+  //       {/* <ActivityIndicator /> */}
+  //       <Text style={styles.buttonText}>Data  Umur</Text>
+  //       {/* <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/> */}
+  //     </View>)
+  //   }
+  //   // setLoading(false)
+  //   // setEmployee(employee.concat(res.data.content))
+  // })
+  // setLoading(false)
+  return(
+    loading?
+  <View style={listStyle.loader}>
+    <ActivityIndicator size="large"/>
+    <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
+  </View> :null)
  }
  handleLoadMore= async()=>{
-    renderFooter()
     if(loading)return;
     renderFooter()
     const nextPage = pageCurrent + 1
-    renderFooter()
-    const newData = await setpageCurrent(nextPage);
-    renderFooter()
-   
+    const newData = await setpageCurrent(nextPage);  
  }
 
  const handleSearch= (item) =>{
@@ -174,17 +184,25 @@ const contains= ({age, note, date, quantity, type, amount}, item) => {
   return false;
 }
 
-const emptyList = ()=>(
+const emptyList = ()=>{
+  return(
     ( <View style={styles.loader1}>
       {/* <ActivityIndicator /> */}
       <Text style={styles.buttonEmpty}>Data Empty</Text>
       {/* <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/> */}
     </View>)
-)
+  )}
+
     return(
+      <SafeAreaView style={listStyle.safearea}>
+        {loading?
+    <View style={listStyle.loadingflatlist}>
+      <ActivityIndicator size="large"/>
+      <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
+    </View> :
       <View style={{backgroundColor:'#F5EEE6'}}>
         <View style={{flexDirection:'row'}}>
-          <View style={styles.input}>
+          <View style={listStyle.input}>
           <Icon name="search" size={25} color={'#1F2544'} style={{marginTop:10}}/>
             <TextInput style={{fontSize:15, color:'#1F2544'}} 
               placeholder="search" 
@@ -201,22 +219,20 @@ const emptyList = ()=>(
               <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
           </TouchableOpacity>
         </View>
-        {loading?
-    <View style={styles.loader}>
-      <ActivityIndicator size="large"/>
-      <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
-    </View> :null}
+        
       <FlatList
-      style={styles.container12}
       data={employee}
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
-      ListEmptyComponent={emptyList}
       ListFooterComponent={renderFooter}
+      // ListEmptyComponent={emptyList}
       onEndReached={this.handleLoadMore}
-      onEndReachedThreshold={0.2}
-      />
-      </View>
+      onEndReachedThreshold={0}
+      style={listStyle.container12}
+      >
+      </FlatList>
+      </View>}
+      </SafeAreaView>
     )
 }
 export default DaftarTernak;
@@ -293,7 +309,7 @@ const styles=StyleSheet.create({
       },
       loader:{
         marginTop:10,
-        marginBottom:16,
+        marginBottom:35,
         alignItems:"center"
       },
       input: {
@@ -318,4 +334,16 @@ const styles=StyleSheet.create({
         paddingHorizontal: 10,
         fontSize: 16
       },
+      loadingflatlist: {
+        marginTop:300,
+        // marginBottom:35,
+        // alignItems:"center"
+        // flex: 1, 
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor:'#F0F8FF'
+      },
+      safearea:{
+        flex:1,
+      }
 })

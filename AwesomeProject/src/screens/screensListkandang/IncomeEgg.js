@@ -10,7 +10,7 @@ import filter from "lodash.filter"
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import BackButton from "../../components/BackButton";
 import Spinner from "../../helpers/Spiner";
-import listStyle from "../../helpers/styles/list.style";
+
 
 
 function DaftarPendapatanTelur({route, navigation}){
@@ -38,25 +38,17 @@ function DaftarPendapatanTelur({route, navigation}){
     }
 
     const getData =  () => {
-         axiosContext.authAxios.get(`/api/v1/incomeEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
+         axiosContext.authAxios.get(`/api/v1/feed?orders=createdAt-desc?size=10&page=${pageCurrent}`)
         .then(res => {
-          if(itemp !== undefined){
-            console.log("Data Update = ", res.data.content)
-            setIncomeEgg(res.data.content)
-          }else{
-            console.log("get data = ",res.data.content);
-            setLoading(false)
-            setIncomeEgg(IncomeEgg.concat(res.data.content))
-          }
           // renderFooter()
-        //   console.log("itemp = ", itemp)
-        //   console.log("succes get data")
-        //   console.log(res.data.content)
-        //  // setIncomeEgg(res.data.content)
-        //  setIncomeEgg(IncomeEgg.concat(res.data.content))
-        //   // console.log(res.data);
-        // //  setIncomeEgg([...IncomeEgg,...res.data.content])
-        // setLoading(false)
+          console.log("itemp = ", itemp)
+          console.log("succes get data")
+          console.log(res.data.content)
+         // setIncomeEgg(res.data.content)
+         setIncomeEgg(IncomeEgg.concat(res.data.content))
+          // console.log(res.data);
+        //  setIncomeEgg([...IncomeEgg,...res.data.content])
+        setLoading(false)
         })
         .catch((e) => {
           console.error(e)
@@ -71,7 +63,7 @@ function DaftarPendapatanTelur({route, navigation}){
 
     const newgetData =  () => {
       console.log("get data")
-      axiosContext.authAxios.get(`/api/v1/incomeEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
+      axiosContext.authAxios.get(`/api/v1/feed?orders=createdAt-desc?size=10&page=${pageCurrent}`)
       .then(res => {
         renderFooter()
         setIncomeEgg(res.data.content)
@@ -103,7 +95,7 @@ function DaftarPendapatanTelur({route, navigation}){
     );
   };     
     const DeleteData=(id)=>{
-        axiosContext.authAxios.delete('/api/v1/incomeEgg/'+id)
+        axiosContext.authAxios.delete('/api/v1/feed/'+id)
         .then(res=> {
           renderFooter()
           setIncomeEgg(res.data.content)
@@ -135,26 +127,28 @@ function DaftarPendapatanTelur({route, navigation}){
       // console.log("item =", item)
         return(
         <ScrollView>
-          <View style={listStyle.container} key={item.id}>
+          <View style={styles.container} key={item.id}>
             <TouchableOpacity
                   onPress={toggleAddEmployeeModal} style={styles.button}>
-                  <Text style={listStyle.buttonText}>Dibuat : {item.date}</Text>
+                  <Text style={styles.buttonText}>Dibuat : {item.date}</Text>
             </TouchableOpacity>
-            <View style={listStyle.employeeListContainer}>
-              <Text style={listStyle.listItem}>Jumlah Telur : {item.quantity.toLocaleString()}</Text>
-              <Text style={listStyle.listItem}>Tanggal : {item.date.toLocaleString()}</Text>
+            <View style={styles.employeeListContainer}>
+            <Text style={styles.listItem}>Jumlah Telur : {item.quantity}</Text>
+            <Text style={styles.listItem}>Jumlah Ternak : {item.amount}</Text>
+            <Text style={styles.listItem}>Tipe : {item.type}</Text>
+            <Text style={styles.listItem}>Tanggal : {item.date}</Text>
             
-            <View style={listStyle.buttonContainer}>
+            <View style={styles.buttonContainer}>
             <TouchableOpacity
               onPress={() => {showConfirmDialog(item.id)}}
-              style={{ ...listStyle.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-              <Text style={listStyle.buttonText}>Hapus</Text>
+              style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+              <Text style={styles.buttonText}>Hapus</Text>
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => navigation.navigate ('UpdatePendapatanTelur',{id:item.id})} 
               onLongPress={()=> navigation.navigate('UpdatePendapatanTelur',{id:item.id})}
-              style={{ ...listStyle.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-              <Text style={listStyle.buttonText}>Edit</Text>
+              style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+              <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>          
             </View>
             </View>
@@ -216,7 +210,7 @@ function DaftarPendapatanTelur({route, navigation}){
           if (res == []){
 <View style={styles.loader}>
       <ActivityIndicator size="large"/>
-      <Text style={listStyle.button}>emty</Text>
+      <Text style={styles.button}>emty</Text>
       <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
     </View>
           }
@@ -251,7 +245,7 @@ function DaftarPendapatanTelur({route, navigation}){
         <View style={{backgroundColor:'#F5EEE6'}}>
           <BackButton goBack={navigation.goBack}/>
           <View style={{flexDirection:'row'}}>
-            <View style={listStyle.input}>
+            <View style={styles.input}>
               <Icon name="search" size={25} color={'#1F2544'} style={{marginTop:10}}/>
               <TextInput placeholder="search" 
                 placeholderTextColor="#000"
@@ -262,25 +256,25 @@ function DaftarPendapatanTelur({route, navigation}){
                 autoCorrect={false}/>
             </View>
             <TouchableOpacity
-              onPress={() => navigation.navigate ('PendapatanTelur')} 
+              onPress={() => navigation.navigate ('ExPost')} 
               style={{ marginVertical: 0, marginLeft: 0 ,flexDirection:'row'}}>
               <Icon name="add" size={40} color={'#1F2544'} style={{marginTop:20,}}/>
               <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
           </TouchableOpacity>   
           </View>
           {loading?
-        <View style={listStyle.loadingflatlist}>
+        <View style={styles.loadingflatlist}>
           <ActivityIndicator size="large"/>
           <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
         </View>: 
           <FlatList
           data={IncomeEgg}
-          renderItem={renlistStyleder}
+          renderItem={render}
           keyExtractor={(item,index)=> index.toString()}
           ListFooterComponent={renderFooter}
           onEndReached={handleLoadMore}
           onEndReachedThreshold={0}
-          style={listStyle.container12}
+          style={styles.container12}
           >
           </FlatList> }      
         </View>

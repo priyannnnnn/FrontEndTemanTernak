@@ -14,7 +14,7 @@ import { AxiosContext } from "../../context/AxiosContext";
 import Background from "../../components/Background";
 import Back from "../../components/Back";
 
-function Ternak({navigation, props}) {
+function Ternak({navigation}) {
   
   const axiosContext = useContext(AxiosContext);
   const [ livestock, setLiveStock ] = useState({
@@ -29,6 +29,7 @@ function Ternak({navigation, props}) {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const[show, setShow]= useState(false);
+  // const {navigation}=props;
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -64,25 +65,22 @@ function Ternak({navigation, props}) {
       type: livestock?.type?.value,
       note: livestock?.note?.value
     }
-    const ageIsValid=!isNaN(data.age)&& data.age>1;
-    const quantityIsValid=!isNaN(data.quantity) && data.quantity>1;
-    const amountIsValid=!isNaN(data.amount)&& data.amount>1;
-    const typeIsvalid=data.type.trim().length>0
+    // const ageIsValid=!isNaN(data.age)&& data.age>1;
+    // const quantityIsValid=!isNaN(data.quantity) && data.quantity>1;
+    // const amountIsValid=!isNaN(data.amount)&& data.amount>1;
+    // const typeIsvalid=data.type.trim().length>0
 
 
-      if (!ageIsValid || !quantityIsValid || !amountIsValid || !typeIsvalid){
-        Alert.alert ('Data Anda Salah',"Mohon Untuk Cek Kembali")
-        return;
-      }
-      console.log("URLLL ternak = ")
-      console.log("token = ",config)
-      console.log("Token2 ", config.headers.Authorization)
+    //   if (!ageIsValid || !quantityIsValid || !amountIsValid || !typeIsvalid){
+    //     Alert.alert ('Data Anda Salah',"Mohon Untuk Cek Kembali")
+    //     return;
+    //   }
     axiosContext.authAxios.post(`/api/v1/livestock`, data)
-    // axios.post(`http://localhost:8000/api/v1/livestock`,data, config)
-    // console.log("succes URL")
       .then(res => {
         console.log(res.data)
-        navigation.navigate('DaftarTernak', {name: 'DaftarTernak'})
+        console.info("succes livestock")
+        //navigation.navigate('DaftarTernak', {name: 'DaftarTernak'})
+        navigation.navigate('DaftarTernak', {itemp:res.data})
       })
       .catch((error) => {
         console.error(error);

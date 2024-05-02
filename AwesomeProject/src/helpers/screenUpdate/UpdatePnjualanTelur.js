@@ -64,7 +64,7 @@ function UpdatePenjualanTelur(props){
           // axios.put(`http://139.162.6.202:8000/api/v1/incomeEgg/`+id,Data,config)
           axiosContext.authAxios.put(`/api/v1/saleEgg/`+id,Data)
           .then (res =>{
-            navigation.navigate ('DaftarPenjualanTelur', {name:'DaftarPenjualanTelur'})
+            navigation.navigate ('DaftarPenjualanTelur', {itemp:res.data})
             // getData()
             //console.log(res.data)
           })

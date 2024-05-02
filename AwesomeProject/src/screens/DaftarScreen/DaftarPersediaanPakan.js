@@ -1,290 +1,333 @@
-import { ScrollView, View,Text, StyleSheet,FlatList,ActivityIndicator,TextInput, Alert, Image } from "react-native";
-import { TouchableOpacity } from "react-native";
-import { theme } from "../../core/theme";
+import { ActivityIndicator, Alert, FlatList, Image, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
+import Button from "../../components/Button";
 import { GlobalStyles } from "../../components/style";
-import filter from "lodash.filter"
+import { theme } from "../../core/theme";
+import {Ionicons} from '@expo/vector-icons';
 import { useContext, useEffect, useState } from "react";
+import { ScrollView } from "react-native-gesture-handler";
+import filter from "lodash.filter"
+import { TouchableOpacity } from "react-native";
 import { AxiosContext } from "../../context/AxiosContext";
-import { AuthContext } from "../../context/AuthContext";
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import listStyle from "../../helpers/styles/list.style";
 
-function DaftarPersediaanPakan({navigation}){
+function DaftarPersediaanPakan({route, navigation}){
+    const axiosContext = useContext(AxiosContext);
+    const [feed, setfeed]= useState([])
+    const [ loading, setLoading ] = useState(true)
+    const [ errorMessage, setErrorMessage ] = useState('')
+    const [pageCurrent, setpageCurrent]= useState(1)
+    const [totalpage, settotalpage]= useState(10);
+    const [search, setsearch]= useState('');
+    const [hasMoreData, setHasMoreData] = useState(true);
+    const {item}= route.params;
+    const {itemp} = route.params;
 
-  const [feed, setfeed]= useState([])
-  const [loading, setLoading]= useState(false)
-  const [errormessage, setErrorMessage]= useState('')
-  const [pageCurrent, setpageCurrent]= useState(0);
-  const [totalpage, settotalpage]= useState(10);
-  const axiosContext = useContext(AxiosContext);
-  const authContext = useContext(AuthContext);
-  const [search, setsearch]= useState('');
+    const getData = () => {
+        axiosContext.authAxios.get(`/api/v1/feed?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
+          .then(res => {
+            console.log("get data = ",res.data.content);
+            setLoading(false)
+            setfeed(feed.concat(res.data.content))
+            //setLoading(false)
+          })
+          .catch((e) => {
+            setLoading(false)
+            console.error(e, "getdatay")
+            setErrorMessage("Network Error. Please try again.")
+          })
+    }
 
-  const toggleAddEmployeeModal = () => {
-    console.log('test_data');}
+    const newgetData = () => {
+        axiosContext.authAxios.get(`/api/v1/feed?orders=createdAt-desc`)
+          .then(res => {
+            //console.log(res.data.content);
+            setLoading(false)
+            setfeed(res.data.content)
+          })
+          .catch((e) => {
+            setLoading(false)
+            console.error(e, "getdata")
+            setErrorMessage("Network Error. Please try again.")
+          })
+    }
 
-  const getData = () =>{
-    setLoading(true)
-    console.log("token = ",axiosContext.authAxios)
-    axiosContext.authAxios.get(`/api/v1/feed?orders=createdAt-desc&size=10`)
-    .then (res => {
-      console.log("getdata_feed")
-      setLoading(false)
-    setfeed(feed.concat(res.data.content))
-    })
-    .catch((e)=> {
-      console.error(e)
-     })
-  }
+    const DeleteData = (id) => {
+        console.log(id)
+        setLoading(true)
+        axiosContext.authAxios.delete('/api/v1/feed/'+id)
+        .then(res =>{
+          setfeed(res.data)
+          newgetData()
+        })
+        .catch((e)=> {
+          console.error(e,"errror")
+          setLoading(false)
+          setErrorMessage("hdr")
+        })
+    }
 
-  const newgetData = () =>{
-    axiosContext.authAxios.get(`/api/v1/feed?orders=createdAt-desc&size=10`)
-    .then (res => {
-      setfeed(res.data.content)
-    })
-    .catch((e)=> {
-      console.error(e)
-     })
-  }
+    const showConfirmDialog = (id) => {
+      console.log(id)
+      return Alert.alert(
+        "Apakah kamu yakin?",
+        "Apakah Kamu Yakin Untuk Menghapus Data?",
+        [
+          {
+            text: "Yes",
+            onPress:()=>DeleteData(id) ,
+          },
+          {
+            text: "No",
+          },
+        ]
+      );
+    }; 
 
-  const DeleteData = (id) => {
-    console.log(id);
-    setLoading(true)
-   axiosContext.authAxios.delete('/api/v1/feed/'+id)
-    .then(res =>{
-      setfeed(res.data.content)
-      newgetData()
-    })
-    .catch((error)=> {
-      setLoading(false)
-      console.error(error)
-    })
-  }
+    useEffect(() => {
+      console.log("itemp = ",itemp)
+      if (itemp !== undefined){
+        newgetData();
+      }else{
+        getData();
+      }  
+    }, [itemp, pageCurrent])
 
-  const showConfirmDialog = (id) => {
-    console.log(id)
-    return Alert.alert(
-      "Apakah kamu yakin?",
-      "Apakah Kamu Yakin Untuk Menghapus Data?",
-      [
-        {
-          text: "Yes",
-          onPress:()=>DeleteData(id) ,
-        },
-        {
-          text: "No",
-        },
-      ]
-    );
-  }; 
-  
-  
-  useEffect(()=> {
-    console.log("PageCurrent = ",pageCurrent)
-    setLoading(true)
-    console.log("Get Data = ")
-    getData()
-    return()=>{}
-  },[pageCurrent])
-  
-  renderItem=({item})=>{
-    return(
-      <View style={styles.container} >
-          <TouchableOpacity
-                onPress={toggleAddEmployeeModal} style={styles.button}>
-                <Text style={styles.buttonText}>Dibuat : {item.date}</Text>
-          </TouchableOpacity>
-          <View style={styles.employeeListContainer}>
-            <Text style={styles.listItem}>Jumlah Telur : {item.quantity}</Text>
-            <Text style={styles.listItem}>Jumlah Ternak : {item.amount}</Text>
-            <Text style={styles.listItem}>Tipe : {item.type}</Text>
-            <Text style={styles.listItem}>Tanggal : {item.date}</Text>
-          
-          <View style={styles.buttonContainer}>
-          <TouchableOpacity
-                    onPress={() => {showConfirmDialog(item.id)}}
-                    style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                    <Text style={styles.buttonText}>Hapus</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-                    onPress={() => navigation.navigate ('UpdatePakan',{id:item.id})} 
-                    onLongPress={()=> navigation.navigate('UpdatePakan',{id:item.id})}
-                    style={{ ...styles.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                    <Text style={styles.buttonText}>Edit</Text>
-                </TouchableOpacity>
-          </View>
+renderItem=({item})=>{
+  return(
+    <View style={listStyle.container} key={item.id}>
+      <TouchableOpacity
+              style={listStyle.button}>
+                <Text style={listStyle.buttonText}>{item.date}</Text>
+        </TouchableOpacity>
+        <View style={listStyle.employeeListContainer}>
+        <Text style={listStyle.listItem}>Jumlah Telur : {item.quantity}</Text>
+            <Text style={listStyle.listItem}>Jumlah Ternak : {item.amount}</Text>
+            <Text style={listStyle.listItem}>Tipe : {item.type}</Text>
+            <Text style={listStyle.listItem}>Tanggal : {item.date}</Text>
+          <View style={listStyle.buttonContainer}>
+            <TouchableOpacity
+                onPress={() => {showConfirmDialog(item.id)}}
+                style={{ ...listStyle.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                <Text style={listStyle.buttonText}>Hapus</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                onPress={() => navigation.navigate ('UpdatePakan',{id:item.id})} 
+                onLongPress={()=> navigation.navigate('UpdatePakan',{id:item.id})}
+                style={{ ...listStyle.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                <Text style={listStyle.buttonText}>Edit</Text>
+            </TouchableOpacity>
           </View>
         </View>
-    )
-  };
+    </View>
+  )
+ }
 
-  const handleLoadMore = async()=>{
-    renderFooter()
+ const renderFooter=()=>{
+  return(
+    loading?
+  <View style={listStyle.loader}>
+    <ActivityIndicator size="large"/>
+    <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
+  </View> :null)
+ }
+
+ handleLoadMore= async()=>{
     if(loading)return;
     renderFooter()
     const nextPage = pageCurrent + 1
-    renderFooter()
-    const newData = await setpageCurrent(nextPage);
-    renderFooter()
-  };
+    const newData = await setpageCurrent(nextPage);  
+ }
 
-  const renderFooter=()=>{
-    return(
-      loading?
-    <View style={styles.loader}>
-      <ActivityIndicator size="large"/>
-      <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
-    </View> :null
-    )
-  }
-
-  const handleSearch= (item) =>{
-    setsearch(item);
-    const data =[];
-    const formattedQuery = item.toLowerCase();
-    const filterData= filter(feed, (item)=> {
-      return contains(item , formattedQuery)
-    })
-    console.log("Data = ",data)
-    console.log("Format Query =",formattedQuery)
-    console.log("Filter Data = ",filterData)
-    setfeed(filterData)
-    console.log("String = []")
-    if (data.toString() === filterData.toString()){
-      console.log("get Text")
-        return (
-          <Text style={styles.text}>Data Tidak Ada</Text>
-        )
-      }else{
-        return getData;
-      }
-  };
-  const contains= ({date, quantity, type, amount}, item) => {
-    if( date.includes(item) || type.includes(item) 
-        || quantity.toString().includes(item)
-        || amount.toString().includes(item)){
-      return true;
+ const handleSearch= (item) =>{
+  setsearch(item);
+  const data =[];
+  const formattedQuery = item.toLowerCase();
+  const filterData= filter(feed, (item)=> {
+    return contains(item , formattedQuery)
+  })
+  console.log("Data = ",data)
+  console.log("Format Query =",formattedQuery)
+  console.log("Filter Data = ",filterData)
+  setfeed(filterData)
+  if (data.toString() === filterData.toString()){
+    console.log("get Text")
+      return (
+        <Text style={styles.text}>Data Tidak Ada</Text>
+      )
     }
-    return false;
+};
+const contains= ({age, note, date, quantity, type, amount}, item) => {
+  if( date.includes(item) || type.includes(item) 
+      || quantity.toString().includes(item)
+      || amount.toString().includes(item)
+      || age.toString().includes(item)
+      || note.toString().includes(item)){
+    return true;
   }
+  return false;
+}
+
+const emptyList = ()=>{
+  return(
+    ( <View style={styles.loader1}>
+      {/* <ActivityIndicator /> */}
+      <Text style={styles.buttonEmpty}>Data Empty</Text>
+      {/* <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/> */}
+    </View>)
+  )}
   
     return(
-      <View style={{backgroundColor: '#F5EEE6'}}>
-        <View style={{flexDirection: 'row'}}>
-          <View style={styles.input}>
-            <TextInput placeholder="search"
+      <SafeAreaView style={stlistStyleyles.safearea}>
+        {loading?
+    <View style={listStyle.loadingflatlist}>
+      <ActivityIndicator size="large"/>
+      <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
+    </View> :
+      <View style={{backgroundColor:'#F5EEE6'}}>
+        <View style={{flexDirection:'row'}}>
+          <View style={listStyle.input}>
+          <Icon name="search" size={25} color={'#1F2544'} style={{marginTop:10}}/>
+            <TextInput style={{fontSize:15, color:'#1F2544'}} 
+              placeholder="search" 
               placeholderTextColor="#000"
-              style={{ fontSize:15, color:'#1F2544' }}
               value={feed} 
               clearButtonMode="always"
               onChangeText={handleSearch}
               autoCorrect={false}/>
-            
           </View>
           <TouchableOpacity
               onPress={() => navigation.navigate ('PersediaanPakan')} 
               style={{ marginVertical: 0, marginLeft: 0 ,flexDirection:'row'}}>
               <Icon name="add" size={40} color={'#1F2544'} style={{marginTop:20,}}/>
               <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
-          </TouchableOpacity> 
+          </TouchableOpacity>
         </View>
+        
       <FlatList
-      style={styles.container12}
       data={feed}
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
       ListFooterComponent={renderFooter}
+      // ListEmptyComponent={emptyList}
+      onEndReached={this.handleLoadMore}
       onEndReachedThreshold={0}
-      onEndReached={handleLoadMore}
-      />
-      </View>
-    )  
+      style={listStyle.container12}
+      >
+      </FlatList>
+      </View>}
+      </SafeAreaView>
+    )
 }
 export default DaftarPersediaanPakan;
 const styles=StyleSheet.create({
-  text:{
-      fontSize:20,
-      flex:1,
-      marginTop:35,
-      textAlign:'center',
-      backgroundColor:theme.colors.error
-  },
-  view:{
-      flex:1,
-      backgroundColor:theme.colors.backgroundColor
-  },
-  view1:{
-      flex:1,
-      backgroundColor:GlobalStyles.colors.error50,
-      marginHorizontal:12,
-      margin:3,
-      minWidth:20,
-  },
-  container: {
-      paddingHorizontal: 20
+    text:{
+        fontSize:20,
+        flex:1,
+        marginTop:35,
+        textAlign:'center'
     },
-    button: {
-      borderRadius: 5,
-      marginVertical: 20,
-      alignSelf: 'flex-start',
-      backgroundColor: "gray",
+    view:{
+        flex:1,
+        backgroundColor:theme.colors.backgroundColor
     },
-    buttonText: {
-      color: '#7FFFD4',
-      paddingVertical: 6,
-      paddingHorizontal: 10,
-      fontSize: 16,     
+    view1:{
+        flex:1,
+        backgroundColor:GlobalStyles.colors.error50,
+        marginHorizontal:12,
+        margin:3,
+        minWidth:20,
+
     },
-    title: {
-      fontWeight: "bold",
-      fontSize: 20,
-      marginBottom: 10,
-      color:'#FF4500'
-    },
-    employeeListContainer: {
-      marginBottom: 25,
-      elevation: 4,
-      backgroundColor: "white",
-      padding: 10,
-      borderRadius: 6,
-      borderTopWidth: 1,
-      borderColor: "rgba(0,0,0,0.1)"
-    },
-    name: {
-      fontWeight: "bold",
-      fontSize: 16
-    },
-    listItem: {
-      fontSize: 18,
+    container: {
+        paddingHorizontal: 20
+      },
+      button: {
+        borderRadius: 5,
+        marginVertical: 20,
+        alignSelf: 'flex-start',
+        backgroundColor: "gray",
+      },
+      buttonText: {
+        color: "white",
+        paddingVertical: 6,
+        paddingHorizontal: 10,
+        fontSize: 16
+      },
+      title: {
+        fontWeight: "bold",
+        fontSize: 20,
+        marginBottom: 10,
+        color:'#FF4500'
+      },
+      employeeListContainer: {
+        marginBottom: 25,
+        elevation: 4,
+        backgroundColor: "white",
+        padding: 10,
+        borderRadius: 6,
+        borderTopWidth: 1,
+        borderColor: "rgba(0,0,0,0.1)"
+      },
+      name: {
+        fontWeight: "bold",
+        fontSize: 16
+      },
+      listItem: {
+        fontSize: 18,
         color:'#800000',
         fontWeight:"500"
-    },
-    buttonContainer: {
-      marginTop: 10,
-      flexDirection: "row",
-      alignItems: "center"
-    },
-    message: {
-      color: "tomato",
-      fontSize: 17
-    },
-    loader:{
-      marginTop:10,
-      marginBottom:35,
-      alignItems:"center"
-    },
-    container12:{
-      marginTop:20,
-      backgroundColor:'#7FFFD4'
-    }, 
-    input: {
-      height:45,
-      width:265,
-      borderWidth:1,
-      paddingLeft:20,
-      margin:5,
-      borderColor:'#009688',
-      backgroundColor:'#FFF6E9',
-      flexDirection:'row',
-      top:13
-    },
+      },
+      buttonContainer: {
+        marginTop: 10,
+        flexDirection: "row",
+        alignItems: "center"
+      },
+      message: {
+        color: "tomato",
+        fontSize: 17
+      },
+      container12:{
+        marginTop:20,
+        backgroundColor:'#7FFFD4'
+      },
+      loader:{
+        marginTop:10,
+        marginBottom:35,
+        alignItems:"center"
+      },
+      input: {
+        height:45,
+        width:265,
+        borderWidth:1,
+        paddingLeft:20,
+        margin:5,
+        borderColor:'#009688',
+        backgroundColor:'#FFF6E9',
+        flexDirection:'row',
+        top:13
+      },
+      loader1:{
+        marginTop:10,
+        marginBottom:80,
+        alignItems:"center"
+      },
+      buttonEmpty: {
+        color: "black",
+        paddingVertical: 6,
+        paddingHorizontal: 10,
+        fontSize: 16
+      },
+      loadingflatlist: {
+        marginTop:300,
+        // marginBottom:35,
+        // alignItems:"center"
+        // flex: 1, 
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor:'#F0F8FF'
+      },
+      safearea:{
+        flex:1,
+      }
 })

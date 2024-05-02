@@ -47,6 +47,9 @@ import AmountKandang from './src/screens/AmountKandang';
 import {name as appName} from './app.json';
 import {AppRegistry} from 'react-native';
 import Api from './src/screens/api';
+import IncomeEgg from './src/screens/screensListkandang/IncomeEgg';
+import expost from './src/screens/screensListkandang/expost';
+import UpdateOperasional from './src/helpers/screenUpdate/UpdateOperasional';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator()
@@ -100,6 +103,9 @@ export default function App() {
               <Stack.Screen name='DaftarOperasional'component={DaftarOperasional}/>
               <Stack.Screen name='AmountKandang' component={AmountKandang}/>
               <Stack.Screen name='Api' component={Api}/>
+              <Stack.Screen name='IncomeEgg' component={IncomeEgg}/>
+              <Stack.Screen name='ExPost' component={expost}/>
+              <Stack.Screen name='UpdateOperasional' component={UpdateOperasional}/>
               {/* <Stack.Screen name='loginkandang' component={Loginkandang}/> */}
 
               <Stack.Screen

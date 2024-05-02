@@ -58,7 +58,7 @@ function UpdatePendapatanTelur(props){
             axiosContext.authAxios.put(`/api/v1/incomeEgg/`+id,Data)
             .then (res =>{
               console.log("",res.data)
-              navigation.navigate ('DaftarPendapatanTelur')
+              navigation.navigate ('DaftarPendapatanTelur',{itemp:res.data})
               getData()
               //console.log(res, "ress")
             })

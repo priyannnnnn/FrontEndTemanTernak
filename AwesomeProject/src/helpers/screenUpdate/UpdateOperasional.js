@@ -9,7 +9,7 @@ import { AxiosContext } from "../../context/AxiosContext";
 import moment from "moment";
 import DateTimePicker from '@react-native-community/datetimepicker';
 
-function BiayaOperasional(props) {
+function UpdateOperasional(props) {
   const [Operation, setOperation] = useState({
     date : {value: '', error:''},
     description : {value:'', error:''},
@@ -20,7 +20,8 @@ function BiayaOperasional(props) {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const[show, setShow]= useState(false);
-  const {navigation}=props;
+  const {navigation, route}=props;
+  const{id} = route.params;
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -40,8 +41,24 @@ function BiayaOperasional(props) {
   };
 
   useEffect (() => {
-    setOperation ({...Operation, date:{value : `${moment(date).format('YYYY-MM-DD')}`, error:''}})
-  },[date])
+    console.log("id Data = ", id)
+    GetData(id)
+  },[])
+
+  const GetData = (id)=>{
+    axiosContext.authAxios.get(`/api/v1/operatingCosh/`+id)
+    .then(res =>{
+        setOperation({...Operation, 
+            id: res.id,
+            date : {value: `${res.data.date}`, error:''},
+            description : {value:`${res.data.description}`, error:''},
+            amount : {value:`${res.data.amount}`,error:''}
+        })
+    })
+    .catch((error) => {
+        console.log(error)
+    })
+  }
   
   const onSubmit = () => {
     const data = {
@@ -49,11 +66,8 @@ function BiayaOperasional(props) {
       description : Operation?.description.value,
       amount : Operation?.amount?.value,
     }
-
-    console.log("Data = ", data)
     axiosContext.authAxios.post(`/api/v1/operatingCosh`,data)
     .then(res => {
-      console.log("Get Data = ", res.data)
       navigation.navigate('DaftarOperasional',{itemp:res.data})
     })
     .catch((e) => {
@@ -64,7 +78,13 @@ function BiayaOperasional(props) {
       <ScrollView style={styles.ScrollView}>
          <View style={styles.View}>
             <BackButton goBack={navigation.goBack}/>
-            <Header>Biaya Operasional</Header>
+            <Header>U Biaya Operasional</Header>
+            <Text style={styles.Text}>Deskripsi</Text>
+            <TextInput
+            value={Operation?.description.value} onChangeText ={(text) => setOperation({...Operation, description:{value:text, error:''}})} label= 'deskripsi'/>
+            <Text style={styles.Text}>Total Biaya Operasional</Text>
+            <TextInput
+            value = {Operation?.amount.value} onChangeText= {(text) => setOperation ({...Operation, amount: {value:text, error:''}})} label='Jumlah-Operasional'/>
             <Text style={styles.Text}>Tanggal</Text>
             <TextInput 
               value={Operation?.date.value} onChangeText = {(text) => setOperation({...Operation, date: {value: text,error:''}})}  label='Tuliskan Keterangan' 
@@ -77,13 +97,6 @@ function BiayaOperasional(props) {
                 is24Hour={true}
                 onChange={onChange}/>
               )}
-
-            <Text style={styles.Text}>Deskripsi</Text>
-            <TextInput
-            value={Operation?.description.value} onChangeText ={(text) => setOperation({...Operation, description:{value:text, error:''}})} label= 'deskripsi'/>
-            <Text style={styles.Text}>Total Biaya Operasional</Text>
-            <TextInput
-            value = {Operation?.amount.value} onChangeText= {(text) => setOperation ({...Operation, amount: {value:text, error:''}})} label='Jumlah-Operasional'/>
 
             <Button
             mode='contained'
@@ -103,7 +116,7 @@ function BiayaOperasional(props) {
        </ScrollView>
     )
 }
-export default BiayaOperasional;
+export default UpdateOperasional;
 const styles=StyleSheet.create({
   View:{
     flex: 1,
