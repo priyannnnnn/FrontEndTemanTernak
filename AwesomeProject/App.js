@@ -17,39 +17,39 @@ import {
   ResetPasswordScreen,
   Dashboard,
   // Loginkandang,
-} from './src/screens'
+} from './src/screens/main'
 // import BuatKandang from '../src/screens/BuatKandang';
-import BuatKandang from './src/screens/BuatKandang';
-import ListKandang  from './src/screens/ListKandang'
-import PendapatanTelur from './src/screens/screensListkandang/PendapatanTelur'
-import Ternak from './src/screens/screensListkandang/Ternak'
-import PersediaanPakan from './src/screens/screensListkandang/PersediaanPakan'
+import BuatKandang from './src/screens/main/BuatKandang';
+import ListKandang  from './src/screens/main/ListKandang'
+import PendapatanTelur from './src/screens/farm_screens/Incomee_egg/PendapatanTelur'
+import Ternak from './src/screens/farm_screens/livestock/Ternak'
+import PersediaanPakan from './src/screens/farm_screens/feed/PersediaanPakan'
 import Pengurangan from './src/screens/screensListkandang/Pengurangan'
 import PenggunaanPakan from './src/screens/screensListkandang/PenggunaanPakan'
-import BiayaOperasional from './src/screens/screensListkandang/BiayaOperasional'
-import DaftarPendapatanTelur from './src/screens/DaftarScreen/DaftarPendapatanTelur'
-import DaftarTernak from './src/screens/DaftarScreen/DaftarTernak'
-import penjumlahan from './src/screens/screensListkandang/Penjualan'
-import DaftarPersediaanPakan from './src/screens/DaftarScreen/DaftarPersediaanPakan'
-import DaftarPengurangan from './src/screens/DaftarScreen/DaftarPengurangan'
-import DaftarPenggunaanPakan from './src/screens/DaftarScreen/DaftarPenggunaanPakan'
-import DaftarPenjualanTelur from './src/screens/DaftarScreen/DaftarPenjualanTelur'
-import UpdatePakan from './src/helpers/screenUpdate/UpdatePakan'
-import UpdatePendapatanTelur from './src/helpers/screenUpdate/UpdatePndptanTelur'
-import UpdatePenjualanTelur from './src/helpers/screenUpdate/UpdatePnjualanTelur'
-import UpdateTernak from './src/helpers/screenUpdate/UpdateTernak'
+import BiayaOperasional from './src/screens/farm_screens/operation/BiayaOperasional'
+import DaftarPendapatanTelur from './src/screens/farm_screens/Incomee_egg/DaftarPendapatanTelur'
+import DaftarTernak from './src/screens/farm_screens/livestock/DaftarTernak'
+import penjumlahan from './src/screens/farm_screens/sale_egg/Penjualan'
+import DaftarPersediaanPakan from './src/screens/farm_screens/feed/DaftarPersediaanPakan'
+// import DaftarPengurangan from './src/screens/DaftarScreen/DaftarPengurangan'
+// import DaftarPenggunaanPakan from './src/screens/DaftarScreen/DaftarPenggunaanPakan'
+import DaftarPenjualanTelur from './src/screens/farm_screens/sale_egg/DaftarPenjualanTelur'
+import UpdatePakan from './src/screens/farm_screens/feed/UpdatePakan'
+import UpdatePendapatanTelur from './src/screens/farm_screens/Incomee_egg/UpdatePndptanTelur'
+import UpdatePenjualanTelur from './src/screens/farm_screens/sale_egg/UpdatePnjualanTelur'
+import UpdateTernak from './src/screens/farm_screens/livestock/UpdateTernak'
 import { AuthProvider } from './src/context/AuthContext';
 import { AxiosProvider } from './src/context/AxiosContext';
-import DaftarOperasional from './src/screens/DaftarScreen/DaftarOperasional';
+import DaftarOperasional from './src/screens/farm_screens/operation/DaftarOperasional';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Tabs from './src/helpers/Tabs';
-import AmountKandang from './src/screens/AmountKandang';
+import AmountKandang from './src/screens/main/AmountKandang';
 import {name as appName} from './app.json';
 import {AppRegistry} from 'react-native';
-import Api from './src/screens/api';
+import Api from './src/screens/main/api';
 import IncomeEgg from './src/screens/screensListkandang/IncomeEgg';
 import expost from './src/screens/screensListkandang/expost';
-import UpdateOperasional from './src/helpers/screenUpdate/UpdateOperasional';
+import UpdateOperasional from './src/screens/farm_screens/operation/UpdateOperasional';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator()
@@ -92,8 +92,8 @@ export default function App() {
               <Stack.Screen name='DaftarPendapatanTelur' component={DaftarPendapatanTelur}/>
               <Stack.Screen name='DaftarTernak' component={DaftarTernak}/>
               <Stack.Screen name='DaftarPersediaanPakan' component={DaftarPersediaanPakan}/>
-              <Stack.Screen name='DaftarPengurangan' component={DaftarPengurangan}/>
-              <Stack.Screen name='DaftarPenggunaanPakan' component={DaftarPenggunaanPakan}/>
+              {/* <Stack.Screen name='DaftarPengurangan' component={DaftarPengurangan}/> */}
+              {/* <Stack.Screen name='DaftarPenggunaanPakan' component={DaftarPenggunaanPakan}/> */}
               <Stack.Screen name='DaftarPenjualanTelur' component={DaftarPenjualanTelur}/>
               <Stack.Screen name='UpdatePakan' component={UpdatePakan}/>
               <Stack.Screen name='UpdatePendapatanTelur' component={UpdatePendapatanTelur}/>

@@ -1,19 +1,19 @@
 import { FlatList, StyleSheet, Text, View, ActivityIndicator, TextInput, Alert, Image, SafeAreaView} from "react-native";
-import Button from "../../components/Button";
-import { GlobalStyles } from "../../components/style";
-import { theme } from "../../core/theme";
+import Button from "../../../components/Button";
+import { GlobalStyles } from "../../../components/style";
+import { theme } from "../../../core/theme";
 import { useContext, useEffect, useRef, useState } from "react";
 import { ScrollView } from "react-native-gesture-handler";
 import { TouchableOpacity } from "react-native";
-import { AxiosContext, AxiosProvider } from "../../context/AxiosContext";
+import { AxiosContext, AxiosProvider } from "../../../context/AxiosContext";
 import filter from "lodash.filter"
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import BackButton from "../../components/BackButton";
-import Spinner from "../../helpers/Spiner";
-import listStyle from "../../helpers/styles/list.style";
+import BackButton from "../../../components/BackButton";
+import Spinner from "../../../helpers/Spiner";
+import listStyle from "../../../helpers/styles/list.style";
 
 
-function IncomeEgg({route, navigation}){
+function DaftarPendapatanTelur({route, navigation}){
 
   // useEffect(() =>{
   //   newgetData();
@@ -38,7 +38,7 @@ function IncomeEgg({route, navigation}){
     }
 
     const getData =  () => {
-         axiosContext.authAxios.get(`/api/v1/saleEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
+         axiosContext.authAxios.get(`/api/v1/incomeEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
         .then(res => {
           if(itemp !== undefined){
             console.log("Data Update = ", res.data.content)
@@ -71,7 +71,7 @@ function IncomeEgg({route, navigation}){
 
     const newgetData =  () => {
       console.log("get data")
-      axiosContext.authAxios.get(`/api/v1/saleEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
+      axiosContext.authAxios.get(`/api/v1/incomeEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
       .then(res => {
         renderFooter()
         setIncomeEgg(res.data.content)
@@ -103,7 +103,7 @@ function IncomeEgg({route, navigation}){
     );
   };     
     const DeleteData=(id)=>{
-        axiosContext.authAxios.delete('/api/v1/saleEgg/'+id)
+        axiosContext.authAxios.delete('/api/v1/incomeEgg/'+id)
         .then(res=> {
           renderFooter()
           setIncomeEgg(res.data.content)
@@ -217,7 +217,6 @@ function IncomeEgg({route, navigation}){
 <View style={styles.loader}>
       <ActivityIndicator size="large"/>
       <Text style={listStyle.button}>emty</Text>
-      <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
     </View>
           }
         })
@@ -225,7 +224,7 @@ function IncomeEgg({route, navigation}){
         //   loading?
         // <View style={styles.loader}>
         //   <ActivityIndicator size="large"/>
-        //   <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
+
         // </View> :null
         // )
       }
@@ -262,10 +261,10 @@ function IncomeEgg({route, navigation}){
                 autoCorrect={false}/>
             </View>
             <TouchableOpacity
-              onPress={() => navigation.navigate ('ExPost')} 
+              onPress={() => navigation.navigate ('PendapatanTelur')} 
               style={{ marginVertical: 0, marginLeft: 0 ,flexDirection:'row'}}>
               <Icon name="add" size={40} color={'#1F2544'} style={{marginTop:20,}}/>
-              <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add.</Text>
+              <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
           </TouchableOpacity>   
           </View>
           {loading?
@@ -286,132 +285,132 @@ function IncomeEgg({route, navigation}){
         </View>
       )
 }
-export default IncomeEgg;
-const styles=StyleSheet.create({
-    text:{
-        fontSize:20,
-        flex:1,
-        marginTop:35,
-        textAlign:'center'
-    },
-    view:{
-        flex:1,
-        backgroundColor:theme.colors.backgroundColor
-    },
-    view1:{
-        flex:1,
-        backgroundColor:GlobalStyles.colors.error50,
-        marginHorizontal:12,
-        margin:3,
-        minWidth:20,
+export default DaftarPendapatanTelur;
+// const styles=StyleSheet.create({
+//     text:{
+//         fontSize:20,
+//         flex:1,
+//         marginTop:35,
+//         textAlign:'center'
+//     },
+//     view:{
+//         flex:1,
+//         backgroundColor:theme.colors.backgroundColor
+//     },
+//     view1:{
+//         flex:1,
+//         backgroundColor:GlobalStyles.colors.error50,
+//         marginHorizontal:12,
+//         margin:3,
+//         minWidth:20,
 
-    },
-    container: {
-        paddingHorizontal: 20
-      },
-      button: {
-        borderRadius: 5,
-        marginVertical: 20,
-        alignSelf: 'flex-start',
-        backgroundColor: "gray",
-      },
-      buttonText: {
-        color: "white",
-        paddingVertical: 6,
-        paddingHorizontal: 10,
-        fontSize: 16
-      },
-      title: {
-        fontWeight: "bold",
-        fontSize: 20,
-        marginBottom: 10,
-        color:'#FF4500'
-      },
-      employeeListContainer: {
-        marginBottom: 25,
-        elevation: 4,
-        backgroundColor: "white",
-        padding: 10,
-        borderRadius: 6,
-        borderTopWidth: 1,
-        borderColor: "rgba(0,0,0,0.1)"
-      },
-      name: {
-        fontWeight: "bold",
-        fontSize: 16
-      },
-      listItem: {
-        fontSize: 18,
-        color:'#800000',
-        fontWeight:"500"
-      },
-      buttonContainer: {
-        marginTop: 10,
-        flexDirection: "row",
-        alignItems: "center"
-      },
-      message: {
-        color: "tomato",
-        fontSize: 17
-      },
-      loader:{
-        marginTop:0,
-        marginBottom:300,
-        // alignItems:"center"
-        flex: 1, 
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor:'#F0F8FF'
-      },
-      loadingflatlist: {
-        marginTop:300,
-        // marginBottom:35,
-        // alignItems:"center"
-        flex: 1, 
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor:'#F0F8FF'
-      },
-      container12:{
-        marginTop:20,
-       backgroundColor:'#7FFFD4'
-      },
-      input: {
-        height:45,
-        width:265,
-        borderWidth:1,
-        paddingLeft:20,
-        margin:5,
-        borderColor:'#009688',
-        backgroundColor:'#FFF6E9',
-        flexDirection:'row',
-        top:13
-        // paddingHorizontal:20,
-        // paddingVertical:10,
-        // borderEndWidth:1,
-        // borderRadius:8,
-        // borderEndColor:'#cccccc'
-        // fontSize: 20,
-        // marginLeft: 10,
-        // width: "90%",
-        // color:'#000000'
-      },
-      viewButton: {
-        height:900,
-        width:300
-      },
-      background:{
-        flexDirection:'row'
-      },
-      loading: {
-        flex: 1, 
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    loadingcontainer: {
-      flex: 1,
-      backgroundColor: "#F5F5F5",
-      justifyContent:"center",
-      alignItems:"center",
-    }
-})
+//     },
+//     container: {
+//         paddingHorizontal: 20
+//       },
+//       button: {
+//         borderRadius: 5,
+//         marginVertical: 20,
+//         alignSelf: 'flex-start',
+//         backgroundColor: "gray",
+//       },
+//       buttonText: {
+//         color: "white",
+//         paddingVertical: 6,
+//         paddingHorizontal: 10,
+//         fontSize: 16
+//       },
+//       title: {
+//         fontWeight: "bold",
+//         fontSize: 20,
+//         marginBottom: 10,
+//         color:'#FF4500'
+//       },
+//       employeeListContainer: {
+//         marginBottom: 25,
+//         elevation: 4,
+//         backgroundColor: "white",
+//         padding: 10,
+//         borderRadius: 6,
+//         borderTopWidth: 1,
+//         borderColor: "rgba(0,0,0,0.1)"
+//       },
+//       name: {
+//         fontWeight: "bold",
+//         fontSize: 16
+//       },
+//       listItem: {
+//         fontSize: 18,
+//         color:'#800000',
+//         fontWeight:"500"
+//       },
+//       buttonContainer: {
+//         marginTop: 10,
+//         flexDirection: "row",
+//         alignItems: "center"
+//       },
+//       message: {
+//         color: "tomato",
+//         fontSize: 17
+//       },
+//       loader:{
+//         marginTop:0,
+//         marginBottom:300,
+//         // alignItems:"center"
+//         flex: 1, 
+//         alignItems: 'center',
+//         justifyContent: 'center',
+//         backgroundColor:'#F0F8FF'
+//       },
+//       loadingflatlist: {
+//         marginTop:300,
+//         // marginBottom:35,
+//         // alignItems:"center"
+//         flex: 1, 
+//         alignItems: 'center',
+//         justifyContent: 'center',
+//         backgroundColor:'#F0F8FF'
+//       },
+//       container12:{
+//         marginTop:20,
+//        backgroundColor:'#7FFFD4'
+//       },
+//       input: {
+//         height:45,
+//         width:265,
+//         borderWidth:1,
+//         paddingLeft:20,
+//         margin:5,
+//         borderColor:'#009688',
+//         backgroundColor:'#FFF6E9',
+//         flexDirection:'row',
+//         top:13
+//         // paddingHorizontal:20,
+//         // paddingVertical:10,
+//         // borderEndWidth:1,
+//         // borderRadius:8,
+//         // borderEndColor:'#cccccc'
+//         // fontSize: 20,
+//         // marginLeft: 10,
+//         // width: "90%",
+//         // color:'#000000'
+//       },
+//       viewButton: {
+//         height:900,
+//         width:300
+//       },
+//       background:{
+//         flexDirection:'row'
+//       },
+//       loading: {
+//         flex: 1, 
+//         alignItems: 'center',
+//         justifyContent: 'center'
+//     },
+//     loadingcontainer: {
+//       flex: 1,
+//       backgroundColor: "#F5F5F5",
+//       justifyContent:"center",
+//       alignItems:"center",
+//     }
+// })

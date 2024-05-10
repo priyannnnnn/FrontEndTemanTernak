@@ -1,21 +1,21 @@
 import { ScrollView, Text, StyleSheet, View, Alert } from "react-native";
-import BackButton from "../../components/BackButton";
-import Button from "../../components/Button";
-import Header from "../../components/HeaderInputKandang";
-import { theme } from "../../core/theme";
-import TextInput from "../../components/TextInputKandang";
+import BackButton from "../../../components/BackButton";
+import Button from "../../../components/Button";
+import Header from "../../../components/HeaderInputKandang";
+import { theme } from "../../../core/theme";
+import TextInput from "../../../components/TextInputKandang";
 import { useState,useContext } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
 import axios from "axios";
-import { axiosInstance } from "../../context/api";
-import { AuthContext } from "../../context/AuthContext";
-import { AxiosContext} from "../../context/AxiosContext";
+import { axiosInstance } from "../../../context/api";
+import { AuthContext } from "../../../context/AuthContext";
+import { AxiosContext} from "../../../context/AxiosContext";
 import * as Keychain from 'react-native-keychain';
-import { AuthProvider } from "../../context/AuthContext";
+import { AuthProvider } from "../../../context/AuthContext";
 // import { AxiosProvider } from "../../context/AxiosContext";
-import { AxiosProvider } from "../../context/AxiosContext";
-
+import { AxiosProvider } from "../../../context/AxiosContext";
+import kandangStyle from "../../../helpers/styles/kandang.style";
 
 function PendapatanTelur(props) {
 
@@ -25,14 +25,12 @@ function PendapatanTelur(props) {
 
   const [IncomeEgg, setIncomeEgg]=useState({
     quantity: {value :'',error:''},
-    amount    : { value : '', error: '' },
     date:     {value:`${moment(date).format('YYYY-MM-DD')}`, error:''}
   })
 
   const onSubmit = () => {
     const data={
             quantity:IncomeEgg?.quantity?.value,
-            amount: IncomeEgg?.amount?.value,
             date: IncomeEgg?.date?.value
           }
     // const amount=!isNaN(data.amount) && data.amount>1;
@@ -43,16 +41,16 @@ function PendapatanTelur(props) {
       //   return;
       // }
 
-    axiosContext.authAxios.post(`/api/v1/saleEgg`, data)
+    axiosContext.authAxios.post(`/api/v1/incomeEgg`, data)
     .then(res => {
       console.info("succes sellegg data = ")
       console.log(res.data)
       console.info("succes sellegg data content = ")
       console.log(res.data.content)
-      navigation.navigate('IncomeEgg',{itemp:res.data.content})
+      navigation.navigate('DaftarPendapatanTelur',{itemp:res.data})
     })
     .catch((error) => {
-      //navigation.navigate('DaftarPendapatanTelur')
+      navigation.navigate('DaftarPendapatanTelur')
       console.error(error);
     })
   }
@@ -84,15 +82,15 @@ function PendapatanTelur(props) {
   };
 
   return (
-    <ScrollView style={styles.ScrollView}>
-      <View style={styles.View}>
+    <ScrollView style={kandangStyle.ScrollView}>
+      <View style={kandangStyle.View}>
         <BackButton goBack={navigation.goBack} />
         <Header>Telur</Header>
-        <Text style={styles.Text}>Jumlah Telur</Text>
+        <Text style={kandangStyle.Text}>Jumlah Telur</Text>
         <TextInput value={IncomeEgg?.quantity.value} onChangeText={(text)=> setIncomeEgg({...IncomeEgg, quantity:{value: text,error:''}})} 
           label='Masukkan Jumlah Telur' keyboardType="numeric" />
           
-        <Text style={styles.Text}>Tanggal</Text>
+        <Text style={kandangStyle.Text}>Tanggal</Text>
         <TextInput value={IncomeEgg?.date.value} onChangeText={(text)=> setIncomeEgg({...setIncomeEgg, date:{value:text,error:''}})} onBlur={onChange} onChange={showDatepicker} onFocus={showDatepicker} label='Tanggal' />
         {show && (
           <DateTimePicker
@@ -103,9 +101,6 @@ function PendapatanTelur(props) {
             onChange={onChange}
           />
         )}
-
-<Text style={styles.Text}>Total Harga Telur</Text>
-            <TextInput value={IncomeEgg?.amount.value} onChangeText={(text) => setIncomeEgg({ ...IncomeEgg, amount: {value: text, error: ''}  })} label='Pendapatan Total' keyboardType="numeric"/>
 
         <Button
           mode='contained'

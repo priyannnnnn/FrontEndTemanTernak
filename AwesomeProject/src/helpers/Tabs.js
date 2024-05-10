@@ -1,7 +1,7 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+   import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 
-import {Dashboard} from '../screens'
-import { RegisterScreen } from '../screens'
+import {Dashboard} from '../screens/main'
+import { RegisterScreen } from '../screens/main'
 const Tab =createBottomTabNavigator();
 
 const Tabs = () => {
