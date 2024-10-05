@@ -13,6 +13,7 @@ import { theme } from '../../core/theme'
 import AmountKandang from './AmountKandang'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Dashboardkandang from './Dashboardkandang'
 
 const Tab = createBottomTabNavigator();
 export default function Dashboard({ navigation }) {
@@ -21,11 +22,28 @@ export default function Dashboard({ navigation }) {
       screenOptions={{
         headerStyle:{backgroundColor:'#E1F0DA'},
         headerTintColor:'#65B741',
-        tabBarStyle:{backgroundColor:'#E1F0DA',height:60,position:'absolute',bottom:20, borderRadius:90, marginHorizontal:25 },
+        tabBarStyle:{backgroundColor:'#E1F0DA',height:70,position:'absolute',bottom:20, borderRadius:90, marginHorizontal:25 },
         //tabBarActiveBackgroundColor:'#EBF4FA',
       }}
       >
       <Tab.Screen name='Kandang'  component={AmountKandang} 
+        options={{tabBarIcon : ({focused})=> (
+          <View style={{alignItems:'center', justifyContent:'center', top:10}}>
+            {/* <View style={styles.viewButton}>
+              <TouchableOpacity onPress={() => navigation.navigate('DaftarOperasional')}><Text>yan</Text></TouchableOpacity>
+            </View> */}
+            <Image source={require('../../image/kandang.png')} 
+              style={{ 
+                width: 60,
+                height: 60,
+                marginBottom:20,
+                tintColor: focused ? '#65B741' : '#65B741',
+              }}/>
+           {/* <Text style={{color: focused ? '#e32f45' : '#748c94', fontSize:12}}>Kandang</Text>  */}
+          </View>
+        )}}
+        />
+         <Tab.Screen name='dass'  component={Dashboardkandang} 
         options={{tabBarIcon : ({focused})=> (
           <View style={{alignItems:'center', justifyContent:'center', top:10}}>
             {/* <View style={styles.viewButton}>

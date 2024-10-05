@@ -31,8 +31,6 @@ import DaftarPendapatanTelur from './src/screens/farm_screens/Incomee_egg/Daftar
 import DaftarTernak from './src/screens/farm_screens/livestock/DaftarTernak'
 import penjumlahan from './src/screens/farm_screens/sale_egg/Penjualan'
 import DaftarPersediaanPakan from './src/screens/farm_screens/feed/DaftarPersediaanPakan'
-// import DaftarPengurangan from './src/screens/DaftarScreen/DaftarPengurangan'
-// import DaftarPenggunaanPakan from './src/screens/DaftarScreen/DaftarPenggunaanPakan'
 import DaftarPenjualanTelur from './src/screens/farm_screens/sale_egg/DaftarPenjualanTelur'
 import UpdatePakan from './src/screens/farm_screens/feed/UpdatePakan'
 import UpdatePendapatanTelur from './src/screens/farm_screens/Incomee_egg/UpdatePndptanTelur'
@@ -50,6 +48,14 @@ import Api from './src/screens/main/api';
 import IncomeEgg from './src/screens/screensListkandang/IncomeEgg';
 import expost from './src/screens/screensListkandang/expost';
 import UpdateOperasional from './src/screens/farm_screens/operation/UpdateOperasional';
+import Dashboardkandang from './src/screens/main/Dashboardkandang';
+import FeedUse from './src/screens/farm_screens/feeds_use/FeedsUse';
+import ListFeedsUse from './src/screens/farm_screens/feeds_use/ListFeedsUse';
+import UpdateFeedsUse from './src/screens/farm_screens/feeds_use/UpdateFeedsUse';
+import QuailReduction from './src/screens/farm_screens/quail_reduction/Quailreduction';
+import ListQuailReduction from './src/screens/farm_screens/quail_reduction/ListQuailReduction';
+import UpdateQuailReduction from './src/screens/farm_screens/quail_reduction/UpdateQuailReduction';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator()
@@ -107,6 +113,13 @@ export default function App() {
               <Stack.Screen name='ExPost' component={expost}/>
               <Stack.Screen name='UpdateOperasional' component={UpdateOperasional}/>
               {/* <Stack.Screen name='loginkandang' component={Loginkandang}/> */}
+              <Stack.Screen name='Dashboardkandang' component={Dashboardkandang}/>
+              <Stack.Screen name='FeedUse' component={FeedUse}/>
+              <Stack.Screen name='ListFeedsUse' component={ListFeedsUse}/>
+              <Stack.Screen name='UpdateFeedsUse' component={UpdateFeedsUse}/>
+              <Stack.Screen name='ListQuailReduction' component={ListQuailReduction}/>
+              <Stack.Screen name='QuailReduction' component={QuailReduction}/>
+              <Stack.Screen name='UpdateQuailReduction' component={UpdateQuailReduction}/>
 
               <Stack.Screen
                 name="ResetPasswordScreen"

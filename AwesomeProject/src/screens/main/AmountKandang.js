@@ -31,22 +31,22 @@ function AmountKandang({navigation}){
                 <Text style={styles.text}>Ternak</Text>
             </View>
             <View style={styles.viewButton}>
-                <TouchableOpacity onPress={() => navigation.navigate('DaftarPendapatanTelur',{item:8})}>
+                <TouchableOpacity onPress={() => navigation.navigate('DaftarPersediaanPakan',{item:8})}>
                     <View style={styles.iconContainer}>
                     {/* <Icon name="beach-access" size={25} color={'#04555c'} /> */}
                     <Image source={require('../../image/pendapatan.png')} style = {{width: 70, height:50}}/>
                     </View>
                 </TouchableOpacity>
-                <Text style={styles.text}>Pendapatan</Text>
+                <Text style={styles.text}>Pakan</Text>
             </View>
             <View style={styles.viewButton}>
-                <TouchableOpacity onPress={() => navigation.navigate('DaftarPenjualanTelur',{item:8})}>
+                <TouchableOpacity onPress={() => navigation.navigate('DaftarPendapatanTelur',{item:8})}>
                     <View style={styles.iconContainer}>
                     {/* <Icon name="near-me" size={25} color={'#04555c'} /> */}
                     <Image source={require('../../image/pendepatan.png')} style = {{width: 70, height:50}}/>
                     </View>
                 </TouchableOpacity>
-                <Text style={styles.text}>Pejualan</Text>
+                <Text style={styles.text}>Pendapatan</Text>
             </View> 
           </View>
         );
@@ -182,7 +182,7 @@ function AmountKandang({navigation}){
                 </View>
                 </View>
                 <ListCategories/>
-                <ListCategories2/>
+                {/* <ListCategories2/> */}
                 <View style = {{marginTop: 60}}>
                     <Text style={styles.sectionTitle}>Recommended</Text>
                     <FlatList
@@ -265,7 +265,7 @@ const styles= StyleSheet.create({
         // backgroundColor: '#04555c'
       },
       inputContainer: {
-        height: 270,
+        height: 150,
         width: '100%',
         backgroundColor: '#F2F597',
         borderRadius: 30,

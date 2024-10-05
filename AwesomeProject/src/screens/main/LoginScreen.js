@@ -38,7 +38,7 @@ function LoginScreen({ navigation }) {
         setPassword({ ...password, error: passwordError })
         return
       }
-      console.log("log ==")
+      console.log(`${BASE_URL}`)
       console.log(`${BASE_URL}/api/v1/login/email`,dataLogin)
       const response = await axios.post(`${BASE_URL}/api/v1/login/email`,dataLogin)
       const accessToken = response.data
