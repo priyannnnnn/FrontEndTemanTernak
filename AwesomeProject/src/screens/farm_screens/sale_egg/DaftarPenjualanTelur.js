@@ -93,8 +93,6 @@ function DaftarTernak({route, navigation}){
     }; 
 
     useEffect(() => {
-      console.log(`/api/v1/saleEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
-      console.log("itemp = ", itemp)
       // console.log("itemp = ",itemp)
       // if (itemp !== undefined){
       //   newgetData();
@@ -113,7 +111,7 @@ renderItem=({item})=>{
                 <Text style={listStyle.buttonText}>{item.date}</Text>
         </TouchableOpacity>
         <View style={listStyle.employeeListContainer}>
-            <Text style={listStyle.listItem}>Jumlah Pendapatan : {item.quantity.toLocaleString()}</Text>
+            <Text style={listStyle.listItem}>Jumlah Penjualan : {item.quantity.toLocaleString()}</Text>
             <Text style={listStyle.listItem}>Jumlah telur : {item.amount.toLocaleString()}</Text>
             <Text style={listStyle.listItem}>Tanggal : {item.date}</Text>  
           <View style={listStyle.buttonContainer}>

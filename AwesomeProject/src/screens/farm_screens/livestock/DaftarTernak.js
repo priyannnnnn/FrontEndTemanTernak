@@ -88,12 +88,12 @@ function DaftarTernak({route, navigation}){
     }; 
 
     useEffect(() => {
-      // console.log("itemp = ",itemp)
-      // if (itemp !== undefined){
-      //   newgetData();
-      // }else{
-      //   getData();
-      // }  
+      console.log("itemp = ",itemp)
+      if (itemp !== undefined){
+        newgetData();
+      }else{
+        getData();
+      }  
       getData()
     }, [itemp, pageCurrent])
 
@@ -182,45 +182,49 @@ const emptyList = ()=>{
   )}
 
     return(
-      <SafeAreaView style={listStyle.safearea}>
-        {loading?
-    <View style={listStyle.loadingflatlist}>
-      <ActivityIndicator size="large"/>
-      <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
-    </View> :
-      <View style={{backgroundColor:'#F5EEE6'}}>
-        <View style={{flexDirection:'row'}}>
-          <View style={listStyle.input}>
-          <Icon name="search" size={25} color={'#1F2544'} style={{marginTop:10}}/>
-            <TextInput style={{fontSize:15, color:'#1F2544'}} 
-              placeholder="search" 
-              placeholderTextColor="#000"
-              value={employee} 
-              clearButtonMode="always"
-              onChangeText={handleSearch}
-              autoCorrect={false}/>
-          </View>
-          <TouchableOpacity
-              onPress={() => navigation.navigate ('Ternak')} 
-              style={{ marginVertical: 0, marginLeft: 0 ,flexDirection:'row'}}>
-              <Icon name="add" size={40} color={'#1F2544'} style={{marginTop:20,}}/>
-              <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
-          </TouchableOpacity>
+    <SafeAreaView style={listStyle.safearea}>
+      {loading ? (
+        <View style={listStyle.loadingflatlist}>
+          <ActivityIndicator size="large" />
+          <Image source={require('../../assets/logo2.png')} style={{ width: 100, height: 100 }} />
         </View>
-        
-      <FlatList
-      data={employee}
-      renderItem={this.renderItem}
-      keyExtractor={(item,index)=> index.toString()}
-      ListFooterComponent={renderFooter}
-      // ListEmptyComponent={emptyList}
-      onEndReached={this.handleLoadMore}
-      onEndReachedThreshold={0}
-      style={listStyle.container12}
-      >
-      </FlatList>
-      </View>}
-      </SafeAreaView>
+      ) : (
+        <View style={{ backgroundColor: '#F5EEE6' }}>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={listStyle.input}>
+              <Icon name="search" size={25} color="#1F2544" style={{ marginTop: 10 }} />
+              <TextInput
+                style={{ fontSize: 15, color: '#1F2544' }}
+                placeholder="Search"
+                placeholderTextColor="#000"
+                value={employee}
+                clearButtonMode="always"
+                onChangeText={handleSearch}
+                autoCorrect={false}
+              />
+            </View>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Ternak')}
+              style={{ flexDirection: 'row', marginVertical: 0, marginLeft: 0 }}
+            >
+              <Icon name="add" size={40} color="#1F2544" style={{ marginTop: 20 }} />
+              <Text style={{ marginTop: 22, fontSize: 20, color: '#030637' }}>Add</Text>
+            </TouchableOpacity>
+          </View>
+    
+          <FlatList
+            data={employee}
+            renderItem={this.renderItem}
+            keyExtractor={(item, index) => index.toString()}
+            ListFooterComponent={renderFooter}
+            onEndReached={this.handleLoadMore}
+            onEndReachedThreshold={0}
+            style={listStyle.container12}
+          />
+        </View>
+      )}
+    </SafeAreaView>
+    
     )
 }
 export default DaftarTernak;

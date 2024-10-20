@@ -16,7 +16,7 @@ import Back from "../../../components/Back";
 import kandangStyle from "../../../helpers/styles/kandang.style";
 
 function Ternak({navigation}) {
-  
+
   const axiosContext = useContext(AxiosContext);
   const [ livestock, setLiveStock ] = useState({
     age:      { value : '', error: '' },
@@ -26,12 +26,9 @@ function Ternak({navigation}) {
     type:     { value : '', error: '' },
     note:     { value : '', error: '' },
   })
-
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const[show, setShow]= useState(false);
-  // const {navigation}=props;
-
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
     setShow(false);
@@ -52,10 +49,6 @@ function Ternak({navigation}) {
   useEffect(() => {
     setLiveStock({...livestock, date:{ value: `${moment(date).format('YYYY-MM-DD')}`, error: ''}})
   }, [date])
-
-  const config = {
-    headers: { Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTcwMDYzNTM4MCwiZXhwIjoxNzAwNjM2ODIwfQ.qCwWeeKY5Far6PvvRp6s23eqET0ZCQ9L3I0H03li-P0"}` }
-};
 
   const onSubmit = () => {
     const data = {

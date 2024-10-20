@@ -101,8 +101,8 @@ renderItem=({item})=>{
                 <Text style={listStyle.buttonText}>{item.date}</Text>
         </TouchableOpacity>
         <View style={listStyle.employeeListContainer}>
-        <Text style={listStyle.listItem}>Jumlah Telur : {item.quantity}</Text>
-            <Text style={listStyle.listItem}>Jumlah Ternak : {item.amount}</Text>
+        <Text style={listStyle.listItem}>Jumlah : {item.quantity} KG</Text>
+            <Text style={listStyle.listItem}>Harga : {item.amount}</Text>
             <Text style={listStyle.listItem}>Tipe : {item.type}</Text>
             <Text style={listStyle.listItem}>Tanggal : {item.date}</Text>
           <View style={listStyle.buttonContainer}>

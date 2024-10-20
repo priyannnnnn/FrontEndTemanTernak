@@ -121,8 +121,8 @@ function DaftarPendapatanTelur({route, navigation}){
     //   console.log("ress = ")
     //  console.log(item)
     //   console.log("url = ")
-      console.log(`/api/v1/incomeEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
-      console.log("itemp = ", itemp)
+      // console.log(`/api/v1/incomeEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
+      // console.log("itemp = ", itemp)
       getData();
       // return()=>{}
     }, [itemp, pageCurrent]);
@@ -137,12 +137,12 @@ function DaftarPendapatanTelur({route, navigation}){
         <ScrollView>
           <View style={listStyle.container} key={item.id}>
             <TouchableOpacity
-                  onPress={toggleAddEmployeeModal} style={styles.button}>
+                  onPress={toggleAddEmployeeModal} style={listStyle.button}>
                   <Text style={listStyle.buttonText}>Dibuat : {item.date}</Text>
             </TouchableOpacity>
             <View style={listStyle.employeeListContainer}>
-              <Text style={listStyle.listItem}>Jumlah Telur : {item.quantity.toLocaleString()}</Text>
-              <Text style={listStyle.listItem}>Tanggal : {item.date.toLocaleString()}</Text>
+              <Text style={listStyle.listItem}>Jumlah Telur : {item.quantity}</Text>
+              <Text style={listStyle.listItem}>Tanggal : {item.date}</Text>
             
             <View style={listStyle.buttonContainer}>
             <TouchableOpacity
@@ -214,7 +214,7 @@ function DaftarPendapatanTelur({route, navigation}){
           console.log("succes get data render footer = ")
           console.log(res.data.content)
           if (res == []){
-<View style={styles.loader}>
+    <View style={styles.loader}>
       <ActivityIndicator size="large"/>
       <Text style={listStyle.button}>emty</Text>
     </View>

@@ -1,10 +1,30 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import BackgroundDashboard from '../../components/Backgrounddash';
 import Ionicons from 'react-native-vector-icons/MaterialIcons';
+import { AxiosContext } from '../../context/AxiosContext';
 
 function Dashboardkandang({ navigation }) {
+
+  const axiosContext = useContext(AxiosContext)
+  const [ Dasboard, setDasboard] = useState([])
+
+  const getData = ()=>{
+    axiosContext.authAxios.get(`/api/v1/dashboard`)
+    .then(res => {
+      console.log("data = ", res.data)
+      setDasboard(res.data)
+    })
+    .catch((err) =>{
+      console.error(err)
+    })
+  }
+
+  useEffect(() =>{
+    getData()
+    console.log("Dashboard = ", Dasboard)
+  },[])
   return (
     <BackgroundDashboard>
       <View style={{ alignItems: 'center', width: 400,}}>
@@ -25,24 +45,14 @@ function Dashboardkandang({ navigation }) {
           end={{ x: 0, y: 0.2 }}
           style={styles.background} // Applied styles here
         >
-          {/* Additional content can go here */}
           <View style={styles.topp}>
-            {/* <View style={styles.stokPakan}>
-            </View>
-            <View style={styles.stokPakan1}>
-            </View> */}
           </View>
           <View style={styles.topp}>
-            {/* <View style={styles.stokPakan3}>
-            </View> */}
-            {/* Stok Pakan */}
-            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ListFeedsUse')}>
-              {/* Gradient background */}
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ListFeedsUse', {itemp:8})}>
               <LinearGradient
                 colors={['#F8CE5A', '#F3B93D']}
                 style={styles.gradientBackground}
               >
-                {/* Icon Section */}
                 <View style={styles.iconContainer}>
                   <Image
                     source={require('../assets/Vector.png')} // Add your egg icon image here
@@ -61,19 +71,16 @@ function Dashboardkandang({ navigation }) {
               </LinearGradient>
             </TouchableOpacity>
             <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('DaftarPenjualanTelur',{item:8})}>
-              {/* Gradient background */}
               <LinearGradient
                 colors={['#F8CE5A', '#F3B93D']}
                 style={styles.gradientBackground}
               >
-                {/* Icon Section */}
                 <View style={styles.iconContainer}>
                   <Image
                     source={require('../assets/telur.png')} // Add your egg icon image here
                     style={styles.icon}
                   />
                 </View>
-
                 <View style={styles.arrrow}>
                   <Text style={styles.text}>Penjualan</Text>
                   <Ionicons
@@ -85,21 +92,14 @@ function Dashboardkandang({ navigation }) {
                 </View>
               </LinearGradient>
             </TouchableOpacity>
-            {/* <View style={styles.stokPakan4}>
-            </View> */}
           </View>
 
           <View style={styles.topp}>
-            {/* <View style={styles.stokPakan3}>
-            </View> */}
-            {/* empat */}
-            <TouchableOpacity style={styles.card} onPress={() =>navigation.navigate('ListQuailReduction')}>
-              {/* Gradient background */}
+            <TouchableOpacity style={styles.card} onPress={() =>navigation.navigate('ListQuailReduction', {item:8})}>
               <LinearGradient
                 colors={['#F8CE5A', '#F3B93D']}
                 style={styles.gradientBackground}
               >
-                {/* Icon Section */}
                 <View style={styles.iconContainer}>
                   <Image
                     source={require('../assets/kan.png')} // Add your egg icon image here
@@ -118,21 +118,17 @@ function Dashboardkandang({ navigation }) {
                 </View>
               </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('BiayaOperasional')}>
-              {/* Gradient background */}
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ListOperational', {itemp:8})}>
               <LinearGradient
                 colors={['#F8CE5A', '#F3B93D']}
                 style={styles.gradientBackground}
               >
-                {/* Icon Section */}
                 <View style={styles.iconContainer}>
                   <Image
                     source={require('../assets/catatan.png')} // Add your egg icon image here
                     style={styles.icon}
                   />
                 </View>
-
-                {/* Text Section */}
                 <View style={styles.arrrow}>
                   <Text style={styles.text}>Operasional</Text>
                   <Ionicons
@@ -144,29 +140,25 @@ function Dashboardkandang({ navigation }) {
                 </View>
               </LinearGradient>
             </TouchableOpacity>
-            {/* <View style={styles.stokPakan4}>
-            </View> */}
           </View>
           <View style={styles.summary}>
-            {/* <Text style={{backgroundColor:'black'}}>teuu</Text> */}
             <View style={styles.headerr}>
               <Text style={styles.titlee}>Ringkasan</Text>
-              {/* <Text style={styles.date}>Kamis, 11 Januari 2024</Text> */}
+            </View>
+
+            <View style={styles.summaryItem}>
+              <Text style={styles.label}>Hasil Puyuh</Text>
+              <Text style={styles.value}>{Dasboard.totalQuailt}</Text>
             </View>
 
             <View style={styles.summaryItem}>
               <Text style={styles.label}>Hasil Telur</Text>
-              <Text style={styles.value}>1320 btr</Text>
+              <Text style={styles.value}>{Dasboard.totalEgg}</Text>
             </View>
 
             <View style={styles.summaryItem}>
-              <Text style={styles.label}>Hasil Telur Rusak</Text>
-              <Text style={styles.value}>29 btr</Text>
-            </View>
-
-            <View style={styles.summaryItem}>
-              <Text style={styles.label}>Penggunaan Pakan</Text>
-              <Text style={styles.value}>2 kg</Text>
+              <Text style={styles.label}>Total Pakan</Text>
+              <Text style={styles.value}>{Dasboard.totalFeed}</Text>
             </View>
           </View>
         </LinearGradient>

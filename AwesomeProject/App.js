@@ -55,7 +55,7 @@ import UpdateFeedsUse from './src/screens/farm_screens/feeds_use/UpdateFeedsUse'
 import QuailReduction from './src/screens/farm_screens/quail_reduction/Quailreduction';
 import ListQuailReduction from './src/screens/farm_screens/quail_reduction/ListQuailReduction';
 import UpdateQuailReduction from './src/screens/farm_screens/quail_reduction/UpdateQuailReduction';
-
+import { DataUserContext } from './src/context/AuthIdContext';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator()
@@ -90,6 +90,7 @@ export default function App() {
               <Stack.Screen name='ListKandang' component={ListKandang} />
               <Stack.Screen name='PendapatanTelur' component={PendapatanTelur}/>
               <Stack.Screen name='BiayaOperasional' component={BiayaOperasional}/>
+              <Stack.Screen name='ListOperational' component={DaftarOperasional}/>
               <Stack.Screen name='PenggunaanPakan' component={PenggunaanPakan}/>
               <Stack.Screen name='Pengurangan' component={Pengurangan}/>
               <Stack.Screen name='PersediaanPakan' component={PersediaanPakan}/>
@@ -106,7 +107,6 @@ export default function App() {
               <Stack.Screen name='UpdatePenjualanTelur' component={UpdatePenjualanTelur}/>
               <Stack.Screen name='UpdateTernak' component={UpdateTernak}/>
               {/* <Stack.Screen name='AuthProvider' component={AuthProvider}/> */}
-              <Stack.Screen name='DaftarOperasional'component={DaftarOperasional}/>
               <Stack.Screen name='AmountKandang' component={AmountKandang}/>
               <Stack.Screen name='Api' component={Api}/>
               <Stack.Screen name='IncomeEgg' component={IncomeEgg}/>

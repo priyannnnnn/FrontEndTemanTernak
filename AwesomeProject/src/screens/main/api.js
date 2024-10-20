@@ -13,22 +13,29 @@ import { AuthContext } from '../../context/AuthContext';
 import Spinner from '../../helpers/Spiner';
 import LoginScreen from './LoginScreen';
 import Dashboard from './Dashboard';
+import { AuthIdContext } from '../../context/AuthIdContext';
 
 const Api =({navigation})=>{
   const authContext = useContext(AuthContext);
   const [status, setStatus] = useState('loading');
   const [ loading, setLoading ] = useState(true)
+  const [dataArray, setDataArray] = useState([]);
+  
 
   const loadJWT = useCallback(async() => {
     try {
       const value = await Keychain.getGenericPassword();
       console.log("value = ",value)
       console.log("Password = ",value.password)
+      // console.log("Users = ",value.password.accessToken)
       console.log("service = ",value.service)
       console.log("storage = ",value.storage)
       console.log("username = ",value.username)
       const jwt = JSON.parse(value.password);
-
+      const userId = jwt.accessToken.userr.id;
+      setDataArray(userId)
+      console.log("array = ", dataArray )
+      console.log("users = ", userId)
       authContext.setAuthState({
         accessToken: jwt.accessToken || null,
         // refreshToken: jwt.refreshToken || null,
@@ -44,9 +51,10 @@ const Api =({navigation})=>{
         authenticated: false,
       });
     }
-  },[])
+  },[setDataArray])
 
   useEffect(() => {
+    // console.log("Updated dataArray from AuthIdContext:", dataArray);
     loadJWT();
   }, [loadJWT]);
 

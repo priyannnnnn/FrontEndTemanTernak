@@ -11,6 +11,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import kandangStyle from "../../../helpers/styles/kandang.style";
 
 function BiayaOperasional(props) {
+
   const [Operation, setOperation] = useState({
     date : {value: '', error:''},
     description : {value:'', error:''},
@@ -21,7 +22,7 @@ function BiayaOperasional(props) {
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const[show, setShow]= useState(false);
-  const {navigation}=props;
+  const {navigation} = props;
 
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate;
@@ -50,12 +51,10 @@ function BiayaOperasional(props) {
       description : Operation?.description.value,
       amount : Operation?.amount?.value,
     }
-
-    console.log("Data = ", data)
     axiosContext.authAxios.post(`/api/v1/operatingCosh`,data)
     .then(res => {
       console.log("Get Data = ", res.data)
-      navigation.navigate('DaftarOperasional',{itemp:res.data})
+      navigation.navigate('ListOperational',{itemp:res.data})
     })
     .catch((e) => {
       console.error(e)

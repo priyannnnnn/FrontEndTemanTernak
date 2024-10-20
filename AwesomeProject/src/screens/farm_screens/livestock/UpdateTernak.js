@@ -67,22 +67,22 @@ function UpdateTernak(props){
         <ScrollView>
         <Text style={style.title}>Daftar Ternak</Text>
         <Text style={style.Text} >Umur</Text>
-        <TextInput value={livestock?.age.value} onChangeText={(text) => setLiveStock({ ...livestock, age: {value: text, error: ''}  })} label='Masukkan Umur' keyboardType="numeric"/>
+        <TextInput value={livestock?.age?.value} onChangeText={(text) => setLiveStock({ ...livestock, age: {value: text, error: ''}  })} label='Masukkan Umur' keyboardType="numeric"/>
 
         <Text style={style.Text} >Total</Text>
-        <TextInput value={livestock?.quantity.value} onChangeText={(text) => setLiveStock({ ...livestock, quantity: {value: text, error: ''}  })}  label= 'Total Ayam' keyboardType="numeric"/>
+        <TextInput value={livestock?.quantity?.value} onChangeText={(text) => setLiveStock({ ...livestock, quantity: {value: text, error: ''}  })}  label= 'Total Ayam' keyboardType="numeric"/>
 
         <Text style={style.Text} >Tanggal</Text>
         <TextInput value={livestock?.date.value} onChangeText={(text) => setLiveStock({...setLiveStock, date: {value: text, error: ''}  })} label='Masukkan Tanggal'/>
 
         <Text style={style.Text} >Harga Total</Text>
-        <TextInput value={livestock?.amount.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam' keyboardType="numeric"/>
+        <TextInput value={livestock?.amount?.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam' keyboardType="numeric"/>
 
         <Text style={style.Text} >Type</Text>
-        <TextInput value={livestock?.type.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam' keyboardType="numeric"/>
+        <TextInput value={livestock?.type?.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam' keyboardType="numeric"/>
 
         <Text style={style.Text} >Catatan</Text>
-        <TextInput value={livestock?.note.value} onChangeText={(text) => setLiveStock({ ...livestock, note: {value: text, error: ''}  })}  label='Masukkan Catatan'/>
+        <TextInput value={livestock?.note?.value} onChangeText={(text) => setLiveStock({ ...livestock, note: {value: text, error: ''}  })}  label='Masukkan Catatan'/>
 
         <Button mode="contained" style={{marginTop:0}} onPress={()=>{UpdateData()}}>Simpan</Button>
         <Button mode="contained"   onPress={() => navigation.reset({ index: 0,

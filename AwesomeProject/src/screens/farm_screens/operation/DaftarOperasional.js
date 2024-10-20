@@ -12,7 +12,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Styles from "../../../helpers/styles/Styles";
 import listStyle from "../../../helpers/styles/list.style";
 
-function DaftarTernak({route, navigation}){
+function ListOperational({route, navigation}){
     const axiosContext = useContext(AxiosContext);
     const [Operasional, setOperasional] = useState([])
     const [ loading, setLoading ] = useState(true)
@@ -20,8 +20,6 @@ function DaftarTernak({route, navigation}){
     const [pageCurrent, setpageCurrent]= useState(1)
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
-    const [hasMoreData, setHasMoreData] = useState(true);
-    const {item}= route.params;
     const {itemp} = route.params;
 
     const getData = () => {
@@ -233,7 +231,7 @@ const emptyList = ()=>{
       </SafeAreaView>
     )
 }
-export default DaftarTernak;
+export default ListOperational;
 // const styles=StyleSheet.create({
 //     text:{
 //         fontSize:20,

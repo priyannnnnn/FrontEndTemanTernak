@@ -20,7 +20,7 @@ function Penjualan(props){
       amount    : { value : '', error: '' },
       date      : { value : '', error: '' },
     })
-    const {navigation}=props;
+  const {navigation} = props;
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
