@@ -66,9 +66,9 @@ function UpdateOperasional(props) {
       description : Operation?.description.value,
       amount : Operation?.amount?.value,
     }
-    axiosContext.authAxios.post(`/api/v1/operatingCosh`,data)
+    axiosContext.authAxios.put(`/api/v1/operatingCosh/`+id, data)
     .then(res => {
-      navigation.navigate('DaftarOperasional',{itemp:res.data})
+      navigation.navigate('ListOperational',{itemp:res.data})
     })
     .catch((e) => {
       console.error(e)

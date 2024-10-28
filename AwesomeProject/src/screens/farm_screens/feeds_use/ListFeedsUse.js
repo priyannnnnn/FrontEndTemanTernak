@@ -47,9 +47,9 @@ function ListFeedsUse({route, navigation}){
     }
 
     const DeleteData = (id) => {
-        console.log(id)
+        console.log("Id delete = ",id)
         setLoading(true)
-        axiosContext.authAxios.delete('/api/v1/feed/'+id)
+        axiosContext.authAxios.delete('/api/v1/feeduse/'+id)
         .then(res =>{
           setfeed(res.data)
           newgetData()
@@ -105,8 +105,8 @@ renderItem=({item})=>{
                 <Text style={listStyle.buttonText}>Hapus</Text>
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={() => navigation.navigate ('UpdatePakan',{id:item.id})} 
-                onLongPress={()=> navigation.navigate('UpdatePakan',{id:item.id})}
+                onPress={() => navigation.navigate ('UpdateFeedsUse',{id:item.id})} 
+                onLongPress={()=> navigation.navigate('UpdateFeedsUse',{id:item.id})}
                 style={{ ...listStyle.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
                 <Text style={listStyle.buttonText}>Edit</Text>
             </TouchableOpacity>

@@ -61,12 +61,12 @@ function QuailReduction({route, navigation}){
       //     Alert.alert ('Data Anda Salah',"Mohon Untuk Cek Kembali")
       //     return;
       //   }
-      axiosContext.authAxios.post(`/api/v1/livestock`, data)
+      axiosContext.authAxios.post(`/api/v1/quailreduction`, data)
         .then(res => {
           console.log(res.data)
           console.info("succes livestock")
           //navigation.navigate('DaftarTernak', {name: 'DaftarTernak'})
-          navigation.navigate('DaftarTernak', {itemp:res.data})
+          navigation.navigate('ListQuailReduction', {itemp:res.data})
         })
         .catch((error) => {
           console.error(error);

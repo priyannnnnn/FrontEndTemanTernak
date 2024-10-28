@@ -30,7 +30,7 @@ function Ternak({navigation}) {
   const [mode, setMode] = useState('date');
   const[show, setShow]= useState(false);
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate;
+  const currentDate = selectedDate;
     setShow(false);
     setDate(currentDate);
   };

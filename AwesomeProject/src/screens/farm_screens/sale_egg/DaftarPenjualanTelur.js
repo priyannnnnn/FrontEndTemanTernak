@@ -31,7 +31,7 @@ function DaftarTernak({route, navigation}){
             // //setLoading(false)
             if(itemp !== undefined){
               setLoading(false)
-              console.log("Data Update = ", res.data.content)
+              console.log("Data = ", res.data.content)
               setsaleEgg(res.data.content)
             }else{
               console.log("get data = ",res.data.content);
@@ -93,14 +93,12 @@ function DaftarTernak({route, navigation}){
     }; 
 
     useEffect(() => {
-      // console.log("itemp = ",itemp)
-      // if (itemp !== undefined){
-      //   newgetData();
-      // }else{
-      //   getData();
-      // }  
-      getData();
-      return;
+      console.log("itemp = ",itemp)
+      if (itemp !== undefined){
+        newgetData();
+      }else{
+        getData();
+      }  
     }, [itemp, pageCurrent])
 
 renderItem=({item})=>{

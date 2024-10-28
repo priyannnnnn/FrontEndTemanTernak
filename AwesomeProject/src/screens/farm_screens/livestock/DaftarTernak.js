@@ -32,10 +32,12 @@ function DaftarTernak({route, navigation}){
               setLoading(false)
               console.log("Data Update = ", res.data.content)
               setEmployee(res.data.content)
+              console.log("employee =  ", employee)
             }else{
               console.log("get data = ",res.data.content);
               setLoading(false)
               setEmployee(employee.concat(res.data.content))
+              console.log("employee =  ", employee)
             }
           })
           .catch((e) => {
@@ -98,6 +100,7 @@ function DaftarTernak({route, navigation}){
     }, [itemp, pageCurrent])
 
 renderItem=({item})=>{
+  // console.log("item = ", item)
   return(
     <View style={listStyle.container} key={item.id}>
       <TouchableOpacity

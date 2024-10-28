@@ -25,75 +25,66 @@ function UpdatePenjualanTelur(props){
     const [show, setShow] = useState(false);
     const axiosContext = useContext(AxiosContext);
 
-    useEffect(()=> {
-        getData(id)
-    },[])
-
-    const config={
-      headers:{Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0XzI0QGdtYWlsLmNvbSIsImlhdCI6MTY4NjQ2Mzg2NiwiZXhwIjoxNjg2NDY1MzA2fQ.VaduI3MQZnP8J9JreMZtsGa7in5tukyhZ9vWELRiuVM"}`}
-    }
-
+    const showMode = (currentMode) => {
+      setShow(true);
+      setMode(currentMode);
+    };
+  
+    const showDatepicker = () => {
+      showMode('date');
+    };
+    
+    const onChange = (event, selectedDate) => {
+      const currentDate = selectedDate || date;
+        setShow(false);
+        setDate(currentDate);
+    
+      setsaleEgg({
+        ...saleEgg,
+        date: {
+          value: currentDate.toISOString().split('T')[0], // Format to YYYY-MM-DD
+          error: '',
+        }
+      });
+    };
 
     const getData=(id)=>{
-        // fetch ('http://139.162.6.202:8000/api/v1/saleEgg/'+id,config ,{method:'GET'})
-        // .then (res => res.json())
-        axiosContext.authAxios.get('/api/v1/saleEgg/'+id)
-        .then (res =>{
-            console.log(res.data)
-            setsaleEgg({
-                ...saleEgg,
-                id:res.id,
-                quantity  : { value : `${res.data.quantity}`, error: '' },
-                amount    : { value : `${res.data.amount}`, error: '' },
-                date      : { value : `${res.data.date}`, error: '' }
-                //.format('YYYY-MM-DD')
-            })
-        })
-        .catch((error) => {
-            console.log(error)
-        })}
+      axiosContext.authAxios.get('/api/v1/saleEgg/'+id)
+      .then (res =>{
+          console.log(res.data)
+          setsaleEgg({
+            ...saleEgg,
+            id:res.id,
+            quantity  : { value : `${res.data.quantity}`, error: '' },
+            amount    : { value : `${res.data.amount}`, error: '' },
+            date      : { value : `${res.data.date}`, error: '' }
+          })
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    }
 
-        const UpdateData=()=>{
-          const Data={
-              quantity:saleEgg?.quantity.value,
-              amount : saleEgg?.amount.value,
-              date :saleEgg?.date.value
-          }
-          console.log(id)
-          console.log(Data);
-          // axios.put(`http://139.162.6.202:8000/api/v1/incomeEgg/`+id,Data,config)
-          axiosContext.authAxios.put(`/api/v1/saleEgg/`+id,Data)
-          .then (res =>{
-            navigation.navigate ('DaftarPenjualanTelur', {itemp:res.data})
-            // getData()
-            //console.log(res.data)
-          })
-          
-          .catch((error) =>{
-              console.error(error, "hfhf");
-          })
+    const UpdateData=()=>{
+      const Data={
+          quantity:saleEgg?.quantity.value,
+          amount : saleEgg?.amount.value,
+          date :saleEgg?.date.value
       }
-
-
-
-        const onChange = (event, selectedDate) => {
-            // const currentDate = selectedDate;
-            setShow(false);};
-
-        const showMode = (currentMode) => {
-            if (Platform.OS === 'android') {
-              setShow(true);
-            }
-            setMode(currentMode);
-          };
-        
-          const showDatepicker = () => {
-            showMode('date');
-          };
-
+      axiosContext.authAxios.put(`/api/v1/saleEgg/`+id,Data)
+        .then (res =>{
+          navigation.navigate ('DaftarPenjualanTelur', {itemp:res.data})
+        }) 
+        .catch((error) =>{
+          console.error(error, "hfhf");
+        })
+    }
+    useEffect(()=> {
+      getData(id)
+    },[])
     return(
     <View style={styles.View}>
-        <Text style={styles.title}>Daftar PendapatanTelur</Text>
+        <Text style={styles.title}>Daftar Penjualan Telur</Text>
 
        <Text style={styles.Text}>Jumlah Telur</Text>
        <TextInput value={saleEgg?.quantity.value}  onChangeText={(text)=> setsaleEgg({...saleEgg, quantity:{value:text, error:''}})} keyboardType="numeric" />
@@ -102,17 +93,19 @@ function UpdatePenjualanTelur(props){
        <TextInput value={saleEgg?.amount.value}  onChangeText={(text)=> setsaleEgg({...saleEgg, amount:{value:text, error:''}})} keyboardType="numeric" />
 
        <Text style={styles.Text}>Tanggal</Text>
-            <TextInput value={saleEgg?.date.value}  onChangeText={(text)=> setsaleEgg({...saleEgg, date:{value:text, error:''}})} onBlur={onChange} onChange={showDatepicker} onFocus={showDatepicker}/>
-            {show && (
+          <TextInput value={saleEgg?.date.value}  onChangeText={(text)=> setsaleEgg({...saleEgg, date:{value:text, error:''}})} onBlur={onChange} onChange={showDatepicker} onFocus={showDatepicker}/>
+          {show && (
         <DateTimePicker
-            testID="dateTimePicker" value={date}
-            mode={mode} is24Hour={true} onChange={onChange}
+          testID="dateTimePicker" value={date}
+          mode={mode} is24Hour={true} onChange={onChange}
         />
           )}
          <Button mode='contained' style={{ marginTop: 4 }} onPress={()=> UpdateData(saleEgg.id)} >Simpan</Button>
             <Button mode='contained'
-                onPress={() => navigation.reset({ index: 0,
-                    routes: [{ name: 'DaftarPenjualanTelur' }], })}>Kembali</Button>
+              onPress={() => navigation.reset({ index: 0,
+              routes: [{ name: 'DaftarPenjualanTelur' }], })}>
+            Kembali
+          </Button>
     </View>
     )
 }

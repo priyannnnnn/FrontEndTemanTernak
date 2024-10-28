@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { AxiosContext } from "../../../context/AxiosContext";
 import Button from "../../../components/Button";
 import TextInput from "../../../components/TextInput";
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 function UpdateTernak(props){
 
@@ -21,6 +22,29 @@ function UpdateTernak(props){
     const [mode, setMode] = useState('date');
     const [show, setShow] = useState(false);
     const axiosContext = useContext(AxiosContext);
+
+    const onChange = (event, selectedDate) => {
+      const currentDate = selectedDate || date;
+        setShow(false);
+        setDate(currentDate);
+    
+      setLiveStock({
+        ...livestock,
+        date: {
+          value: currentDate.toISOString().split('T')[0], // Format to YYYY-MM-DD
+          error: '',
+        }
+      });
+    };
+
+      const showMode = (currentMode) => {
+        setShow(true);
+        setMode(currentMode);
+      };
+    
+      const showDatepicker = () => {
+        showMode('date');
+      };
 
     useEffect(()=>{
         getData(id)
@@ -72,8 +96,19 @@ function UpdateTernak(props){
         <Text style={style.Text} >Total</Text>
         <TextInput value={livestock?.quantity?.value} onChangeText={(text) => setLiveStock({ ...livestock, quantity: {value: text, error: ''}  })}  label= 'Total Ayam' keyboardType="numeric"/>
 
-        <Text style={style.Text} >Tanggal</Text>
-        <TextInput value={livestock?.date.value} onChangeText={(text) => setLiveStock({...setLiveStock, date: {value: text, error: ''}  })} label='Masukkan Tanggal'/>
+        {/* <Text style={style.Text} >Tanggal</Text>
+        <TextInput value={livestock?.date.value} onChangeText={(text) => setLiveStock({...setLiveStock, date: {value: text, error: ''}  })} label='Masukkan Tanggal'/> */}
+
+      <Text style={style.Text}>Tanggal</Text>
+      <TextInput value={livestock?.date?.value} onChangeText={(text) => setLiveStock({...livestock, date: {value: text, error: ''}})} onFocus={showDatepicker} />
+      {show &&(
+        <DateTimePicker
+        testID="dateTimePicker"
+              value={date}
+              mode={mode}
+              is24Hour={true}
+              onChange={onChange}/>
+        )}
 
         <Text style={style.Text} >Harga Total</Text>
         <TextInput value={livestock?.amount?.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam' keyboardType="numeric"/>

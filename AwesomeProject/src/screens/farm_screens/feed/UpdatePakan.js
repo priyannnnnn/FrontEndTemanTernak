@@ -3,10 +3,8 @@ import TextInput from "../../../components/TextInput";
 import { useContext, useEffect, useState } from "react";
 import { theme } from "../../../core/theme";
 import Button from "../../../components/Button";
-import axios from "axios";
 import { AxiosContext } from "../../../context/AxiosContext";
-
-
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 function UpdatePakan(props){
 
@@ -23,8 +21,34 @@ function UpdatePakan(props){
         amount:   { value : '', error: '' },
         date:     { value : '', error: '' },
         
-    }
-    )
+    })
+
+    const [date, setDate] = useState(new Date());
+    const [mode, setMode] = useState('date');
+    const [show, setShow] = useState(false);
+
+    const onChange = (event, selectedDate) => {
+      const currentDate = selectedDate || date;
+        setShow(false);
+        setDate(currentDate);
+    
+      setfeed({
+        ...feed,
+        date: {
+          value: currentDate.toISOString().split('T')[0], // Format to YYYY-MM-DD
+          error: '',
+        }
+      });
+    };
+
+      const showMode = (currentMode) => {
+        setShow(true);
+        setMode(currentMode);
+      };
+    
+      const showDatepicker = () => {
+        showMode('date');
+      };
 
     useEffect(() => {
         getData(id)
@@ -67,7 +91,7 @@ function UpdatePakan(props){
             .catch ((error)=>{
                 console.log(error);
             })
-        }
+    }
     
     return (
         <View style={styles.View} >
@@ -81,15 +105,27 @@ function UpdatePakan(props){
             <Text style={styles.Text}>Total Harga</Text>
             <TextInput value={feed?.amount.value} onChangeText={(text)=> setfeed({...feed, amount:{value:text, error:''}})}/>
 
+            {/* <Text style={styles.Text}>Tanggal</Text>
+            <TextInput value={feed?.date.value} onChangeText={(text)=> setfeed({...feed, date:{value:text, error:''}})} label="tanggal"/> */}
+
             <Text style={styles.Text}>Tanggal</Text>
-            <TextInput value={feed?.date.value} onChangeText={(text)=> setfeed({...feed, date:{value:text, error:''}})} label="tanggal"/>
+            <TextInput value={feed?.date?.value} onChangeText={(text) => setLiveStock({...feed, date: {value: text, error: ''}})} onFocus={showDatepicker} />
+            {show &&(
+                <DateTimePicker
+                testID="dateTimePicker"
+                    value={date}
+                    mode={mode}
+                    is24Hour={true}
+                    onChange={onChange}/>
+                )}
 
             <Button mode='contained' style={{ marginTop: 4 }} onPress={()=> updatedata(feed.id)} >Simpan</Button>
             <Button mode='contained'
                 onPress={() => navigation.reset({ index: 0,
                 routes: [{ name: 'DaftarPersediaanPakan' }], })}>Kembali</Button>
         </View>
-    )}
+    )
+  }
 export default UpdatePakan;
 const styles = StyleSheet.create({
     View:{

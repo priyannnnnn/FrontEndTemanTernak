@@ -52,7 +52,7 @@ function ListQuailReduction({route, navigation}){
     const DeleteData = (id) => {
         console.log(id)
         setLoading(true)
-        axiosContext.authAxios.delete('/api/v1/livestock/'+id)
+        axiosContext.authAxios.delete('/api/v1/quailreduction/'+id)
         .then(res =>{
           setLiveStock(res.data)
           newgetData()
