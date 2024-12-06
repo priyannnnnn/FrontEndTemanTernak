@@ -32,7 +32,7 @@ function Dashboardkandang({ navigation }) {
           colors={['#FFD365', '#179574']}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 0.2 }}
-          style={styles.background} // Applied styles here
+          style={styles.background} // Applied styles heres
         >
           <View style={styles.topp}>
           </View>
