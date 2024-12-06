@@ -46,6 +46,14 @@ function Ternak({navigation}) {
     showMode('date');
   };
 
+  const formatAmount = (text) => {
+    // Remove non-numeric characters
+    const onlyNumbers = text.replace(/[^0-9]/g, '');
+    // Format number with dots after every 3 digits
+    const formatted = onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return formatted;
+  };
+
   useEffect(() => {
     setLiveStock({...livestock, date:{ value: `${moment(date).format('YYYY-MM-DD')}`, error: ''}})
   }, [date])
@@ -53,9 +61,9 @@ function Ternak({navigation}) {
   const onSubmit = () => {
     const data = {
       age: livestock?.age?.value,
-      quantity: livestock?.quantity?.value,
+      quantity: livestock?.quantity?.value.replace(/\./g, ''),
       date: livestock?.date?.value,
-      amount: livestock?.amount?.value,
+      amount: livestock?.amount?.value.replace(/\./g, ''),
       type: livestock?.type?.value,
       note: livestock?.note?.value
     }
@@ -92,7 +100,13 @@ function Ternak({navigation}) {
       <TextInput value={livestock?.age.value} onChangeText={(text) => setLiveStock({ ...livestock, age: {value: text, error: ''}  })} label='Masukkan Umur' keyboardType="numeric"/>
 
       <Text style={kandangStyle.Text}>Total</Text>
-      <TextInput value={livestock?.quantity.value} onChangeText={(text) => setLiveStock({ ...livestock, quantity: {value: text, error: ''}  })}  label= 'Total Ayam' keyboardType="numeric"/>
+      <TextInput value={livestock?.quantity.value} onChangeText={(text) => {
+         const formatted = formatAmount(text);
+        setLiveStock({ ...livestock, quantity: {value: formatted, error: ''}})
+        }}  
+        label= 'Total Ayam' 
+        keyboardType="numeric"
+      />
 
       <Text style={kandangStyle.Text}>Tanggal</Text>
       <TextInput value={livestock?.date.value} onChangeText={(text) => setLiveStock({...setLiveStock, date: {value: text, error: ''}  })}  onBlur={onChange} onChange={showDatepicker} onFocus={showDatepicker} label='Masukkan Tanggal'/>
@@ -105,7 +119,13 @@ function Ternak({navigation}) {
               onChange={onChange}/>
               )}
       <Text style={kandangStyle.Text} >Harga Total</Text>
-      <TextInput value={livestock?.amount.value} onChangeText={(text) => setLiveStock({ ...livestock, amount: {value: text, error: ''}  })}  label='Total harga ayam' keyboardType="numeric"/>
+      <TextInput value={livestock?.amount.value} onChangeText={(text) => {
+        const formatted = formatAmount(text);
+        setLiveStock({ ...livestock, amount: {value: formatted, error: ''}})
+        }}  
+        label='Total harga ayam' 
+        keyboardType="numeric"
+      />
 
       <Text style={kandangStyle.Text} >Type</Text>
       <View style={{ borderRadius:5,borderWidth:1,borderColor:'#708090',overflow:'hidden',}}>

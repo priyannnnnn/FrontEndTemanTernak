@@ -41,6 +41,15 @@ function BiayaOperasional(props) {
     showMode('date');
   };
 
+
+  const formatAmount = (text) => {
+    // Remove non-numeric characters
+    const onlyNumbers = text.replace(/[^0-9]/g, '');
+    // Format number with dots after every 3 digits
+    const formatted = onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return formatted;
+  };
+
   useEffect (() => {
     setOperation ({...Operation, date:{value : `${moment(date).format('YYYY-MM-DD')}`, error:''}})
   },[date])
@@ -49,7 +58,7 @@ function BiayaOperasional(props) {
     const data = {
       date : Operation?.date?.value,
       description : Operation?.description.value,
-      amount : Operation?.amount?.value,
+      amount : Operation?.amount?.value.replace(/\./g, ''),
     }
     axiosContext.authAxios.post(`/api/v1/operatingCosh`,data)
     .then(res => {
@@ -71,7 +80,12 @@ function BiayaOperasional(props) {
             value={Operation?.description.value} onChangeText ={(text) => setOperation({...Operation, description:{value:text, error:''}})} label= 'deskripsi'/>
             <Text style={kandangStyle.Text}>Total Biaya Operasional</Text>
             <TextInput
-            value = {Operation?.amount.value} onChangeText= {(text) => setOperation ({...Operation, amount: {value:text, error:''}})} label='Jumlah-Operasional'/>
+            value = {Operation?.amount.value} onChangeText= {(text) => {
+              const formatted = formatAmount(text)
+              setOperation ({...Operation, amount: {value:formatted, error:''}})
+              }} 
+              label='Jumlah-Operasional'
+            />
             <Text style={kandangStyle.Text}>Tanggal</Text>
             <TextInput 
               value={Operation?.date.value} onChangeText = {(text) => setOperation({...Operation, date: {value: text,error:''}})}  label='Tuliskan Keterangan' 

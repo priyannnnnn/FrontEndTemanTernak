@@ -21,6 +21,7 @@ function ListOperational({route, navigation}){
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
     const {itemp} = route.params;
+    const [isDataFinished, setIsDataFinished] = useState(false);
 
     const getData = () => {
         axiosContext.authAxios.get(`/api/v1/operatingCosh?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
@@ -83,6 +84,12 @@ function ListOperational({route, navigation}){
       );
     }; 
 
+    const formatAmountWithDots = (value) => {
+      if (!value) return '0'; // Handle empty or undefined value
+      const onlyNumbers = value.toString().replace(/[^0-9]/g, ''); // Ensure only numeric characters
+      return onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every 3 digits
+    };
+
     useEffect(() => {
       console.log("itemp = ",itemp)
       if (itemp !== undefined){
@@ -101,7 +108,7 @@ renderItem=({item})=>{
         </TouchableOpacity>
         <View style={listStyle.employeeListContainer}>
         <Text style={listStyle.listItem}> Deskripsi : {item.description}</Text>
-                    <Text style={listStyle.listItem}> Biaya Operasional : {item.amount.toLocaleString()}</Text>
+                    <Text style={listStyle.listItem}> Biaya Operasional : {formatAmountWithDots(item.amount)}</Text>
                     <Text style={listStyle.listItem}>Tanggal : {item.date} </Text>
           <View style={listStyle.buttonContainer}>
             <TouchableOpacity
@@ -121,33 +128,22 @@ renderItem=({item})=>{
   )
  }
 
- const renderFooter=()=>{
-  // axiosContext.authAxios.get(`/api/v1/livestock?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
-  // .then(res => {
-  //   // console.log("Ress",res.data.content);
-  //   if(res.data.content.length == 0){
-  //     console.log("`gtt",res.data.content.length);
-  //     return( <View style={styles.loader1}>
-  //       {/* <ActivityIndicator /> */}
-  //       <Text style={styles.buttonText}>Data  Umur</Text>
-  //       {/* <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/> */}
-  //     </View>)
-  //   }
-  //   // setLoading(false)
-  //   // setEmployee(employee.concat(res.data.content))
-  // })
-  // setLoading(false)
-  return(
-    loading?
-  <View style={listStyle.loader}>
-    <ActivityIndicator size="large"/>
-   
-  </View> :null)
- }
+  const renderFooter = () => {
+    if (isDataFinished) {
+      return (
+        <View style={listStyle.footerContainer}>
+          <Text style={listStyle.footerText}>Data sudah habis</Text>
+        </View>
+      );
+    }
+    return null; // Tidak ada footer jika data belum habis
+  };
+
  handleLoadMore= async()=>{
     if(loading)return;
     renderFooter()
     const nextPage = pageCurrent + 1
+    setIsDataFinished(true); 
     const newData = await setpageCurrent(nextPage);  
  }
 
@@ -220,11 +216,11 @@ const emptyList = ()=>{
       data={Operasional}
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
-      ListFooterComponent={renderFooter}
-      // ListEmptyComponent={emptyList}
       onEndReached={this.handleLoadMore}
-      onEndReachedThreshold={0}
+      onEndReachedThreshold={0.1}
       style={listStyle.container12}
+      contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
+      ListFooterComponent={renderFooter}
       >
       </FlatList>
       </View>}

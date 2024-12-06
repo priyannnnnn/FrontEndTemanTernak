@@ -56,6 +56,7 @@ import QuailReduction from './src/screens/farm_screens/quail_reduction/Quailredu
 import ListQuailReduction from './src/screens/farm_screens/quail_reduction/ListQuailReduction';
 import UpdateQuailReduction from './src/screens/farm_screens/quail_reduction/UpdateQuailReduction';
 import { DataUserContext } from './src/context/AuthIdContext';
+import Account from './src/screens/main/account';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator()
@@ -120,6 +121,7 @@ export default function App() {
               <Stack.Screen name='ListQuailReduction' component={ListQuailReduction}/>
               <Stack.Screen name='QuailReduction' component={QuailReduction}/>
               <Stack.Screen name='UpdateQuailReduction' component={UpdateQuailReduction}/>
+              <Stack.Screen name='Account' component={Account}/>
 
               <Stack.Screen
                 name="ResetPasswordScreen"

@@ -42,14 +42,22 @@ function Penjualan(props){
     showMode('date');
   };
 
+  const formatAmount = (text) => {
+    // Remove non-numeric characters
+    const onlyNumbers = text.replace(/[^0-9]/g, '');
+    // Format number with dots after every 3 digits
+    const formatted = onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return formatted;
+  };
+
   useEffect(() => {
     setsaleEgg({...saleEgg, date:{ value: `${moment(date).format('YYYY-MM-DD')}`, error: ''}})
   }, [date])
     
   const onSubmit = () => {
     const data = {
-      quantity: saleEgg?.quantity?.value,
-      amount: saleEgg?.amount?.value,
+      quantity: saleEgg?.quantity?.value.replace(/\./g, ''),
+      amount: saleEgg?.amount?.value.replace(/\./g, ''),
       date:saleEgg?.date?.value
     }
     const amount=!isNaN(data.amount) && data.amount>1;
@@ -75,7 +83,13 @@ function Penjualan(props){
         <BackButton goBack={navigation.goBack}/>
             <Header>Penjualan Telur</Header>
             <Text style={kandangStyle.Text}>Jumlah Telur</Text>
-            <TextInput value={saleEgg?.quantity.value} onChangeText={(text) => setsaleEgg({ ...saleEgg, quantity: {value: text, error: ''}  })} label='Masukkan Jumlah Telur' keyboardType="numeric"/>
+            <TextInput value={saleEgg?.quantity.value} onChangeText={(text) => {
+              const formatted = formatAmount(text);
+              setsaleEgg({ ...saleEgg, quantity: {value: formatted, error: ''}  })
+              }} 
+              label='Masukkan Jumlah Telur' 
+              keyboardType="numeric"
+            />
 
             <Text style={kandangStyle.Text}>Tanggal</Text>
             <TextInput value={saleEgg?.date.value} onChangeText={(text)=> setsaleEgg({...saleEgg, date:{value:text, error:''}})} onChange={showDatepicker} onFocus={showDatepicker} label= 'Tanggal'/>
@@ -88,7 +102,13 @@ function Penjualan(props){
               onChange={onChange}/>
             )}
             <Text style={kandangStyle.Text}>Total Harga Telur</Text>
-            <TextInput value={saleEgg?.amount.value} onChangeText={(text) => setsaleEgg({ ...saleEgg, amount: {value: text, error: ''}  })} label='Pendapatan Total' keyboardType="numeric"/>
+            <TextInput value={saleEgg?.amount.value} onChangeText={(text) => {
+              const formatted = formatAmount(text);
+              setsaleEgg({ ...saleEgg, amount: {value: formatted, error: ''}})
+              }} 
+              label='Pendapatan Total'
+              keyboardType="numeric"
+            />
 
         <Button mode='contained' style={{margin:4}} onPress={onSubmit}>Simpan</Button>  
         <Button mode='contained'

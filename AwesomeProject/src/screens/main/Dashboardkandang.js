@@ -28,22 +28,11 @@ function Dashboardkandang({ navigation }) {
   return (
     <BackgroundDashboard>
       <View style={{ alignItems: 'center', width: 400,}}>
-        <Text
-          style={{
-            color: 'black',
-            fontSize: 30,
-            fontWeight: 'bold',
-            marginVertical: 0,
-            // textAlign:'right'
-          }}>
-          Dashboard
-        </Text>
-       
         <LinearGradient
           colors={['#FFD365', '#179574']}
           start={{ x: 0, y: 0 }}
           end={{ x: 0, y: 0.2 }}
-          style={styles.background} // Applied styles here
+          style={styles.background} // Applied styles heres
         >
           <View style={styles.topp}>
           </View>

@@ -16,6 +16,7 @@ function ListFeedsUse({route, navigation}){
     const [hasMoreData, setHasMoreData] = useState(true);
     const {item}= route.params;
     const {itemp} = route.params;
+    const [isDataFinished, setIsDataFinished] = useState(false);
 
     const getData = () => {
         axiosContext.authAxios.get(`/api/v1/feeduse?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
@@ -78,6 +79,12 @@ function ListFeedsUse({route, navigation}){
       );
     }; 
 
+    const formatAmountWithDots = (value) => {
+      if (!value) return '0'; // Handle empty or undefined value
+      const onlyNumbers = value.toString().replace(/[^0-9]/g, ''); // Ensure only numeric characters
+      return onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every 3 digits
+    };
+
     useEffect(() => {
       console.log("itemp = ",itemp)
       if (itemp !== undefined){
@@ -95,7 +102,7 @@ renderItem=({item})=>{
                 <Text style={listStyle.buttonText}>{item.date}</Text>
         </TouchableOpacity>
         <View style={listStyle.employeeListContainer}>
-            <Text style={listStyle.listItem}>Jumlah : {item.quantity} KG</Text>
+            <Text style={listStyle.listItem}>Jumlah : {formatAmountWithDots(item.quantity)} KG</Text>
             <Text style={listStyle.listItem}>Catatan : {item.note}</Text>
             <Text style={listStyle.listItem}>Tanggal : {item.date}</Text>
           <View style={listStyle.buttonContainer}>
@@ -116,19 +123,22 @@ renderItem=({item})=>{
   )
  }
 
- const renderFooter=()=>{
-  return(
-    loading?
-  <View style={listStyle.loader}>
-    <ActivityIndicator size="large"/>
-    
-  </View> :null)
- }
+ const renderFooter = () => {
+  if (isDataFinished) {
+    return (
+      <View style={listStyle.footerContainer}>
+        <Text style={listStyle.footerText}>Data sudah habis</Text>
+      </View>
+    );
+  }
+  return null; // Tidak ada footer jika data belum habis
+  };
 
  handleLoadMore= async()=>{
     if(loading)return;
     renderFooter()
     const nextPage = pageCurrent + 1
+    setIsDataFinished(true)
     const newData = await setpageCurrent(nextPage);  
  }
 
@@ -197,14 +207,16 @@ const emptyList = ()=>{
         </View>
         
       <FlatList
-      data={feed}
+      data={feed || []}
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
       ListFooterComponent={renderFooter}
       // ListEmptyComponent={emptyList}
+      ListEmptyComponent={this.renderEmptyComponent}
       onEndReached={this.handleLoadMore}
-      onEndReachedThreshold={0}
+      onEndReachedThreshold={0.1}
       style={listStyle.container12}
+      contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
       >
       </FlatList>
       </View>}

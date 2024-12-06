@@ -15,6 +15,7 @@ function ListQuailReduction({route, navigation}){
     const [hasMoreData, setHasMoreData] = useState(true);
     // const {item}= route.params;
     const {itemp} = route.params;
+    const [isDataFinished, setIsDataFinished] = useState(false);
 
     const getData = () => {
         axiosContext.authAxios.get(`/api/v1/quailreduction?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
@@ -80,6 +81,12 @@ function ListQuailReduction({route, navigation}){
       );
     }; 
 
+    const formatAmountWithDots = (value) => {
+      if (!value) return '0'; // Handle empty or undefined value
+      const onlyNumbers = value.toString().replace(/[^0-9]/g, ''); // Ensure only numeric characters
+      return onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every 3 digits
+    };
+
     useEffect(() => {
       console.log("itemp = ",itemp)
       if (itemp !== undefined){
@@ -99,7 +106,7 @@ function ListQuailReduction({route, navigation}){
                     <Text style={listStyle.buttonText}>{item.date}</Text>
             </TouchableOpacity>
             <View style={listStyle.employeeListContainer}>
-            <Text style={listStyle.listItem}>Jumlah : {item.quantity}</Text>
+            <Text style={listStyle.listItem}>Jumlah : {formatAmountWithDots(item.quantity)}</Text>
             <Text style={listStyle.listItem}>Jenis : {item.type}</Text>
             <Text style={listStyle.listItem}>Catatan : {item.reason}</Text>
             <Text style={listStyle.listItem}>Tanggal : {item.date}</Text>
@@ -121,17 +128,22 @@ function ListQuailReduction({route, navigation}){
     )
     }
 
-    const renderFooter=()=>{
-    return(
-        loading?
-    <View style={listStyle.loader}>
-        <ActivityIndicator size="large"/>
-    </View> :null)
-    }
+    const renderFooter = () => {
+      if (isDataFinished) {
+        return (
+          <View style={listStyle.footerContainer}>
+            <Text style={listStyle.footerText}>Data sudah habis</Text>
+          </View>
+        );
+      }
+      return null; // Tidak ada footer jika data belum habis
+    };
+    
     handleLoadMore= async()=>{
         if(loading)return;
         renderFooter()
         const nextPage = pageCurrent + 1
+        setIsDataFinished(true); 
         const newData = await setpageCurrent(nextPage);  
     }
 
@@ -205,12 +217,13 @@ function ListQuailReduction({route, navigation}){
       </View>
 
       <FlatList
-        data={livestock}
+        data={livestock ||[]}
         renderItem={this.renderItem}
         keyExtractor={(item, index) => index.toString()}
         ListFooterComponent={renderFooter}
         onEndReached={this.handleLoadMore}
         onEndReachedThreshold={0}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
         style={listStyle.container12}
       />
     </View>

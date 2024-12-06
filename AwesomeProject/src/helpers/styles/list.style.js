@@ -74,7 +74,7 @@ export default StyleSheet.create({
         backgroundColor:'#7FFFD4'
       },
       loader:{
-        marginTop:10,
+        padding:10,
         marginBottom:35,
         alignItems:"center"
       },
@@ -111,5 +111,14 @@ export default StyleSheet.create({
       },
       safearea:{
         flex:1,
-      }
+      },
+      footerContainer: {
+        padding: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+      },
+      footerText: {
+        fontSize: 16,
+        color: 'gray',
+      },
 })

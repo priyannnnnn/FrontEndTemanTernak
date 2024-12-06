@@ -48,7 +48,7 @@ function FeedUse({navigation}){
       const onSubmit=()=>{
         const data={
           note:feed?.note?.value,
-          quantity:feed?.quantity?.value,
+          quantity:feed?.quantity?.value.replace(/\./g, ''),
           date:feed?.date?.value,
         }
           const quantity=!isNaN(data.quantity) && data.quantity>1;
@@ -68,25 +68,27 @@ function FeedUse({navigation}){
             console.error(error);
           })
       }
+      const formatAmount = (text) => {
+        // Remove non-numeric characters
+        const onlyNumbers = text.replace(/[^0-9]/g, '');
+        // Format number with dots after every 3 digits
+        const formatted = onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        return formatted;
+      };
+
       return (
       <ScrollView style={kandangStyle.ScrollView}>
       <View style={kandangStyle.View}>
           <BackButton goBack={navigation.goBack}/>
           <Header>Penggunaan Pakan</Header>
           <Text style={kandangStyle.Text}>Jumlah per KG</Text>
-          <TextInput value={feed?.quantity.value} onChangeText={(text)=> setFeed({...feed, quantity: { value: text, error:''} })} label='Masukkan Pakan' keyboardType='numeric'/>
-
-          {/* <Text style={kandangStyle.Text}>Type</Text>
-          <View style={{ borderRadius:5,borderWidth:1,borderColor:'#708090',overflow:'hidden',}}>
-          <Picker style={{backgroundColor:'#FFFAFA',width:"100%",height:50,textAlign:'center',marginTop:-8,marginBottom:7,}}
-            selectedValue={feed?.type.value}
-            onValueChange={(itemvalue) => setFeed({...feed, type:{value:itemvalue, error:''}})}>
-            <Picker.Item/>
-            <Picker.Item style={kandangStyle.title} label="pedaging" value="pedaging"/>
-            <Picker.Item style={kandangStyle.title} label="petelur" value="petelur"/>
-          </Picker>
-          </View> */}
-          {/* <TextInput value={feed?.type.value} onChangeText={(text)=> setFeed({...feed, type: {value:text, error:''} })} label='Nama Produk Pakan'/> */}
+          <TextInput value={feed?.quantity.value} onChangeText={(text)=> {
+            const formatted = formatAmount(text);
+            setFeed({...feed, quantity: { value: formatted, error:''} })
+            }} 
+            label='Masukkan Pakan' 
+            keyboardType='numeric'
+          />
 
           <Text style={kandangStyle.Text}>Catatan</Text>
           <TextInput value={feed?.note.value} onChangeText={(text)=> setFeed({...feed, note: {value:text, error:''} })}label='Catatan'/>

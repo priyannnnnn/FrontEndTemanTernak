@@ -21,6 +21,7 @@ function DaftarTernak({route, navigation}){
     const [search, setsearch]= useState('');
     const {item}= route.params;
     const {itemp} = route.params;
+    const [isDataFinished, setIsDataFinished] = useState(false);
 
     const getData = () => {
         axiosContext.authAxios.get(`/api/v1/saleEgg?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
@@ -92,6 +93,12 @@ function DaftarTernak({route, navigation}){
       );
     }; 
 
+    const formatAmountWithDots = (value) => {
+      if (!value) return '0'; // Handle empty or undefined value
+      const onlyNumbers = value.toString().replace(/[^0-9]/g, ''); // Ensure only numeric characters
+      return onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every 3 digits
+    };
+
     useEffect(() => {
       console.log("itemp = ",itemp)
       if (itemp !== undefined){
@@ -109,8 +116,8 @@ renderItem=({item})=>{
                 <Text style={listStyle.buttonText}>{item.date}</Text>
         </TouchableOpacity>
         <View style={listStyle.employeeListContainer}>
-            <Text style={listStyle.listItem}>Jumlah Penjualan : {item.quantity.toLocaleString()}</Text>
-            <Text style={listStyle.listItem}>Jumlah telur : {item.amount.toLocaleString()}</Text>
+            <Text style={listStyle.listItem}>Jumlah Penjualan : {formatAmountWithDots(item.quantity)}</Text>
+            <Text style={listStyle.listItem}>Jumlah telur : {formatAmountWithDots(item.amount)}</Text>
             <Text style={listStyle.listItem}>Tanggal : {item.date}</Text>  
           <View style={listStyle.buttonContainer}>
             <TouchableOpacity
@@ -129,30 +136,17 @@ renderItem=({item})=>{
     </View>
   )
  }
+ const renderFooter = () => {
+  if (isDataFinished) {
+    return (
+      <View style={listStyle.footerContainer}>
+        <Text style={listStyle.footerText}>Data sudah habis</Text>
+      </View>
+    );
+  }
+  return null; // Tidak ada footer jika data belum habis
+};
 
- const renderFooter=()=>{
-  // axiosContext.authAxios.get(`/api/v1/livestock?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
-  // .then(res => {
-  //   // console.log("Ress",res.data.content);
-  //   if(res.data.content.length == 0){
-  //     console.log("`gtt",res.data.content.length);
-  //     return( <View style={styles.loader1}>
-  //       {/* <ActivityIndicator /> */}
-  //       <Text style={styles.buttonText}>Data  Umur</Text>
-  //       {/* <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/> */}
-  //     </View>)
-  //   }
-  //   // setLoading(false)
-  //   // setEmployee(employee.concat(res.data.content))
-  // })
-  // setLoading(false)
-  return(
-    loading?
-  <View style={listStyle.loader}>
-    <ActivityIndicator size="large"/>
-   
-  </View> :null)
- }
 const handleLoadMore= async()=>{
     // if(loading)return;
     // const nextPage = pageCurrent + 1
@@ -168,6 +162,7 @@ const handleLoadMore= async()=>{
       console.log("Tess = ")
     //  await setpageCurrent(pageCurrent + 1)
       const nextPage = pageCurrent + 1
+      setIsDataFinished(true); 
       return;
       const newData = await setpageCurrent(nextPage);
       return;
@@ -239,7 +234,7 @@ const emptyList = ()=>{
         </View>
         
       <FlatList
-      data={saleEgg}
+      data={saleEgg || []}
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
       ListFooterComponent={renderFooter}
@@ -247,6 +242,8 @@ const emptyList = ()=>{
       onEndReached={handleLoadMore}
       onEndReachedThreshold={0}
       style={listStyle.container12}
+      contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
+      ListEmptyComponent={this.renderEmptyComponent}
       >
       </FlatList>
       </View>}
@@ -254,114 +251,3 @@ const emptyList = ()=>{
     )
 }
 export default DaftarTernak;
-// const styles=StyleSheet.create({
-//     text:{
-//         fontSize:20,
-//         flex:1,
-//         marginTop:35,
-//         textAlign:'center'
-//     },
-//     view:{
-//         flex:1,
-//         backgroundColor:theme.colors.backgroundColor
-//     },
-//     view1:{
-//         flex:1,
-//         backgroundColor:GlobalStyles.colors.error50,
-//         marginHorizontal:12,
-//         margin:3,
-//         minWidth:20,
-
-//     },
-//     container: {
-//         paddingHorizontal: 20
-//       },
-//       button: {
-//         borderRadius: 5,
-//         marginVertical: 20,
-//         alignSelf: 'flex-start',
-//         backgroundColor: "gray",
-//       },
-//       buttonText: {
-//         color: "white",
-//         paddingVertical: 6,
-//         paddingHorizontal: 10,
-//         fontSize: 16
-//       },
-//       title: {
-//         fontWeight: "bold",
-//         fontSize: 20,
-//         marginBottom: 10,
-//         color:'#FF4500'
-//       },
-//       employeeListContainer: {
-//         marginBottom: 25,
-//         elevation: 4,
-//         backgroundColor: "white",
-//         padding: 10,
-//         borderRadius: 6,
-//         borderTopWidth: 1,
-//         borderColor: "rgba(0,0,0,0.1)"
-//       },
-//       name: {
-//         fontWeight: "bold",
-//         fontSize: 16
-//       },
-//       listItem: {
-//         fontSize: 18,
-//         color:'#800000',
-//         fontWeight:"500"
-//       },
-//       buttonContainer: {
-//         marginTop: 10,
-//         flexDirection: "row",
-//         alignItems: "center"
-//       },
-//       message: {
-//         color: "tomato",
-//         fontSize: 17
-//       },
-//       container12:{
-//         marginTop:20,
-//         backgroundColor:'#7FFFD4'
-//       },
-//       loader:{
-//         marginTop:10,
-//         marginBottom:35,
-//         alignItems:"center"
-//       },
-//       input: {
-//         height:45,
-//         width:265,
-//         borderWidth:1,
-//         paddingLeft:20,
-//         margin:5,
-//         borderColor:'#009688',
-//         backgroundColor:'#FFF6E9',
-//         flexDirection:'row',
-//         top:13
-//       },
-//       loader1:{
-//         marginTop:10,
-//         marginBottom:80,
-//         alignItems:"center"
-//       },
-//       buttonEmpty: {
-//         color: "black",
-//         paddingVertical: 6,
-//         paddingHorizontal: 10,
-//         fontSize: 16
-//       },
-//       loadingflatlist: {
-//         marginTop:300,
-//         // marginBottom:35,
-//         // alignItems:"center"
-//         // flex: 1, 
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//         backgroundColor:'#F0F8FF'
-//       },
-//       safearea:{
-//         flex:1,
-//       }
-// })

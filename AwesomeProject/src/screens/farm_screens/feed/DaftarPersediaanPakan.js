@@ -22,6 +22,7 @@ function DaftarPersediaanPakan({route, navigation}){
     const [hasMoreData, setHasMoreData] = useState(true);
     const {item}= route.params;
     const {itemp} = route.params;
+    const [isDataFinished, setIsDataFinished] = useState(false);
 
     const getData = () => {
         axiosContext.authAxios.get(`/api/v1/feed?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
@@ -67,6 +68,12 @@ function DaftarPersediaanPakan({route, navigation}){
         })
     }
 
+    const formatAmountWithDots = (value) => {
+      if (!value) return '0'; // Handle empty or undefined value
+      const onlyNumbers = value.toString().replace(/[^0-9]/g, ''); // Ensure only numeric characters
+      return onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every 3 digits
+    };
+    
     const showConfirmDialog = (id) => {
       console.log(id)
       return Alert.alert(
@@ -101,9 +108,9 @@ renderItem=({item})=>{
                 <Text style={listStyle.buttonText}>{item.date}</Text>
         </TouchableOpacity>
         <View style={listStyle.employeeListContainer}>
-        <Text style={listStyle.listItem}>Jumlah : {item.quantity} KG</Text>
-            <Text style={listStyle.listItem}>Harga : {item.amount}</Text>
-            <Text style={listStyle.listItem}>Tipe : {item.type}</Text>
+        <Text style={listStyle.listItem}>Jumlah : {formatAmountWithDots(item.quantity)} KG</Text>
+            <Text style={listStyle.listItem}>Harga : {formatAmountWithDots(item.amount)}</Text>
+            <Text style={listStyle.listItem}>Type : {item.type}</Text>
             <Text style={listStyle.listItem}>Tanggal : {item.date}</Text>
           <View style={listStyle.buttonContainer}>
             <TouchableOpacity
@@ -123,19 +130,30 @@ renderItem=({item})=>{
   )
  }
 
- const renderFooter=()=>{
-  return(
-    loading?
-  <View style={listStyle.loader}>
-    <ActivityIndicator size="large"/>
+//  const renderFooter=()=>{
+//   return(
+//     loading?
+//   <View style={listStyle.loader}>
+//     <ActivityIndicator size="large"/>
     
-  </View> :null)
- }
+//   </View> :null)
+//  }
+  const renderFooter = () => {
+    if (isDataFinished) {
+      return (
+        <View style={listStyle.footerContainer}>
+          <Text style={listStyle.footerText}>Data sudah habis</Text>
+        </View>
+      );
+    }
+    return null; // Tidak ada footer jika data belum habis
+  };
 
  handleLoadMore= async()=>{
     if(loading)return;
     renderFooter()
     const nextPage = pageCurrent + 1
+    setIsDataFinished(true); 
     const newData = await setpageCurrent(nextPage);  
  }
 
@@ -170,12 +188,18 @@ const contains= ({age, note, date, quantity, type, amount}, item) => {
 
 const emptyList = ()=>{
   return(
-    ( <View style={styles.loader1}>
+    ( <View style={listStyle.loader1}>
       {/* <ActivityIndicator /> */}
-      <Text style={styles.buttonEmpty}>Data Empty</Text>
+      <Text style={listStyle.buttonEmpty}>Data Empty</Text>
       {/* <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/> */}
     </View>)
   )}
+
+  renderEmptyComponent = () => (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 20 }}>
+      <Text style={{ fontSize: 16, color: 'gray' }}>Data kosong</Text>
+    </View>
+  );
   
     return(
       <SafeAreaView style={listStyle.safearea}>
@@ -203,131 +227,23 @@ const emptyList = ()=>{
               <Text style={{marginTop:22, fontSize:20,color:'#030637'}}>Add</Text>
           </TouchableOpacity>
         </View>
-        
+      {/* <ScrollView contentContainerStyle={{ flexGrow: 1 }}> */}
       <FlatList
-      data={feed}
+      // data={feed}
+      data={feed || []} 
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
-      ListFooterComponent={renderFooter}
       // ListEmptyComponent={emptyList}
+      ListEmptyComponent={this.renderEmptyComponent}
       onEndReached={this.handleLoadMore}
-      onEndReachedThreshold={0}
+      onEndReachedThreshold={0.1}
       style={listStyle.container12}
-      >
-      </FlatList>
+      contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
+      ListFooterComponent={renderFooter}
+      />
+      {/* </ScrollView> */}
       </View>}
       </SafeAreaView>
     )
 }
 export default DaftarPersediaanPakan;
-// const styles=StyleSheet.create({
-//     text:{
-//         fontSize:20,
-//         flex:1,
-//         marginTop:35,
-//         textAlign:'center'
-//     },
-//     view:{
-//         flex:1,
-//         backgroundColor:theme.colors.backgroundColor
-//     },
-//     view1:{
-//         flex:1,
-//         backgroundColor:GlobalStyles.colors.error50,
-//         marginHorizontal:12,
-//         margin:3,
-//         minWidth:20,
-
-//     },
-//     container: {
-//         paddingHorizontal: 20
-//       },
-//       button: {
-//         borderRadius: 5,
-//         marginVertical: 20,
-//         alignSelf: 'flex-start',
-//         backgroundColor: "gray",
-//       },
-//       buttonText: {
-//         color: "white",
-//         paddingVertical: 6,
-//         paddingHorizontal: 10,
-//         fontSize: 16
-//       },
-//       title: {
-//         fontWeight: "bold",
-//         fontSize: 20,
-//         marginBottom: 10,
-//         color:'#FF4500'
-//       },
-//       employeeListContainer: {
-//         marginBottom: 25,
-//         elevation: 4,
-//         backgroundColor: "white",
-//         padding: 10,
-//         borderRadius: 6,
-//         borderTopWidth: 1,
-//         borderColor: "rgba(0,0,0,0.1)"
-//       },
-//       name: {
-//         fontWeight: "bold",
-//         fontSize: 16
-//       },
-//       listItem: {
-//         fontSize: 18,
-//         color:'#800000',
-//         fontWeight:"500"
-//       },
-//       buttonContainer: {
-//         marginTop: 10,
-//         flexDirection: "row",
-//         alignItems: "center"
-//       },
-//       message: {
-//         color: "tomato",
-//         fontSize: 17
-//       },
-//       container12:{
-//         marginTop:20,
-//         backgroundColor:'#7FFFD4'
-//       },
-//       loader:{
-//         marginTop:10,
-//         marginBottom:35,
-//         alignItems:"center"
-//       },
-//       input: {
-//         height:45,
-//         width:265,
-//         borderWidth:1,
-//         paddingLeft:20,
-//         margin:5,
-//         borderColor:'#009688',
-//         backgroundColor:'#FFF6E9',
-//         flexDirection:'row',
-//         top:13
-//       },
-//       loader1:{
-//         marginTop:10,
-//         marginBottom:80,
-//         alignItems:"center"
-//       },
-//       buttonEmpty: {
-//         color: "black",
-//         paddingVertical: 6,
-//         paddingHorizontal: 10,
-//         fontSize: 16
-//       },
-//       loadingflatlist: {
-//         marginTop:300,
-//         // marginBottom:35,
-//         // alignItems:"center"
-//         // flex: 1, 
-//         alignItems: 'center',
-//         justifyContent: 'center',
-//         backgroundColor:'#F0F8FF'
-//       },
-//       safearea:{
-//         flex:1,
-//       }
-// })

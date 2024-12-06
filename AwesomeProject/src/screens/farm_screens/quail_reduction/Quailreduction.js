@@ -39,6 +39,14 @@ function QuailReduction({route, navigation}){
     const showDatepicker = () => {
       showMode('date');
     };
+
+    const formatAmount = (text) => {
+      // Remove non-numeric characters
+      const onlyNumbers = text.replace(/[^0-9]/g, '');
+      // Format number with dots after every 3 digits
+      const formatted = onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      return formatted;
+    };
   
     useEffect(() => {
       setLiveStock({...livestock, date:{ value: `${moment(date).format('YYYY-MM-DD')}`, error: ''}})
@@ -46,7 +54,7 @@ function QuailReduction({route, navigation}){
   
     const onSubmit = () => {
       const data = {
-        quantity: livestock?.quantity?.value,
+        quantity: livestock?.quantity?.value.replace(/\./g, ''),
         date: livestock?.date?.value,
         reason: livestock?.amount?.value,
         type: livestock?.type?.value,
@@ -81,7 +89,13 @@ function QuailReduction({route, navigation}){
         <Header>Isi Kandang</Header>
   
         <Text style={kandangStyle.Text}>Jumlah</Text>
-        <TextInput value={livestock?.quantity.value} onChangeText={(text) => setLiveStock({ ...livestock, quantity: {value: text, error: ''}  })} label='Masukkan Umur' keyboardType="numeric"/>
+        <TextInput value={livestock?.quantity.value} onChangeText={(text) => {
+          const formatted = formatAmount(text)
+          setLiveStock({ ...livestock, quantity: {value: formatted, error: ''}})
+          }} 
+          label='Masukkan Umur' 
+          keyboardType="numeric"
+        />
   
         <Text style={kandangStyle.Text} >Type</Text>
         <View style={{ borderRadius:5,borderWidth:1,borderColor:'#708090',overflow:'hidden',}}>

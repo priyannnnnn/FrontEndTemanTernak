@@ -39,6 +39,14 @@ function PersediaanPakan({navigation}) {
     setMode(currentMode);
   };
 
+  const formatAmount = (text) => {
+    // Remove non-numeric characters
+    const onlyNumbers = text.replace(/[^0-9]/g, '');
+    // Format number with dots after every 3 digits
+    const formatted = onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return formatted;
+  };
+
   const showDatepicker = () => {
     showMode('date');
   };
@@ -49,9 +57,9 @@ function PersediaanPakan({navigation}) {
 
   const onSubmit=()=>{
     const data={
-      amount:feed?.amount?.value,
+      amount:feed?.amount?.value.replace(/\./g, ''),
       type:feed?.type?.value,
-      quantity:feed?.quantity?.value,
+      quantity:feed?.quantity?.value.replace(/\./g, ''),
       date:feed?.date?.value,
     }
       const amount=!isNaN(data.amount) && data.amount>1;
@@ -81,7 +89,13 @@ function PersediaanPakan({navigation}) {
             <BackButton goBack={navigation.goBack}/>
             <Header>Persediaan Pakan</Header>
             <Text style={kandangStyle.Text}>Jumlah per KG</Text>
-            <TextInput value={feed?.quantity.value} onChangeText={(text)=> setFeed({...feed, quantity: { value: text, error:''} })} label='Masukkan Pakan' keyboardType='numeric'/>
+            <TextInput value={feed?.quantity.value} onChangeText={(text)=> {
+              const formatted = formatAmount(text);
+              setFeed({...feed, quantity: { value: formatted, error:''} });
+              }} 
+              label='Masukkan Pakan' 
+              keyboardType='numeric'
+            />
 
             <Text style={kandangStyle.Text}>Type</Text>
             <View style={{ borderRadius:5,borderWidth:1,borderColor:'#708090',overflow:'hidden',}}>
@@ -89,14 +103,20 @@ function PersediaanPakan({navigation}) {
               selectedValue={feed?.type.value}
               onValueChange={(itemvalue) => setFeed({...feed, type:{value:itemvalue, error:''}})}>
               <Picker.Item/>
-              <Picker.Item style={kandangStyle.title} label="pedaging" value="pedaging"/>
-              <Picker.Item style={kandangStyle.title} label="petelur" value="petelur"/>
+              <Picker.Item style={kandangStyle.title} label="PEDAGING" value="PEDAGING"/>
+              <Picker.Item style={kandangStyle.title} label="PETELUR" value="PETELUR"/>
             </Picker>
             </View>
             {/* <TextInput value={feed?.type.value} onChangeText={(text)=> setFeed({...feed, type: {value:text, error:''} })} label='Nama Produk Pakan'/> */}
 
             <Text style={kandangStyle.Text}>Harga Total</Text>
-            <TextInput value={feed?.amount.value} onChangeText={(text)=> setFeed({...feed, amount: {value:text, error:''} })}label='Harga keseluruhan' keyboardType='numeric'/>
+            <TextInput value={feed?.amount.value} onChangeText={(text)=> {
+              const formatted = formatAmount(text);
+              setFeed({...feed, amount: {value:formatted, error:''} });
+              }}
+              placeholder='Harga keseluruhan' 
+              keyboardType='numeric'
+            />
 
             <Text style={kandangStyle.Text}>Tanggal</Text>
             <TextInput value={feed?.date.value} onChangeText={(text)=> setFeed({...setFeed, date:{value:text, error:''}})} onBlur={onChange} onChange={showDatepicker} onFocus={showDatepicker} label= 'Tanggal'/>
@@ -116,6 +136,7 @@ function PersediaanPakan({navigation}) {
                 routes: [{ name: 'Dashboard' }], })}>Kembali</Button>
         </View>
        </ScrollView>
+       ////sheejj
     )
 }
 export default PersediaanPakan;

@@ -14,8 +14,7 @@ import axios from 'axios'
 import * as Keychain from 'react-native-keychain';
 import { AxiosContext } from '../../context/AxiosContext'
 import { AuthContext } from '../../context/AuthContext'
-// import {BASE_URL} from "@env"
-import {BASE_URL} from "@env"
+import {BASE_URL} from '@env'
 
 function LoginScreen({ navigation }) {
   const [email, setEmail] = useState({ value: '',error: '' })
@@ -40,7 +39,7 @@ function LoginScreen({ navigation }) {
       }
       console.log(`${BASE_URL}`)
       console.log(`${BASE_URL}/api/v1/login/email`,dataLogin)
-      const response = await axios.post(`http://192.168.1.131:8000/api/v1/login/email`,dataLogin)
+      const response = await axios.post(`${BASE_URL}/api/v1/login/email`,dataLogin)
       const accessToken = response.data
       const refreshToken = response.data
       authContext.setAuthState({
