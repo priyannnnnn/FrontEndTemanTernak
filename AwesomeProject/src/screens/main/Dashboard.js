@@ -11,9 +11,10 @@ import ListKandang from './ListKandang'
 import Ternak from '../farm_screens/livestock/Ternak'
 import { theme } from '../../core/theme'
 import AmountKandang from './AmountKandang'
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import Icon from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome from 'react-native-vector-icons/AntDesign'
+import Icon from 'react-native-vector-icons/FontAwesome';
 import Dashboardkandang from './Dashboardkandang'
+import Account from './account'
 
 const Tab = createBottomTabNavigator();
 export default function Dashboard({ navigation }) {
@@ -22,88 +23,67 @@ export default function Dashboard({ navigation }) {
       screenOptions={{
         headerStyle:{backgroundColor:'#E1F0DA'},
         headerTintColor:'#65B741',
-        tabBarStyle:{backgroundColor:'#E1F0DA',height:70,position:'absolute',bottom:20, borderRadius:90, marginHorizontal:25 },
-        //tabBarActiveBackgroundColor:'#EBF4FA',
+        tabBarStyle:{
+          backgroundColor:'#E1F0DA',
+          height:70,position:'absolute',
+          bottom:20, 
+          borderRadius:90, 
+          marginHorizontal:25 
+        },
+        tabBarLabelStyle: {
+          fontSize: 16,
+          fontWeight:'bold'
+        },
       }}
       >
-      <Tab.Screen name='Kandang'  component={AmountKandang} 
+      <Tab.Screen 
+        name='Dasboard' 
+        component={AmountKandang} 
         options={{tabBarIcon : ({focused})=> (
           <View style={{alignItems:'center', justifyContent:'center', top:10}}>
-            {/* <View style={styles.viewButton}>
-              <TouchableOpacity onPress={() => navigation.navigate('DaftarOperasional')}><Text>yan</Text></TouchableOpacity>
-            </View> */}
+            <FontAwesome name='home'
+              style={{ 
+                fontSize:40,
+                marginBottom:5,
+                color: focused ? '#997C70' : 'green',
+              }}/>
+          </View>
+        ),
+        tabBarLabel: 'Dasboard'
+        }}
+      />
+         <Tab.Screen name='Kandang'  component={Dashboardkandang} 
+        options={{tabBarIcon : ({focused})=> (
+          <View style={{alignItems:'center', justifyContent:'center', top:10}}>
             <Image source={require('../../image/kandang.png')} 
               style={{ 
                 width: 60,
                 height: 60,
                 marginBottom:20,
-                tintColor: focused ? '#65B741' : '#65B741',
-              }}/>
-           {/* <Text style={{color: focused ? '#e32f45' : '#748c94', fontSize:12}}>Kandang</Text>  */}
+                // color: focused ? '#A52A2A' : 'green',
+                tintColor: focused ? '#997C70' : 'green',
+              }}
+            />
           </View>
         )}}
         />
-         <Tab.Screen name='dass'  component={Dashboardkandang} 
-        options={{tabBarIcon : ({focused})=> (
-          <View style={{alignItems:'center', justifyContent:'center', top:10}}>
-            {/* <View style={styles.viewButton}>
-              <TouchableOpacity onPress={() => navigation.navigate('DaftarOperasional')}><Text>yan</Text></TouchableOpacity>
-            </View> */}
-            <Image source={require('../../image/kandang.png')} 
-              style={{ 
-                width: 60,
-                height: 60,
-                marginBottom:20,
-                tintColor: focused ? '#65B741' : '#65B741',
-              }}/>
-           {/* <Text style={{color: focused ? '#e32f45' : '#748c94', fontSize:12}}>Kandang</Text>  */}
-          </View>
-        )}}
-        />
-      <Tab.Screen name='Akun' component={Ternak} options={{tabBarIcon: ({focused}) => (
-          <View style={{alignItems:'center', justifyContent:'center', top:10}}>
-              <AntDesign name="home" style={{color:'green',marginBottom:20, fontSize:40, tintColor: focused ? '#e32f45' : '#748c94',}}/>
+      <Tab.Screen 
+      name= 'Akun' 
+      component= {Account} 
+      options={{
+        headerShown: false,
+        tabBarIcon: ({focused}) => (
+          <View style={{alignItems:'center', justifyContent:'center', top:7}}>
+              <Icon name="user-circle" 
+                style={{
+                  marginBottom:5,
+                  fontSize:40,
+                  color: focused ? '#997C70' : 'green',
+                }}
+              />
           </View>
       )}}/>
-
-    {/* <View style={styles.ff}>
-    
-    <Background>
-      <BackButton goBack={navigation.goBack}/>
-      {/* <Logo /> */}
-      {/* <Header>Ayo Beternak</Header>
-      <Paragraph >
-        Selamat Datang Sahabat Peternak Milineal
-      </Paragraph>
-      <Button style={styles.color}
-        mode="outlined"
-        onPress={() =>
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'BuatKandang' }],
-          })
-        }
-        >
-        Buat Kandang
-      </Button> */} 
-      {/* <Text style={styles.Paragraph}>* Buat Kandang Jika belum Punya Kandang</Text>
-      <Button
-        mode="outlined"
-        onPress={() =>
-          navigation.reset({
-            index: 0,
-            routes: [{ name: 'ListKandang' }],
-          })
-        }
-        >
-      Masuk Kandang
-      </Button>
-
-    </Background>
-   
-    </View> */}
-        </Tab.Navigator>
-   
+    </Tab.Navigator>
   )
 }
 const styles=StyleSheet.create({
