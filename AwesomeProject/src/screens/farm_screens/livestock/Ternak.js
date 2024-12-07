@@ -67,21 +67,11 @@ function Ternak({navigation}) {
       type: livestock?.type?.value,
       note: livestock?.note?.value
     }
-    // const ageIsValid=!isNaN(data.age)&& data.age>1;
-    // const quantityIsValid=!isNaN(data.quantity) && data.quantity>1;
-    // const amountIsValid=!isNaN(data.amount)&& data.amount>1;
-    // const typeIsvalid=data.type.trim().length>0
 
-
-    //   if (!ageIsValid || !quantityIsValid || !amountIsValid || !typeIsvalid){
-    //     Alert.alert ('Data Anda Salah',"Mohon Untuk Cek Kembali")
-    //     return;
-    //   }
     axiosContext.authAxios.post(`/api/v1/livestock`, data)
       .then(res => {
         console.log(res.data)
         console.info("succes livestock")
-        //navigation.navigate('DaftarTernak', {name: 'DaftarTernak'})
         navigation.navigate('DaftarTernak', {itemp:res.data})
       })
       .catch((error) => {
@@ -101,8 +91,8 @@ function Ternak({navigation}) {
 
       <Text style={kandangStyle.Text}>Total</Text>
       <TextInput value={livestock?.quantity.value} onChangeText={(text) => {
-         const formatted = formatAmount(text);
-        setLiveStock({ ...livestock, quantity: {value: formatted, error: ''}})
+          const formatted = formatAmount(text);
+          setLiveStock({ ...livestock, quantity: {value: formatted, error: ''}})
         }}  
         label= 'Total Ayam' 
         keyboardType="numeric"

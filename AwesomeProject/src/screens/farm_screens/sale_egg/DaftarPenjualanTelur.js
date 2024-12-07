@@ -19,17 +19,13 @@ function DaftarTernak({route, navigation}){
     const [pageCurrent, setpageCurrent]= useState(1)
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
-    const {item}= route.params;
-    const {itemp} = route.params;
+    const itemp = (route && route.params) ? route.params.itemp : undefined;
     const [isDataFinished, setIsDataFinished] = useState(false);
 
     const getData = () => {
         axiosContext.authAxios.get(`/api/v1/saleEgg?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
           .then(res => {
             
-            // console.log("get data = ",res.data.content);
-            // setsaleEgg(saleEgg.concat(res.data.content))
-            // //setLoading(false)
             if(itemp !== undefined){
               setLoading(false)
               console.log("Data = ", res.data.content)
@@ -220,7 +216,7 @@ const emptyList = ()=>{
             <TextInput style={{fontSize:15, color:'#1F2544'}} 
               placeholder="search" 
               placeholderTextColor="#000"
-              value={saleEgg} 
+              value={search} 
               clearButtonMode="always"
               onChangeText={handleSearch}
               autoCorrect={false}/>

@@ -20,8 +20,8 @@ function DaftarPersediaanPakan({route, navigation}){
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
     const [hasMoreData, setHasMoreData] = useState(true);
-    const {item}= route.params;
-    const {itemp} = route.params;
+    console.log('router', route.params);
+    const item = (route && route.params) ? route.params.item : null;
     const [isDataFinished, setIsDataFinished] = useState(false);
 
     const getData = () => {
@@ -92,13 +92,13 @@ function DaftarPersediaanPakan({route, navigation}){
     }; 
 
     useEffect(() => {
-      console.log("itemp = ",itemp)
-      if (itemp !== undefined){
+      console.log("itemp = ",item)
+      if (item == null){
         newgetData();
       }else{
         getData();
       }  
-    }, [itemp, pageCurrent])
+    }, [item, pageCurrent])
 
 renderItem=({item})=>{
   return(

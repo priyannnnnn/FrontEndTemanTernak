@@ -60,14 +60,17 @@ function Penjualan(props){
       amount: saleEgg?.amount?.value.replace(/\./g, ''),
       date:saleEgg?.date?.value
     }
+
     const amount=!isNaN(data.amount) && data.amount>1;
     const quantity=!isNaN(data.quantity) && data.quantity>1;
 
-      if(!amount || !quantity){
-        Alert.alert('Data Anda Salah',"Mohon Untuk Cek Kembali")
-        return;
-      }
+    if(!amount || !quantity){
+      Alert.alert('Data Anda Salah',"Mohon Untuk Cek Kembali")
+      return;
+    }
 
+    console.log('req_penjualan', data);
+    
     axiosContext.authAxios.post(`/api/v1/saleEgg`, data)
     .then(res => {
       console.info("succes sellegg")
@@ -84,8 +87,8 @@ function Penjualan(props){
             <Header>Penjualan Telur</Header>
             <Text style={kandangStyle.Text}>Jumlah Telur</Text>
             <TextInput value={saleEgg?.quantity.value} onChangeText={(text) => {
-              const formatted = formatAmount(text);
-              setsaleEgg({ ...saleEgg, quantity: {value: formatted, error: ''}  })
+                const formatted = formatAmount(text);
+                setsaleEgg({ ...saleEgg, quantity: {value: formatted, error: ''}  })
               }} 
               label='Masukkan Jumlah Telur' 
               keyboardType="numeric"

@@ -14,6 +14,8 @@ function ListFeedsUse({route, navigation}){
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
     const [hasMoreData, setHasMoreData] = useState(true);
+    console.log('router', route.params);
+    
     const {item}= route.params;
     const {itemp} = route.params;
     const [isDataFinished, setIsDataFinished] = useState(false);

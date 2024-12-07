@@ -40,7 +40,7 @@ function AmountKandang({navigation}){
                 <Text style={styles.text}>Pakan</Text>
             </View>
             <View style={styles.viewButton}>
-                <TouchableOpacity onPress={() => navigation.navigate('DaftarPendapatanTelur',{itemp:8})}>
+                <TouchableOpacity onPress={() => navigation.navigate('DaftarPenjualanTelur',{itemp:8})}>
                     <View style={styles.iconContainer}>
                     {/* <Icon name="near-me" size={25} color={'#04555c'} /> */}
                     <Image source={require('../../image/pendepatan.png')} style = {{width: 70, height:50}}/>

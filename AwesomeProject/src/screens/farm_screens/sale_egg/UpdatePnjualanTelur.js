@@ -67,9 +67,13 @@ function UpdatePenjualanTelur(props){
 
     const UpdateData=()=>{
       const Data={
-          quantity:saleEgg?.quantity.value,
-          amount : saleEgg?.amount.value,
-          date :saleEgg?.date.value
+          quantity: saleEgg?.quantity?.value.replace(/\./g, ''),
+          amount: saleEgg?.amount?.value.replace(/\./g, ''),
+          date:saleEgg?.date?.value
+        
+          // quantity:saleEgg?.quantity.value,
+          // amount : saleEgg?.amount.value,
+          // date :saleEgg?.date.value
       }
       axiosContext.authAxios.put(`/api/v1/saleEgg/`+id,Data)
         .then (res =>{
@@ -82,15 +86,32 @@ function UpdatePenjualanTelur(props){
     useEffect(()=> {
       getData(id)
     },[])
+
+    const formatAmount = (text) => {
+      const onlyNumbers = text.replace(/[^0-9]/g, '');
+      const formatted = onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+      return formatted;
+    };
+
     return(
     <View style={styles.View}>
         <Text style={styles.title}>Daftar Penjualan Telur</Text>
 
        <Text style={styles.Text}>Jumlah Telur</Text>
-       <TextInput value={saleEgg?.quantity.value}  onChangeText={(text)=> setsaleEgg({...saleEgg, quantity:{value:text, error:''}})} keyboardType="numeric" />
+       <TextInput value={saleEgg?.quantity.value}  
+       onChangeText={(text)=> {
+        const formatted = formatAmount(text);
+        setsaleEgg({ ...saleEgg, quantity: {value: formatted, error: ''}  })
+       }}
+       keyboardType="numeric" />
 
        <Text style={styles.Text}>Total Pendapatan Telur</Text>
-       <TextInput value={saleEgg?.amount.value}  onChangeText={(text)=> setsaleEgg({...saleEgg, amount:{value:text, error:''}})} keyboardType="numeric" />
+       <TextInput value={saleEgg?.amount.value}  
+       onChangeText={(text)=> {
+        const formatted = formatAmount(text);
+        setsaleEgg({ ...saleEgg, amount: {value: formatted, error: ''}  })
+       }} 
+       keyboardType="numeric" />
 
        <Text style={styles.Text}>Tanggal</Text>
           <TextInput value={saleEgg?.date.value}  onChangeText={(text)=> setsaleEgg({...saleEgg, date:{value:text, error:''}})} onBlur={onChange} onChange={showDatepicker} onFocus={showDatepicker}/>
@@ -100,12 +121,12 @@ function UpdatePenjualanTelur(props){
           mode={mode} is24Hour={true} onChange={onChange}
         />
           )}
-         <Button mode='contained' style={{ marginTop: 4 }} onPress={()=> UpdateData(saleEgg.id)} >Simpan</Button>
-            <Button mode='contained'
-              onPress={() => navigation.reset({ index: 0,
-              routes: [{ name: 'DaftarPenjualanTelur' }], })}>
+        <Button mode='contained' style={{ marginTop: 4 }} onPress={()=> UpdateData(saleEgg.id)} >Simpan</Button>
+        <Button mode='contained'
+          onPress={() => navigation.reset({ index: 0,
+          routes: [{ name: 'DaftarPenjualanTelur' }], })}>
             Kembali
-          </Button>
+        </Button>
     </View>
     )
 }
