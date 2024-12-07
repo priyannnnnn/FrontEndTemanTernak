@@ -31,6 +31,17 @@ const Api =({navigation})=>{
       console.log("service = ",value.service)
       console.log("storage = ",value.storage)
       console.log("username = ",value.username)
+
+      if( value == false){
+
+        setStatus('error');
+        authContext.setAuthState({
+          accessToken: null,
+          authenticated: false,
+        });
+        return
+      }
+
       const jwt = JSON.parse(value.password);
       const userId = jwt.accessToken.userr.id;
       setDataArray(userId)

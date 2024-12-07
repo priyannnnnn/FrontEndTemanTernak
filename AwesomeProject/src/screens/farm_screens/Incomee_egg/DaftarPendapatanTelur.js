@@ -130,7 +130,7 @@ function DaftarPendapatanTelur({ route, navigation }) {
             <TextInput style={{fontSize:15, color:'#1F2544'}} 
               placeholder="search" 
               placeholderTextColor="#000"
-              value={incomeEgg} 
+              value={search} 
               clearButtonMode="always"
               onChangeText={handleSearch}
               autoCorrect={false}/>
