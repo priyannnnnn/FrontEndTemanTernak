@@ -21,6 +21,14 @@ function Dashboardkandang({ navigation }) {
     })
   }
 
+  const formatAmountWithDots = (value) => {
+    if (!value) return '0'; // Handle empty or undefined value
+    const onlyNumbers = value.toString().replace(/[^0-9]/g, ''); // Ensure only numeric characters
+    if( value < 0 )
+      return '-'+onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every 3 digits
+    return onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every 3 digits
+  };
+
   useEffect(() =>{
     getData()
     console.log("Dashboard = ", Dasboard)
@@ -34,8 +42,7 @@ function Dashboardkandang({ navigation }) {
           end={{ x: 0, y: 0.2 }}
           style={styles.background} // Applied styles heres
         >
-          <View style={styles.topp}>
-          </View>
+          
           <View style={styles.topp}>
             <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ListFeedsUse', {itemp:8})}>
               <LinearGradient
@@ -131,24 +138,37 @@ function Dashboardkandang({ navigation }) {
             </TouchableOpacity>
           </View>
           <View style={styles.summary}>
-            <View style={styles.headerr}>
-              <Text style={styles.titlee}>Ringkasan</Text>
+
+            <View style={styles.summaryItem}>
+              <Text style={styles.label}>Keuntungan</Text>
+              <Text style={styles.value}>{formatAmountWithDots(Dasboard.profit)}</Text>
+            </View>
+
+            {/* <View style={styles.summaryItem}>
+              <Text style={styles.label}>Uang Masuk</Text>
+              <Text style={styles.value}>{formatAmountWithDots(Dasboard.income)}</Text>
+            </View> */}
+
+            {/* <View style={styles.summaryItem}>
+              <Text style={styles.label}>Uang Keluar</Text>
+              <Text style={styles.value}>{formatAmountWithDots(Dasboard.cost)}</Text>
+            </View> */}
+
+            <View style={styles.summaryItem}>
+              <Text style={styles.label}>Ternak</Text>
+              <Text style={styles.value}>{formatAmountWithDots(Dasboard.livestock)}</Text>
             </View>
 
             <View style={styles.summaryItem}>
-              <Text style={styles.label}>Hasil Puyuh</Text>
-              <Text style={styles.value}>{Dasboard.totalQuailt}</Text>
+              <Text style={styles.label}>Pakan</Text>
+              <Text style={styles.value}>{formatAmountWithDots(Dasboard.feed)} Kg</Text>
             </View>
 
             <View style={styles.summaryItem}>
-              <Text style={styles.label}>Hasil Telur</Text>
-              <Text style={styles.value}>{Dasboard.totalEgg}</Text>
+              <Text style={styles.label}>Telur</Text>
+              <Text style={styles.value}>{formatAmountWithDots(Dasboard.egg)}</Text>
             </View>
 
-            <View style={styles.summaryItem}>
-              <Text style={styles.label}>Total Pakan</Text>
-              <Text style={styles.value}>{Dasboard.totalFeed}</Text>
-            </View>
           </View>
         </LinearGradient>
       </View>
@@ -222,7 +242,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',  // Align child elements in a row
     justifyContent: 'space-between',  // Optional: Adjust spacing between elements
     alignItems: 'center',  // Optional: Align items vertically
-    top:-70
+    top:-130
     // padding: 10,  // Optional: Add padding to the container
     // backgroundColor: '#FCDE70',  // Optional: Set background color
   },
@@ -274,11 +294,11 @@ const styles = StyleSheet.create({
    },
    summary:{
     position: 'absolute',
-    width: 370,
+    width: '100%',
     height: 270,
-    left: '50%',
-    top: 220,
-    marginLeft: -185, 
+    left: 0,
+    top: 170,
+    marginLeft: 0, 
     backgroundColor: 'white',
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
@@ -311,14 +331,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   label: {
+    width: '50%',
     fontSize: 16,
     fontWeight: 'bold',
     color:'black'
   },
   value: {
+    width: '50%',
+    right: 0,
     fontSize: 16,
     fontWeight: 'bold',
-    color:'black'
+    color:'black',
+    textAlign: 'right'
   },
   card: {
     width: 170,
