@@ -136,8 +136,7 @@ function Ternak({navigation}) {
 
       <Button mode='contained' style={{ marginTop: 4 }} onPress={ onSubmit }>Simpan</Button>
       <Button mode='contained'
-        onPress={() => navigation.reset({index: 0,
-          routes: [{ name: 'Dashboard' }],})}>Kembali</Button>
+        onPress={() => navigation.navigate('DaftarTernak',{item:8})}>Kembali</Button>
       </View>
     </ScrollView>
           // </Back>

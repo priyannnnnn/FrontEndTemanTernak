@@ -110,12 +110,7 @@ function PendapatanTelur(props) {
         </Button>
         <Button
           mode='contained'
-          onPress={() =>
-            navigation.reset({
-              index: 0,
-              routes: [{ name: 'Dashboard' }],
-            })
-          }
+          onPress={()=> navigation.navigate('DaftarPendapatanTelur', {itemp:8})}
         >Kembali</Button>
       </View>
     </ScrollView>

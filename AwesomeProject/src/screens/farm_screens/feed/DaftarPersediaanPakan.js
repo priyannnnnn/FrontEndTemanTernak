@@ -1,10 +1,15 @@
-import { ActivityIndicator, Alert, FlatList, Image, SafeAreaView, StyleSheet, Text, TextInput, View } from "react-native";
-import Button from "../../../components/Button";
-import { GlobalStyles } from "../../../components/style";
-import { theme } from "../../../core/theme";
-import {Ionicons} from '@expo/vector-icons';
+import { 
+  ActivityIndicator, 
+  Alert, 
+  FlatList, 
+  Image, 
+  SafeAreaView, 
+  StyleSheet, 
+  Text, 
+  TextInput, 
+  View 
+} from "react-native";
 import { useContext, useEffect, useState } from "react";
-import { ScrollView } from "react-native-gesture-handler";
 import filter from "lodash.filter"
 import { TouchableOpacity } from "react-native";
 import { AxiosContext } from "../../../context/AxiosContext";
@@ -23,25 +28,35 @@ function DaftarPersediaanPakan({route, navigation}){
     console.log('router', route.params);
     const item = (route && route.params) ? route.params.item : null;
     const [isDataFinished, setIsDataFinished] = useState(false);
+    const [isPaginating, setIsPaginating] = useState(false);
 
-    const getData = () => {
-        axiosContext.authAxios.get(`/api/v1/feed?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
-          .then(res => {
-            console.log("get data = ",res.data.content);
-            setLoading(false)
-            setfeed(feed.concat(res.data.content))
-            //setLoading(false)
-          })
-          .catch((e) => {
-            setLoading(false)
-            console.error(e, "getdatay")
-            setErrorMessage("Network Error. Please try again.")
-          })
-    }
+  const getData = () => {
+    axiosContext.authAxios
+      .get(`/api/v1/feed?orders=createdAt-desc&size=${totalpage}&page=${pageCurrent}`)
+      .then((res) => {
+        console.log(" Get Data")
+        const data = res.data.content || [];
 
-    const newgetData = () => {
+        if (data.length === 0) {
+          setIsDataFinished(true);
+        } else {
+          setfeed((prevFeed) => [...prevFeed, ...data]);
+        }
+        setLoading(false);
+        setIsPaginating(false);
+      })
+      .catch((error) => {
+        setLoading(false);
+        setIsPaginating(false);
+        setErrorMessage("Network Error. Please try again.");
+        console.error(error);
+      });
+  };
+
+    const refreshFeedData = () => {
         axiosContext.authAxios.get(`/api/v1/feed?orders=createdAt-desc`)
           .then(res => {
+            console.log("New Get Data")
             //console.log(res.data.content);
             setLoading(false)
             setfeed(res.data.content)
@@ -59,7 +74,7 @@ function DaftarPersediaanPakan({route, navigation}){
         axiosContext.authAxios.delete('/api/v1/feed/'+id)
         .then(res =>{
           setfeed(res.data)
-          newgetData()
+          refreshFeedData()
         })
         .catch((e)=> {
           console.error(e,"errror")
@@ -91,100 +106,98 @@ function DaftarPersediaanPakan({route, navigation}){
       );
     }; 
 
-    useEffect(() => {
-      console.log("itemp = ",item)
-      if (item == null){
-        newgetData();
-      }else{
-        getData();
-      }  
-    }, [item, pageCurrent])
-
-renderItem=({item})=>{
-  return(
-    <View style={listStyle.container} key={item.id}>
-      <TouchableOpacity
-              style={listStyle.button}>
-                <Text style={listStyle.buttonText}>{item.date}</Text>
-        </TouchableOpacity>
-        <View style={listStyle.employeeListContainer}>
-        <Text style={listStyle.listItem}>Jumlah : {formatAmountWithDots(item.quantity)} KG</Text>
-            <Text style={listStyle.listItem}>Harga : {formatAmountWithDots(item.amount)}</Text>
-            <Text style={listStyle.listItem}>Type : {item.type}</Text>
-            <Text style={listStyle.listItem}>Tanggal : {item.date}</Text>
-          <View style={listStyle.buttonContainer}>
-            <TouchableOpacity
-                onPress={() => {showConfirmDialog(item.id)}}
-                style={{ ...listStyle.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                <Text style={listStyle.buttonText}>Hapus</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                onPress={() => navigation.navigate ('UpdatePakan',{id:item.id})} 
-                onLongPress={()=> navigation.navigate('UpdatePakan',{id:item.id})}
-                style={{ ...listStyle.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
-                <Text style={listStyle.buttonText}>Edit</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-    </View>
-  )
- }
-
-//  const renderFooter=()=>{
-//   return(
-//     loading?
-//   <View style={listStyle.loader}>
-//     <ActivityIndicator size="large"/>
-    
-//   </View> :null)
-//  }
-  const renderFooter = () => {
-    if (isDataFinished) {
-      return (
-        <View style={listStyle.footerContainer}>
-          <Text style={listStyle.footerText}>Data sudah habis</Text>
-        </View>
-      );
+  useEffect(() => {
+    if (item == null) {
+      refreshFeedData();
+    } else {
+      getData();
     }
-    return null; // Tidak ada footer jika data belum habis
-  };
+  }, [item, pageCurrent]);
+
+  renderItem=({item})=>{
+    return(
+      <View style={listStyle.container} key={item.id}>
+        <TouchableOpacity
+                style={listStyle.button}>
+                  <Text style={listStyle.buttonText}>{item.date}</Text>
+          </TouchableOpacity>
+          <View style={listStyle.employeeListContainer}>
+          <Text style={listStyle.listItem}>Jumlah : {formatAmountWithDots(item.quantity)} KG</Text>
+              <Text style={listStyle.listItem}>Harga : {formatAmountWithDots(item.amount)}</Text>
+              <Text style={listStyle.listItem}>Type : {item.type}</Text>
+              <Text style={listStyle.listItem}>Tanggal : {item.date}</Text>
+            <View style={listStyle.buttonContainer}>
+              <TouchableOpacity
+                  onPress={() => {showConfirmDialog(item.id)}}
+                  style={{ ...listStyle.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                  <Text style={listStyle.buttonText}>Hapus</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                  onPress={() => navigation.navigate ('UpdatePakan',{id:item.id})} 
+                  onLongPress={()=> navigation.navigate('UpdatePakan',{id:item.id})}
+                  style={{ ...listStyle.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
+                  <Text style={listStyle.buttonText}>Edit</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+      </View>
+    )
+  }
+  // const renderFooter = () => {
+  //   if (isDataFinished) {
+  //     return (
+  //       <View style={listStyle.footerContainer}>
+  //         <Text style={listStyle.footerText}>Data sudah habis</Text>
+  //       </View>
+  //     ); (
+  //       isPaginating && (
+  //         <View style={listStyle.footerContainer}>
+  //           <ActivityIndicator size="small" />
+  //           <Text style={listStyle.footerText}>Memuat data...</Text>
+  //         </View>
+  //       )
+  //     )
+  //   }
+  //   return null; // Tidak ada footer jika data belum habis
+  // };
+  const renderFooter = () => (
+    isDataFinished ? (
+      <View style={listStyle.footerContainer}>
+        <Text style={listStyle.footerText}>Data sudah habis</Text>
+      </View>
+    ) : (
+      isPaginating && (
+        <View style={listStyle.footerContainer}>
+          <ActivityIndicator size="small" />
+          <Text style={listStyle.footerText}>Memuat data...</Text>
+        </View>
+      )
+    )
+  );
 
  handleLoadMore= async()=>{
-    if(loading)return;
-    renderFooter()
-    const nextPage = pageCurrent + 1
-    setIsDataFinished(true); 
-    const newData = await setpageCurrent(nextPage);  
+    if (!loading && !isDataFinished) {
+      setpageCurrent((prevPage) => prevPage + 1);
+    }
  }
 
- const handleSearch= (item) =>{
-  setsearch(item);
-  const data =[];
-  const formattedQuery = item.toLowerCase();
-  const filterData= filter(feed, (item)=> {
-    return contains(item , formattedQuery)
-  })
-  console.log("Data = ",data)
-  console.log("Format Query =",formattedQuery)
-  console.log("Filter Data = ",filterData)
-  setfeed(filterData)
-  if (data.toString() === filterData.toString()){
-    console.log("get Text")
-      return (
-        <Text style={styles.text}>Data Tidak Ada</Text>
-      )
-    }
+ const handleSearch = (query) => {
+  setsearch(query);
+  const formattedQuery = query.toLowerCase();
+  const filteredData = filter(feed, (item) => contains(item, formattedQuery));
+  setfeed(filteredData);
 };
-const contains= ({age, note, date, quantity, type, amount}, item) => {
-  if( date.includes(item) || type.includes(item) 
-      || quantity.toString().includes(item)
-      || amount.toString().includes(item)
-      || age.toString().includes(item)
-      || note.toString().includes(item)){
-    return true;
-  }
-  return false;
-}
+
+const contains = ({ age, note, date, quantity, type, amount }, query) => {
+  return (
+    date.includes(query) ||
+    type.includes(query) ||
+    quantity.toString().includes(query) ||
+    amount.toString().includes(query) ||
+    age?.toString().includes(query) ||
+    note?.toString().includes(query)
+  );
+};
 
 const emptyList = ()=>{
   return(

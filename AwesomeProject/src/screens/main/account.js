@@ -1,9 +1,46 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconHelp from 'react-native-vector-icons/Entypo';
+import * as Keychain from 'react-native-keychain';
+import { AuthContext } from '../../context/AuthContext'
 
-function Account(){
+function Account({navigation}){
+
+  const authContext = useContext(AuthContext);
+
+  const LogOut = async () =>{
+    console.log("Log Out")
+    try{
+      await Keychain.resetGenericPassword();
+      authContext.setAuthState({
+        authenticated: false,
+        refreshToken:null,
+        accessToken:null,
+      })
+      navigation.navigate('LoginScreen')
+    } catch(error){
+      console.error("Error LougOut", error)
+    }
+  }
+
+  const showConfirmLogOut = () => {
+    // console.log(id)
+    return Alert.alert(
+      "Apakah kamu yakin?",
+      "Apakah Kamu Yakin Untuk LogOut?",
+      [
+        {
+          text: "Yes",
+          onPress:()=>LogOut() ,
+        },
+        {
+          text: "No",
+        },
+      ]
+    );
+  }; 
+
     return(
     <View style={styles.container}>
         <View style={styles.card}>
@@ -45,7 +82,7 @@ function Account(){
                 <Icon name='chevron-right' style={styles.SecondIcon}/>
             </TouchableOpacity>
         </View>
-        <TouchableOpacity style={styles.ThirdContainer}>
+        <TouchableOpacity style={styles.ThirdContainer} onPress={() => showConfirmLogOut()}>
             <View style={styles.firsticon}>
                 <IconHelp name='log-out' style={styles.thridIcon}/>
                 <Text style={styles.TextLogout}>Log Out</Text>

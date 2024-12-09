@@ -95,7 +95,6 @@ function ListQuailReduction({route, navigation}){
         getData();
       }  
       getData()
-    // console.log("axios = ", axiosContext.authAxios)
     }, [itemp, pageCurrent])
 
     renderItem=({item})=>{

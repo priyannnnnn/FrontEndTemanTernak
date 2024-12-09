@@ -13,13 +13,24 @@ function DaftarPendapatanTelur({ route, navigation }) {
   const axiosContext = useContext(AxiosContext);
   const { itemp } = route.params;
   const [isDataFinished, setIsDataFinished] = useState(false);
+  const [totalpage, settotalpage]= useState(10);
+  const [isPaginating, setIsPaginating] = useState(false);
 
   const getData = () => {
     axiosContext.authAxios
-      .get(`/api/v1/incomeEgg?orders=createdAt-desc&size=10&page=${pageCurrent}`)
+      .get(`/api/v1/incomeEgg?orders=createdAt-desc&size=${totalpage}&page=${pageCurrent}`)
       .then(res => {
+        // setLoading(false);
+        // setIncomeEgg(prevData => itemp ? res.data.content : [...prevData, ...res.data.content]);
+        const data = res.data.content || [];
+
+        if (data.length === 0) {
+          setIsDataFinished(true);
+        } else {
+          setIncomeEgg((prevFeed) => [...prevFeed, ...data]);
+        }
         setLoading(false);
-        setIncomeEgg(prevData => itemp ? res.data.content : [...prevData, ...res.data.content]);
+        setIsPaginating(false);
       })
       .catch(console.error);
   };
@@ -93,7 +104,13 @@ function DaftarPendapatanTelur({ route, navigation }) {
   };
 
   useEffect(() => {
-    itemp ? newGetData() : getData();
+    console.log("page current = ", pageCurrent)
+    // itemp ? newGetData() : getData();
+    if (itemp == null) {
+      newGetData();
+    } else {
+      getData();
+    }
   }, [itemp, pageCurrent]);
 
    renderItem = ({ item }) => (

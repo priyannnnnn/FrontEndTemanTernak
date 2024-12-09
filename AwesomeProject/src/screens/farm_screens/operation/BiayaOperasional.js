@@ -105,12 +105,7 @@ function BiayaOperasional(props) {
             </Button>
             <Button 
             mode='contained'
-                onPress={() =>
-                  navigation.reset({
-                    index: 0,
-                    routes: [{ name: 'Dashboard' }],
-                  })
-                }
+                onPress={()=> navigation.navigate('ListOperational',{itemp:8})}
             >Kembali</Button>
           </View>
        </ScrollView>

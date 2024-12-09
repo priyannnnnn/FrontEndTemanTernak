@@ -19,27 +19,30 @@ function ListFeedsUse({route, navigation}){
     const {item}= route.params;
     const {itemp} = route.params;
     const [isDataFinished, setIsDataFinished] = useState(false);
+    const [isPaginating, setIsPaginating] = useState(false);
 
     const getData = () => {
-        axiosContext.authAxios.get(`/api/v1/feeduse?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
-          .then(res => {
-            console.log("get data = ",res.data.content);
-            setLoading(false)
-            setfeed(feed.concat(res.data.content))
-            //setLoading(false)
-          })
-          .catch((e) => {
-            setLoading(false)
-            console.error(e, "getdatay")
-            setErrorMessage("Network Error. Please try again.")
-          })
+      axiosContext.authAxios.get(`/api/v1/feeduse?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
+        .then(res => {
+          const data = res.data.content || [];
+          if (data.length === 0) {
+            setIsDataFinished(true);
+          } else {
+            setfeed((prevFeed) => [...prevFeed, ...data]);
+          }
+          setLoading(false);
+          setIsPaginating(false);
+        })
+        .catch((e) => {
+          setLoading(false)
+          console.error(e, "getdatay")
+          setErrorMessage("Network Error. Please try again.")
+        })
     }
 
     const newgetData = () => {
         axiosContext.authAxios.get(`/api/v1/feeduse?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
           .then(res => {
-            //console.log(res.data.content);
-            setLoading(false)
             setfeed(res.data.content)
           })
           .catch((e) => {
@@ -88,12 +91,12 @@ function ListFeedsUse({route, navigation}){
     };
 
     useEffect(() => {
-      console.log("itemp = ",itemp)
-      if (itemp !== undefined){
+      console.log("pageCurrent = ",pageCurrent)
+      if (itemp == null) {
         newgetData();
-      }else{
+      } else {
         getData();
-      }  
+      }
     }, [itemp, pageCurrent])
 
 renderItem=({item})=>{

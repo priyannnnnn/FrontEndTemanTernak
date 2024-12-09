@@ -115,8 +115,7 @@ function Penjualan(props){
 
         <Button mode='contained' style={{margin:4}} onPress={onSubmit}>Simpan</Button>  
         <Button mode='contained'
-            onPress={() => navigation.reset({
-            index: 0, routes: [{ name: 'Dashboard' }],})}>Kembali</Button>   
+            onPress={() => navigation.navigate('DaftarPenjualanTelur',{itemp:8})}>Kembali</Button>   
         </View> 
         </ScrollView>
     )

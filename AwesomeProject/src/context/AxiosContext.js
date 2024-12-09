@@ -4,6 +4,7 @@ import { AuthContext } from "./AuthContext";
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 import * as Keychain from 'react-native-keychain';
 import {BASE_URL} from "@env"
+import {URL} from '@env'
 
 const AxiosContext=createContext();
 const {Provider}= AxiosContext;

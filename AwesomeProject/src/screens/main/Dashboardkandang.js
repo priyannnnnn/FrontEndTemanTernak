@@ -42,7 +42,6 @@ function Dashboardkandang({ navigation }) {
           end={{ x: 0, y: 0.2 }}
           style={styles.background} // Applied styles heres
         >
-          
           <View style={styles.topp}>
             <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ListFeedsUse', {itemp:8})}>
               <LinearGradient
@@ -104,7 +103,7 @@ function Dashboardkandang({ navigation }) {
                 </View>
 
                 <View style={styles.arrrow}>
-                  <Text style={styles.text}>Kandang</Text>
+                  <Text style={styles.text}>Afkir Ternak</Text>
                   <Ionicons
                     name="arrow-forward"
                     size={24}
@@ -216,7 +215,7 @@ const styles = StyleSheet.create({
   },
   background: {
     position: 'absolute',
-    width: 390,
+    width: 410,
     height: 1634,
     left: '50%',
     marginLeft: -200,
@@ -242,7 +241,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',  // Align child elements in a row
     justifyContent: 'space-between',  // Optional: Adjust spacing between elements
     alignItems: 'center',  // Optional: Align items vertically
-    top:-130
+    top:-70
     // padding: 10,  // Optional: Add padding to the container
     // backgroundColor: '#FCDE70',  // Optional: Set background color
   },
@@ -297,8 +296,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 270,
     left: 0,
-    top: 170,
-    marginLeft: 0, 
+    top: 230,
+    // marginLeft: 0, 
+    marginHorizontal:0,
     backgroundColor: 'white',
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
