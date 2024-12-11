@@ -15,13 +15,15 @@ function ListFeedsUse({route, navigation}){
     const [search, setsearch]= useState('');
     const [hasMoreData, setHasMoreData] = useState(true);
     console.log('router', route.params);
-    
-    const {item}= route.params;
-    const {itemp} = route.params;
+    const item = (route && route.params) ? route.params.item : null;
+    // const {item}= route.params;
+    // const {itemp} = route.params;
+    // const itemp  = (route && route.params) ? route.params.item : null;
     const [isDataFinished, setIsDataFinished] = useState(false);
     const [isPaginating, setIsPaginating] = useState(false);
 
     const getData = () => {
+      console.log("Get Data")
       axiosContext.authAxios.get(`/api/v1/feeduse?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
         .then(res => {
           const data = res.data.content || [];
@@ -43,6 +45,7 @@ function ListFeedsUse({route, navigation}){
     const newgetData = () => {
         axiosContext.authAxios.get(`/api/v1/feeduse?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
           .then(res => {
+            setLoading(false)
             setfeed(res.data.content)
           })
           .catch((e) => {
@@ -91,13 +94,12 @@ function ListFeedsUse({route, navigation}){
     };
 
     useEffect(() => {
-      console.log("pageCurrent = ",pageCurrent)
-      if (itemp == null) {
+      if (item == null) {
         newgetData();
       } else {
         getData();
       }
-    }, [itemp, pageCurrent])
+    }, [item, pageCurrent])
 
 renderItem=({item})=>{
   return(

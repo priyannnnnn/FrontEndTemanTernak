@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import BackgroundDashboard from '../../components/Backgrounddash';
 import Ionicons from 'react-native-vector-icons/MaterialIcons';
@@ -43,7 +43,7 @@ function Dashboardkandang({ navigation }) {
           style={styles.background} // Applied styles heres
         >
           <View style={styles.topp}>
-            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ListFeedsUse', {itemp:8})}>
+            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ListFeedsUse', {item:8})}>
               <LinearGradient
                 colors={['#F8CE5A', '#F3B93D']}
                 style={styles.gradientBackground}
@@ -136,7 +136,8 @@ function Dashboardkandang({ navigation }) {
               </LinearGradient>
             </TouchableOpacity>
           </View>
-          <View style={styles.summary}>
+          {/* <View style={styles.summary}> */}
+            <ScrollView style={styles.summary}>
 
             <View style={styles.summaryItem}>
               <Text style={styles.label}>Keuntungan</Text>
@@ -168,7 +169,8 @@ function Dashboardkandang({ navigation }) {
               <Text style={styles.value}>{formatAmountWithDots(Dasboard.egg)}</Text>
             </View>
 
-          </View>
+          {/* </View> */}
+          </ScrollView>
         </LinearGradient>
       </View>
     </BackgroundDashboard>

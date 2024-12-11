@@ -28,8 +28,7 @@ function DaftarTernak({ route, navigation }) {
   const [search, setSearch] = useState('');
   const [hasMoreData, setHasMoreData] = useState(true);
   const [isDataFinished, setIsDataFinished] = useState(false);
-  
-  const { itemp } = route.params;
+  const itemp  = (route && route.params) ? route.params.item : null;
 
   const getData = () => {
     axiosContext.authAxios.get(`/api/v1/livestock?orders=createdAt-desc&size=${totalPage}&page=${pageCurrent}`)
@@ -151,7 +150,12 @@ function DaftarTernak({ route, navigation }) {
   };
 
   useEffect(() => {
-    if (itemp !== undefined) {
+    // if (itemp !== undefined) {
+    //   newGetData();
+    // } else {
+    //   getData();
+    // }
+    if (itemp == null) {
       newGetData();
     } else {
       getData();

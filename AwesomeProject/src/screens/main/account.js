@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import IconHelp from 'react-native-vector-icons/Entypo';
@@ -8,7 +8,7 @@ import { AuthContext } from '../../context/AuthContext'
 function Account({navigation}){
 
   const authContext = useContext(AuthContext);
-
+  const [users, setUsers] = useState([])
   const LogOut = async () =>{
     console.log("Log Out")
     try{
@@ -41,6 +41,21 @@ function Account({navigation}){
     );
   }; 
 
+  const GetAccount = useCallback(async() => {
+    try{
+      const value = await Keychain.getGenericPassword();
+      const jwt = JSON.parse(value.password)
+      const User = jwt.accessToken.userr;
+      setUsers(User)
+    }catch{
+
+    }
+  })
+
+  useEffect(() => {
+    GetAccount()
+  },[])
+
     return(
     <View style={styles.container}>
         <View style={styles.card}>
@@ -50,8 +65,8 @@ function Account({navigation}){
                 />
             </View>
             <View style={styles.textContainer}>
-                <Text style={styles.name}>Supriyanto</Text>
-                <Text style={styles.phone}>085328783238</Text>
+                <Text style={styles.name}>{users.fullName}</Text>
+                <Text style={styles.phone}>{users.phoneNumber}</Text>
             </View>
         </View>
         <View style={styles.SecondContainer}>
@@ -77,7 +92,7 @@ function Account({navigation}){
                 <Text style={styles.TextProfile}>Tentang Aplikasi</Text>
                 <Icon name='chevron-right' style={styles.SecondIcon}/>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.icon}>
+            <TouchableOpacity style={styles.icon} onPress={() => GetAccount()}>
                 <Text style={styles.TextProfile}>Cara Penggunaan</Text>
                 <Icon name='chevron-right' style={styles.SecondIcon}/>
             </TouchableOpacity>

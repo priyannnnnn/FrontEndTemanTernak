@@ -15,7 +15,7 @@ function AmountKandang({navigation}){
       <Icon name="search" size={25} color={'#04555c'} />,
       <Icon name="person" size={25} color={'#04555c'} />,
       <Icon name="near-me" size={25} color={'#04555c'} />,
-      <Icon name="place" size={25} color={'#04555c'} />,
+        <Icon name="place" size={25} color={'#04555c'} />,
         
     ];
       const ListCategories = () => {
@@ -51,6 +51,31 @@ function AmountKandang({navigation}){
           </View>
         );
       };
+      const ListCategories2 = () => {
+        return (
+          <View style={styles.categoryContainer2}>
+            <View style={styles.viewButton}>
+                <TouchableOpacity onPress={() => navigation.navigate('DaftarPersediaanPakan',{item:8})}>
+                    <View style={styles.iconContainer}>
+                    {/* <Icon name="alarm" size={25} color={'#04555c'} /> */}
+                    <Image source={require('../../image/pakan12.png')} style = {{width:65, height:65}}/>
+                    </View>
+                </TouchableOpacity>
+                <Text style={styles.text}>Persediaan Pakan</Text>
+            </View>
+            <View style={styles.viewButton}>
+                <TouchableOpacity onPress={() => navigation.navigate('DaftarOperasional',{item:8})}>
+                    <View style={styles.iconContainer}>
+                    {/* <Icon name="beach-access" size={25} color={'#04555c'} /> */}
+                    <Image source={require('../../image/date.png')} style = {{marginLeft:5,width:63, height:63}}/>
+                    </View>
+                </TouchableOpacity>
+                <Text style={styles.text}>Operasional</Text>
+            </View> 
+          </View>
+        );
+      };
+      
     const RecommendedCard = ({place}) => {
         return (
           <ImageBackground style={styles.rmCardImage} source={place.image}>

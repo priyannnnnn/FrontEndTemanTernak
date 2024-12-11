@@ -44,9 +44,11 @@ const Api =({navigation})=>{
 
       const jwt = JSON.parse(value.password);
       const userId = jwt.accessToken.userr.id;
+      const name = jwt.accessToken.userr.fullName;
       setDataArray(userId)
       console.log("array = ", dataArray )
       console.log("users = ", userId)
+      console.log("Name  = ", name)
       authContext.setAuthState({
         accessToken: jwt.accessToken || null,
         // refreshToken: jwt.refreshToken || null,

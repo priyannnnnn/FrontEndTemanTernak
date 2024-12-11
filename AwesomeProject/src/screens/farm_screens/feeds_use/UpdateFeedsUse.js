@@ -92,7 +92,7 @@ function UpdateFeedsUse(props){
         }
         return (
             <View style={styles.View} >
-                 <Text style={styles.title}>Daftar PendapatanTelur</Text>
+                 <Text style={styles.title}>Update Penggunaan Telur</Text>
                  <Text style={styles.Text}>Jumlah KG</Text>
                 <TextInput value={feed?.quantity.value} onChangeText={(text)=> setfeed({...feed, quantity:{value:text, error:''}})} keyboardType="numeric"/>
 

@@ -95,7 +95,7 @@ function UpdatePakan(props){
     
     return (
         <View style={styles.View} >
-             <Text style={styles.title}>Daftar PendapatanTelur</Text>
+             <Text style={styles.title}>Daftar Persediaan Pakan</Text>
              <Text style={styles.Text}>Jumlah KG</Text>
             <TextInput value={feed?.quantity.value} onChangeText={(text)=> setfeed({...feed, quantity:{value:text, error:''}})} keyboardType="numeric"/>
 
