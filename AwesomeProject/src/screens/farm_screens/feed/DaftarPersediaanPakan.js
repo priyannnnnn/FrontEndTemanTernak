@@ -15,6 +15,7 @@ import { TouchableOpacity } from "react-native";
 import { AxiosContext } from "../../../context/AxiosContext";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import listStyle from "../../../helpers/styles/list.style";
+import Styles from "../../../helpers/styles/Styles";
 
 function DaftarPersediaanPakan({route, navigation}){
     const axiosContext = useContext(AxiosContext);
@@ -143,23 +144,6 @@ function DaftarPersediaanPakan({route, navigation}){
       </View>
     )
   }
-  // const renderFooter = () => {
-  //   if (isDataFinished) {
-  //     return (
-  //       <View style={listStyle.footerContainer}>
-  //         <Text style={listStyle.footerText}>Data sudah habis</Text>
-  //       </View>
-  //     ); (
-  //       isPaginating && (
-  //         <View style={listStyle.footerContainer}>
-  //           <ActivityIndicator size="small" />
-  //           <Text style={listStyle.footerText}>Memuat data...</Text>
-  //         </View>
-  //       )
-  //     )
-  //   }
-  //   return null; // Tidak ada footer jika data belum habis
-  // };
   const renderFooter = () => (
     isDataFinished ? (
       <View style={listStyle.footerContainer}>
@@ -222,6 +206,7 @@ const emptyList = ()=>{
       <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
     </View> :
       <View style={{backgroundColor:'#F5EEE6'}}>
+      
         <View style={{flexDirection:'row'}}>
           <View style={listStyle.input}>
           <Icon name="search" size={25} color={'#1F2544'} style={{marginTop:10}}/>

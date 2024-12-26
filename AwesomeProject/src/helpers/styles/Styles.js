@@ -27,4 +27,11 @@ export default StyleSheet.create({
         marginBottom:-10,
         color:'#000000'
       },
+      TextContainer:{
+        textAlign: 'center',
+        fontSize: 25,
+        fontWeight: '700',
+        marginBottom:-10,
+        color:'#000000'
+      }
 })

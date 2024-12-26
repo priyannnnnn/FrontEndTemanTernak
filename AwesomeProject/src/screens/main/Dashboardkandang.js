@@ -35,7 +35,8 @@ function Dashboardkandang({ navigation }) {
   },[])
   return (
     <BackgroundDashboard>
-      <View style={{ alignItems: 'center', width: 400,}}>
+      {/* <View style={{ alignItems: 'center', width: 400,}}> */}
+      <ScrollView contentContainerStyle={{ alignItems: 'center', width: 405,height:800 }}>
         <LinearGradient
           colors={['#FFD365', '#179574']}
           start={{ x: 0, y: 0 }}
@@ -65,7 +66,7 @@ function Dashboardkandang({ navigation }) {
                 </View>
               </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('DaftarPenjualanTelur',{item:8})}>
+            <TouchableOpacity style={styles.card1} onPress={() => navigation.navigate('DaftarPenjualanTelur',{item:8})}>
               <LinearGradient
                 colors={['#F8CE5A', '#F3B93D']}
                 style={styles.gradientBackground}
@@ -113,7 +114,7 @@ function Dashboardkandang({ navigation }) {
                 </View>
               </LinearGradient>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('ListOperational', {itemp:8})}>
+            <TouchableOpacity style={styles.card1} onPress={() => navigation.navigate('ListOperational', {itemp:8})}>
               <LinearGradient
                 colors={['#F8CE5A', '#F3B93D']}
                 style={styles.gradientBackground}
@@ -144,16 +145,6 @@ function Dashboardkandang({ navigation }) {
               <Text style={styles.value}>{formatAmountWithDots(Dasboard.profit)}</Text>
             </View>
 
-            {/* <View style={styles.summaryItem}>
-              <Text style={styles.label}>Uang Masuk</Text>
-              <Text style={styles.value}>{formatAmountWithDots(Dasboard.income)}</Text>
-            </View> */}
-
-            {/* <View style={styles.summaryItem}>
-              <Text style={styles.label}>Uang Keluar</Text>
-              <Text style={styles.value}>{formatAmountWithDots(Dasboard.cost)}</Text>
-            </View> */}
-
             <View style={styles.summaryItem}>
               <Text style={styles.label}>Ternak</Text>
               <Text style={styles.value}>{formatAmountWithDots(Dasboard.livestock)}</Text>
@@ -172,7 +163,8 @@ function Dashboardkandang({ navigation }) {
           {/* </View> */}
           </ScrollView>
         </LinearGradient>
-      </View>
+      {/* </View> */}
+      </ScrollView>
     </BackgroundDashboard>
   );
 }
@@ -221,78 +213,16 @@ const styles = StyleSheet.create({
     height: 1634,
     left: '50%',
     marginLeft: -200,
-    top: 140,
+    top: 120,
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-  },
-  stokPakan:{
-    position: 'absolute',
-    width: 148,
-    height: 105,
-    left: 35,
-    top: -50,
-    borderRadius: 10,
-    backgroundColor: '#FFD365', // Assuming a default background color
-    shadowColor: '#000',
-    shadowOffset: { width: 5, height: 5 },
-    shadowOpacity: 0.5,
-    shadowRadius: 10,
-    elevation: 5, // Required for Android to apply shadow
   },
   topp:{
     flexDirection: 'row',  // Align child elements in a row
     justifyContent: 'space-between',  // Optional: Adjust spacing between elements
     alignItems: 'center',  // Optional: Align items vertically
     top:-70
-    // padding: 10,  // Optional: Add padding to the container
-    // backgroundColor: '#FCDE70',  // Optional: Set background color
   },
-  stokPakan1:{
-    // flex: 1,  // Adjust size of each element
-    // marginRight: 10,  // Add margin to the right for spacing between elements
-    // backgroundColor: '#cce7ff',  // Optional: Set background color for the element
-    position: 'absolute',
-    width: 148,
-    height: 105,
-    left: 200,
-    top: -50,
-    borderRadius: 10,
-    backgroundColor: '#FFD365',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.25,
-    shadowRadius: 5,
-    elevation: 5, // Required for Android to apply shadow
-   },
-   stokPakan3:{
-    position: 'absolute',
-    width: 148,
-    height: 105,
-    left: 35,
-    top: 80,
-    borderRadius: 10,
-    backgroundColor: '#FFD365', // Assuming a default background color
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.25,
-    shadowRadius: 5,
-    elevation: 5, // Required for Android to apply shadow
-   },
-   stokPakan4:{
-    position: 'absolute',
-    width: 148,
-    height: 105,
-    left: 200,
-    top: 80,
-    borderRadius: 10,
-    backgroundColor: '#FFD365', // Assuming a default background color
-    // color:'#FFD365',
-    shadowColor: 'black',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.25,
-    shadowRadius: 5,
-    elevation: 5, // Required for Android to apply shadow
-   },
    summary:{
     position: 'absolute',
     width: '100%',
@@ -347,7 +277,7 @@ const styles = StyleSheet.create({
     textAlign: 'right'
   },
   card: {
-    width: 170,
+    width: 160,
     height: 125,
     borderRadius: 15,
     overflow: 'hidden',
@@ -356,6 +286,19 @@ const styles = StyleSheet.create({
     shadowColor: '#000', // shadow for iOS
     shadowOpacity: 0.2,
     shadowRadius: 5,
+    left:10
+  },
+  card1:{
+    width: 160,
+    height: 125,
+    borderRadius: 15,
+    overflow: 'hidden',
+    margin: 10,
+    elevation: 5, // shadow for Android
+    shadowColor: '#000', // shadow for iOS
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    right:10
   },
   gradientBackground: {
     flex: 1,
@@ -382,5 +325,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',  // Align child elements in a row
     justifyContent: 'space-between',  // Optional: Adjust spacing between elements
     // alignItems: 'center', 
-  }
+  },
+
 });

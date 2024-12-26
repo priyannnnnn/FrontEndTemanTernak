@@ -188,7 +188,7 @@ const styles = StyleSheet.create({
         color:'red'
       },
       SecondContainer:{
-        marginTop:60,
+        marginTop:40,
         marginHorizontal:40
       },
       ThirdContainer:{

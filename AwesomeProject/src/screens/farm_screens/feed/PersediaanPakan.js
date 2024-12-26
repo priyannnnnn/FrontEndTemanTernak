@@ -12,6 +12,7 @@ import axios from "axios";
 import { Picker } from "@react-native-picker/picker";
 import { AxiosContext } from "../../../context/AxiosContext";
 import kandangStyle from "../../../helpers/styles/kandang.style";
+import RNPickerSelect from 'react-native-picker-select';
 
 function PersediaanPakan({navigation}) {
   const [feed, setFeed] = useState({
@@ -98,15 +99,21 @@ function PersediaanPakan({navigation}) {
             />
 
             <Text style={kandangStyle.Text}>Type</Text>
-            <View style={{ borderRadius:5,borderWidth:1,borderColor:'#708090',overflow:'hidden',}}>
-            <Picker style={{backgroundColor:'#FFFAFA',width:"100%",height:50,textAlign:'center',marginTop:-8,marginBottom:7,}}
-              selectedValue={feed?.type.value}
-              onValueChange={(itemvalue) => setFeed({...feed, type:{value:itemvalue, error:''}})}>
-              <Picker.Item/>
-              <Picker.Item style={kandangStyle.title} label="PEDAGING" value="PEDAGING"/>
-              <Picker.Item style={kandangStyle.title} label="PETELUR" value="PETELUR"/>
-            </Picker>
-            </View>
+            <RNPickerSelect
+              onValueChange={(text) => {setFeed({...feed, type:{value: text, error:''}})}}
+              items={[
+                { label: 'PEDAGING', value: 'PEDAGING' },
+                { label: 'PETELUR', value: 'PETELUR' },
+              ]}
+              style={{
+                inputIOS: styles.input,
+                inputAndroid: styles.input,
+                placeholder: styles.placeholder,
+              }}
+              placeholder={{ label: 'Jenis Pakan ', value: feed?.type.value, color: 'gray' }}
+              useNativeAndroidPickerStyle={true}
+              // Icon={() => <MaterialIcons name="house" size={24} color="gray" />}
+            />
             {/* <TextInput value={feed?.type.value} onChangeText={(text)=> setFeed({...feed, type: {value:text, error:''} })} label='Nama Produk Pakan'/> */}
 
             <Text style={kandangStyle.Text}>Harga Total</Text>
@@ -162,5 +169,25 @@ const styles=StyleSheet.create({
   },
   title:{
     color:'#000000'
+  },
+  input1: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    marginBottom: 15,
+    paddingHorizontal: 10,
+    borderRadius: 5,
+    backgroundColor: '#fff',
+    fontSize: 16,
+    color: 'black',
+  },
+  placeholder: {
+    color: 'gray',
+    fontSize: 12,
+  },
+  input:{
+    width: '100%',
+    marginVertical: 17,
+    backgroundColor:'white'
   }
 }) 

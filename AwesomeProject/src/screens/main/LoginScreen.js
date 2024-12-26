@@ -16,13 +16,16 @@ import { AxiosContext } from '../../context/AxiosContext'
 import { AuthContext } from '../../context/AuthContext'
 import {BASE_URL} from '@env'
 import {URL} from '@env'
+import RegisterScreen from './RegisterScreen'
+import { useNavigation } from '@react-navigation/native';
 
-function LoginScreen({ navigation }) {
+function LoginScreen() {
   const [email, setEmail] = useState({ value: '',error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
 
   const authContext = useContext(AuthContext);
   const publicAxios = useContext(AxiosContext);
+  const navigation = useNavigation();
 
   const onLoginPressed =async () => {
     console.log("Login Any farm ")
@@ -61,6 +64,12 @@ function LoginScreen({ navigation }) {
       console.log("Url Error")
     }
   }
+
+  const Register =()=>{
+    console.log("test")
+    navigation.navigate('RegisterScreen')
+  }
+
   return (
     <Background>
       {/* <BackButton goBack={navigation.goBack} /> */}
@@ -90,27 +99,21 @@ function LoginScreen({ navigation }) {
         errorText={password.error}
         secureTextEntry
       />
-      <View style={styles.forgotPassword}>
+      {/* <View style={styles.forgotPassword}>
         <TouchableOpacity
-          onPress={() => navigation.navigate('DaftarPendapatanTelur')}
+          onPress={() => navigation.navigate('ListKandang')}
         >
           <Text style={styles.forgot}>Forgot your password?</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
       <Button mode="contained" onPress={onLoginPressed}>
         Login
       </Button>
       <View style={styles.row}>
         <Text>Tidak Punya Akun? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Api')}>
+        <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>
           <Text style={styles.link}>Buat Akun</Text>
         </TouchableOpacity>
-        <View>
-        <Text>Tidak Punya111 Akun? </Text>
-        <TouchableOpacity onPress={() => navigation.navigate('Api')}>
-          <Text style={styles.link}>Buat Akun</Text>
-        </TouchableOpacity>
-        </View>
       </View>
     </View>
       </ScrollView>
@@ -137,6 +140,7 @@ const styles = StyleSheet.create({
   link: {
     fontWeight: 'bold',
     color: theme.colors.primary,
+    fontSize: 16
   },
   f:{
     flex:1,

@@ -40,7 +40,6 @@ import { AuthProvider } from './src/context/AuthContext';
 import { AxiosProvider } from './src/context/AxiosContext';
 import DaftarOperasional from './src/screens/farm_screens/operation/DaftarOperasional';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
-import Tabs from './src/helpers/Tabs';
 import AmountKandang from './src/screens/main/AmountKandang';
 import {name as appName} from './app.json';
 import {AppRegistry} from 'react-native';
@@ -55,21 +54,10 @@ import UpdateFeedsUse from './src/screens/farm_screens/feeds_use/UpdateFeedsUse'
 import QuailReduction from './src/screens/farm_screens/quail_reduction/Quailreduction';
 import ListQuailReduction from './src/screens/farm_screens/quail_reduction/ListQuailReduction';
 import UpdateQuailReduction from './src/screens/farm_screens/quail_reduction/UpdateQuailReduction';
-import { DataUserContext } from './src/context/AuthIdContext';
 import Account from './src/screens/main/account';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator()
-
-function Expenses(){
-  return(
-  <Tab.Navigator>
-     <Tab.Screen name='teyy' component={ListKandang}/>
-      <Tab.Screen name='rtt' component={Ternak}/>
-  </Tab.Navigator>
-  
-  )
-}
 
 export default function App() {
   return (

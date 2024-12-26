@@ -12,33 +12,37 @@ import { emailValidator } from '../../helpers/emailValidator'
 import { passwordValidator } from '../../helpers/passwordValidator'
 import { nameValidator } from '../../helpers/nameValidator'
 import { AxiosContext } from '../../context/AxiosContext'
+import axios from 'axios'
+import {URL} from '@env'
 
 export default function RegisterScreen({ navigation }) {
   const axiosContext = useContext(AxiosContext);
-  const [name, setName] = useState({ value: '', error: '' })
-  const [nickName, setnickName] = useState({ value: '', error: '' })
-  const [numberPhone, setnumberPhone]= useState({value: '', error: ''})
-  const [email, setEmail] = useState({ value: '', error: '' })
-  const [password, setPassword] = useState({ value: '', error: '' })
+  const [fullName, setFullName] = useState({ value: 'supriyantoee', error: '' })
+  const [nickName, setnickName] = useState({ value: 'yantoee', error: '' })
+  const [phoneNumber, setPhoneNumber]= useState({value: '085328783235', error: ''})
+  const [email, setEmail] = useState({ value: 'supri123@gmail.com', error: '' })
+  const [password, setPassword] = useState({ value: 'supri123', error: '' })
 
   const onSignUpPressed = () => {
-    const nameError = nameValidator(name.value)
+    const nameError = nameValidator(fullName.value)
     const emailError = emailValidator(email.value)
-    const passwordError = passwordValidator(password.value)
+    const passwordError = passwsupriordValidator(password.value)
     const data={
-      name: name?.value,
+      fullName: fullName?.value,
       nickName:nickName?.value,
-      numberPhone:numberPhone?.value,
+      phoneNumber:phoneNumber?.value,
       email: email?.value,
       password: password?.value
     }
     if (emailError || passwordError || nameError) {
-      setName({ ...name, error: nameError })
+      setName({ ...fullName, error: nameError })
       setEmail({ ...email, error: emailError })
       setPassword({ ...password, error: passwordError })
       return
     }
-    axiosContext.authAxios.post('/api/v1/registration/password', data)
+    console.log(data)
+    // axiosContext.authAxios.post('/api/v1/registration/password', data)
+    axios.post(`${URL}/api/v1/registration/phoneNumber`,data)
     .then(res => {
       navigation.navigate('StartScreen', {name: 'StartScreen'})
     })
@@ -57,14 +61,14 @@ export default function RegisterScreen({ navigation }) {
       <TextInput
         label="Name"
         returnKeyType="next"
-        value={name.value}
-        onChangeText={(text) => setName({ value: text, error: '' })}
-        error={!!name.error}
-        errorText={name.error}
+        value={fullName.value}
+        onChangeText={(text) => setFullName({ value: text, error: '' })}
+        error={!!fullName.error}
+        errorText={fullName.error}
         />
         </View>
       <TextInput label="nick name" onChangeText={(text) => setnickName ({value:text, error:''})}/>
-      <TextInput label="Nomer Telepon" onChangeText={(text) => setnumberPhone ({value:text, error:''})}/>
+      <TextInput label="Nomer Telepon" onChangeText={(text) => setPhoneNumber ({value:text, error:''})}/>
       <TextInput
         label="Email"
         returnKeyType="next"
