@@ -17,11 +17,11 @@ import {URL} from '@env'
 
 export default function RegisterScreen({ navigation }) {
   const axiosContext = useContext(AxiosContext);
-  const [fullName, setFullName] = useState({ value: 'supriyantoee', error: '' })
-  const [nickName, setnickName] = useState({ value: 'yantoee', error: '' })
-  const [phoneNumber, setPhoneNumber]= useState({value: '085328783235', error: ''})
-  const [email, setEmail] = useState({ value: 'supri123@gmail.com', error: '' })
-  const [password, setPassword] = useState({ value: 'supri123', error: '' })
+  const [fullName, setFullName] = useState({ value: '', error: '' })
+  const [nickName, setnickName] = useState({ value: '', error: '' })
+  const [phoneNumber, setPhoneNumber]= useState({value: '', error: ''})
+  const [email, setEmail] = useState({ value: '', error: '' })
+  const [password, setPassword] = useState({ value: '', error: '' })
 
   const onSignUpPressed = () => {
     const nameError = nameValidator(fullName.value)
