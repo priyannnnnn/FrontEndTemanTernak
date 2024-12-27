@@ -1,5 +1,5 @@
 import { useContext, useEffect, useState } from "react";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, View, Text, ScrollView } from "react-native";
 import TextInput from "../../../components/TextInput";
 import { theme } from "../../../core/theme";
 import Button from "../../../components/Button";
@@ -7,6 +7,8 @@ import moment from "moment";
 import axios from "axios";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { AxiosContext } from "../../../context/AxiosContext";
+import Header from "../../../components/HeaderInputKandang";
+import kandangStyle from "../../../helpers/styles/kandang.style";
 
 function UpdatePenjualanTelur(props){
 
@@ -70,10 +72,6 @@ function UpdatePenjualanTelur(props){
           quantity: saleEgg?.quantity?.value.replace(/\./g, ''),
           amount: saleEgg?.amount?.value.replace(/\./g, ''),
           date:saleEgg?.date?.value
-        
-          // quantity:saleEgg?.quantity.value,
-          // amount : saleEgg?.amount.value,
-          // date :saleEgg?.date.value
       }
       axiosContext.authAxios.put(`/api/v1/saleEgg/`+id,Data)
         .then (res =>{
@@ -94,10 +92,11 @@ function UpdatePenjualanTelur(props){
     };
 
     return(
+      <ScrollView style={kandangStyle.ScrollView}>
     <View style={styles.View}>
-        <Text style={styles.title}>Daftar Penjualan Telur</Text>
+        <Header>Update Penjualan Telur</Header>
 
-       <Text style={styles.Text}>Jumlah Telur</Text>
+       <Text style={kandangStyle.Text}>Jumlah Telur</Text>
        <TextInput value={saleEgg?.quantity.value}  
        onChangeText={(text)=> {
         const formatted = formatAmount(text);
@@ -105,7 +104,7 @@ function UpdatePenjualanTelur(props){
        }}
        keyboardType="numeric" />
 
-       <Text style={styles.Text}>Total Pendapatan Telur</Text>
+       <Text style={kandangStyle.Text}>Total Pendapatan Telur</Text>
        <TextInput value={saleEgg?.amount.value}  
        onChangeText={(text)=> {
         const formatted = formatAmount(text);
@@ -113,7 +112,7 @@ function UpdatePenjualanTelur(props){
        }} 
        keyboardType="numeric" />
 
-       <Text style={styles.Text}>Tanggal</Text>
+       <Text style={kandangStyle.Text}>Tanggal</Text>
           <TextInput value={saleEgg?.date.value}  onChangeText={(text)=> setsaleEgg({...saleEgg, date:{value:text, error:''}})} onBlur={onChange} onChange={showDatepicker} onFocus={showDatepicker}/>
           {show && (
         <DateTimePicker
@@ -128,6 +127,7 @@ function UpdatePenjualanTelur(props){
             Kembali
         </Button>
     </View>
+    </ScrollView>
     )
 }
 export default UpdatePenjualanTelur;
@@ -135,7 +135,7 @@ const styles =StyleSheet.create({
     View:{
         flex: 1,
         width: '100%',
-        backgroundColor:'#FAEBD7',
+        backgroundColor:theme.colors.screen,
         padding: 20,
         alignSelf: 'center',
         justifyContent: 'center',
@@ -157,5 +157,12 @@ const styles =StyleSheet.create({
         fontWeight: 'normal',
         marginBottom:-10,
         color:'#000000'
+      },
+      ScrollView:{
+        flex:1,
+        width:'100%',
+        paddingBottom:1,
+        backgroundColor:theme.colors.screen,
+        marginTop:0
       },
 })

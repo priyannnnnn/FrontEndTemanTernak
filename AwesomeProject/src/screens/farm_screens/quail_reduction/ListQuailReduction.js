@@ -13,15 +13,12 @@ function ListQuailReduction({route, navigation}){
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
     const [hasMoreData, setHasMoreData] = useState(true);
-    // const {item}= route.params;
     const {itemp} = route.params;
     const [isDataFinished, setIsDataFinished] = useState(false);
 
     const getData = () => {
         axiosContext.authAxios.get(`/api/v1/quailreduction?orders=createdAt-desc?size=${totalpage}&page=${pageCurrent}`)
           .then(res => {
-            // setLoading(false)
-            // setEmployee(employee.concat(res.data.content))
             if(itemp !== undefined){
               setLoading(false)
               console.log("Data Update = ", res.data.content)
@@ -94,7 +91,6 @@ function ListQuailReduction({route, navigation}){
       }else{
         getData();
       }  
-      getData()
     }, [itemp, pageCurrent])
 
     renderItem=({item})=>{
@@ -116,8 +112,8 @@ function ListQuailReduction({route, navigation}){
                     <Text style={listStyle.buttonText}>Hapus</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={() => navigation.navigate ('UpdateTernak',{id:item.id})} 
-                    onLongPress={()=> navigation.navigate('UpdateTernak',{id:item.id})}
+                    onPress={() => navigation.navigate ('UpdateQuailReduction',{id:item.id})} 
+                    onLongPress={()=> navigation.navigate('UpdateQuailReduction',{id:item.id})}
                     style={{ ...listStyle.button, marginVertical: 0, marginLeft: 10, backgroundColor: "tomato" }}>
                     <Text style={listStyle.buttonText}>Edit</Text>
                 </TouchableOpacity>

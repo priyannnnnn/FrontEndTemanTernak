@@ -78,7 +78,7 @@ function UpdateOperasional(props) {
       <ScrollView style={styles.ScrollView}>
          <View style={styles.View}>
             <BackButton goBack={navigation.goBack}/>
-            <Header>U Biaya Operasional</Header>
+            <Header>Update Operasional</Header>
             <Text style={styles.Text}>Deskripsi</Text>
             <TextInput
             value={Operation?.description.value} onChangeText ={(text) => setOperation({...Operation, description:{value:text, error:''}})} label= 'deskripsi'/>
@@ -121,7 +121,7 @@ const styles=StyleSheet.create({
   View:{
     flex: 1,
     width: '100%',
-    backgroundColor: theme.colors.backgroundColor,
+    backgroundColor: theme.colors.screen,
     padding: 20,
     alignSelf: 'center',
     justifyContent: 'center',
@@ -134,7 +134,7 @@ const styles=StyleSheet.create({
   },
   ScrollView:{
     flex:1,
-    backgroundColor:theme.colors.backgroundColor,
+    backgroundColor:theme.colors.screen,
     marginTop:35
   }
 })

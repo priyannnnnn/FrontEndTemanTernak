@@ -65,6 +65,10 @@ function FeedUse({navigation}){
             navigation.navigate('ListFeedsUse',{itemp:res.data})
           })
           .catch((error) => {
+            Alert.alert(
+              "Tidak Bisa Menambah Data",
+              "Pastikan Anda Memiliki Stok Pakan"
+            )
             console.error(error);
           })
       }

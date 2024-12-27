@@ -77,6 +77,10 @@ function Penjualan(props){
       navigation.navigate('DaftarPenjualanTelur', {itemp:res.data})
     })
     .catch((error) => {
+      Alert.alert(
+        "Tidak Bisa Menambah Data",
+        "Pastikan Anda Memiliki Stok Telur"
+      )
       console.error(error);
     })
   }

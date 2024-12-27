@@ -11,7 +11,8 @@ function DaftarPendapatanTelur({ route, navigation }) {
   const [pageCurrent, setPageCurrent] = useState(1);
   const [search, setSearch] = useState('');
   const axiosContext = useContext(AxiosContext);
-  const { itemp } = route.params;
+  // const { itemp } = route.params;
+  const itemp  = (route && route.params) ? route.params.item : null;
   const [isDataFinished, setIsDataFinished] = useState(false);
   const [totalpage, settotalpage]= useState(10);
   const [isPaginating, setIsPaginating] = useState(false);

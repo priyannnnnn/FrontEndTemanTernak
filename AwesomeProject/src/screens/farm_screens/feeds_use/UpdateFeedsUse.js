@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from "react";
 import { AxiosContext } from "../../../context/AxiosContext";
-import { StyleSheet, Text, View } from "react-native";
+import { ScrollView, StyleSheet, Text, View } from "react-native";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Button from "../../../components/Button";
 import TextInput from "../../../components/TextInput";
 import { theme } from "../../../core/theme";
+import Header from "../../../components/HeaderInputKandang";
+import kandangStyle from "../../../helpers/styles/kandang.style";
 
 function UpdateFeedsUse(props){
 
@@ -91,18 +93,16 @@ function UpdateFeedsUse(props){
             })
         }
         return (
+          <ScrollView style={kandangStyle.ScrollView}>
             <View style={styles.View} >
-                 <Text style={styles.title}>Update Penggunaan Telur</Text>
-                 <Text style={styles.Text}>Jumlah KG</Text>
+              <Header>Update Penggunaan Pakan</Header>
+                <Text style={kandangStyle.Text}>Jumlah KG</Text>
                 <TextInput value={feed?.quantity.value} onChangeText={(text)=> setfeed({...feed, quantity:{value:text, error:''}})} keyboardType="numeric"/>
 
-                <Text style={styles.Text}>Catatan</Text>
+                <Text style={kandangStyle.Text}>Catatan</Text>
                 <TextInput value={feed?.note.value} onChangeText={(text)=> setfeed({...feed, note:{value:text, error:''}})}/>
-    
-                {/* <Text style={styles.Text}>Tanggal</Text>
-                <TextInput value={feed?.date.value} onChangeText={(text)=> setfeed({...feed, date:{value:text, error:''}})} label="tanggal"/> */}
-    
-                <Text style={styles.Text}>Tanggal</Text>
+
+                <Text style={kandangStyle.Text}>Tanggal</Text>
                 <TextInput value={feed?.date?.value} onChangeText={(text) => setLiveStock({...feed, date: {value: text, error: ''}})} onFocus={showDatepicker} />
                 {show &&(
                     <DateTimePicker
@@ -118,6 +118,7 @@ function UpdateFeedsUse(props){
                     onPress={() => navigation.reset({ index: 0,
                     routes: [{ name: 'ListFeedsUse' }], })}>Kembali</Button>
             </View>
+          </ScrollView>
         )
 }
 export default UpdateFeedsUse;
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
     View:{
         flex: 1,
         width: '100%',
-        backgroundColor: theme.colors.backgroundColor,
+        backgroundColor: theme.colors.screen,
         padding: 20,
         alignSelf: 'center',
         justifyContent: 'center',
@@ -147,5 +148,12 @@ const styles = StyleSheet.create({
       fontWeight: 'normal',
       marginBottom:-10,
       color:'#000000'
+    },
+    ScrollView:{
+      flex:1,
+      width:'100%',
+      paddingBottom:1,
+      backgroundColor:theme.colors.screen,
+      marginTop:0
     },
 })

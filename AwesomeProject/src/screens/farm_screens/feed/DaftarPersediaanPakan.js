@@ -35,16 +35,12 @@ function DaftarPersediaanPakan({route, navigation}){
     axiosContext.authAxios
       .get(`/api/v1/feed?orders=createdAt-desc&size=${totalpage}&page=${pageCurrent}`)
       .then((res) => {
-        console.log(" Get Data")
-        const data = res.data.content || [];
-
-        if (data.length === 0) {
-          setIsDataFinished(true);
-        } else {
-          setfeed((prevFeed) => [...prevFeed, ...data]);
-        }
         setLoading(false);
-        setIsPaginating(false);
+        if (item !== undefined) {
+          setfeed(res.data.content);
+        } else {
+          setfeed(prevData => [...prevData, ...res.data.content]);
+        }
       })
       .catch((error) => {
         setLoading(false);

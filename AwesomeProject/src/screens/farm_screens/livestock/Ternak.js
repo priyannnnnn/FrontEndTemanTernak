@@ -14,6 +14,7 @@ import { AxiosContext } from "../../../context/AxiosContext";
 import Background from "../../../components/Background";
 import Back from "../../../components/Back";
 import kandangStyle from "../../../helpers/styles/kandang.style";
+import RNPickerSelect from 'react-native-picker-select';
 
 function Ternak({navigation}) {
 
@@ -118,7 +119,23 @@ function Ternak({navigation}) {
       />
 
       <Text style={kandangStyle.Text} >Type</Text>
-      <View style={{ borderRadius:5,borderWidth:1,borderColor:'#708090',overflow:'hidden',}}>
+      <RNPickerSelect
+        onValueChange={(text) => {setLiveStock({...livestock, type:{value: text, error:''}})}}
+        items={[
+          { label: 'Peksi', value: 'Peksi' },
+          { label: 'Blaster', value: 'Blaster' },
+          { label: 'Albino', value: 'Albino' },
+        ]}
+        style={{
+          inputIOS: style.input,
+          inputAndroid: style.input,
+          placeholder: style.placeholder,
+        }}
+        placeholder={{ label: 'Jenis Puyuh ', value: livestock?.type.value, color: 'gray' }}
+        useNativeAndroidPickerStyle={true}
+      />
+
+      {/* <View style={{ borderRadius:5,borderWidth:1,borderColor:'#708090',overflow:'hidden',}}>
         <Picker
         style={{backgroundColor:'#FFFAFA',width:"100%",height:50,textAlign:'center',marginTop:-8,marginBottom:7}}
         selectedValue={livestock?.type.value}
@@ -126,9 +143,9 @@ function Ternak({navigation}) {
           <Picker.Item/>
           <Picker.Item style={kandangStyle.title} label="Peksi" value="peksi"/>
           <Picker.Item style={kandangStyle.title} label="Blaster" value="blaster"/>
-          <Picker.Item style={kandangStyle.title} label="Albino" value="albino"/>
+          <Picker.Item style={kandangStyle.title} label="Albino" value="Albino"/>
         </Picker>
-      </View>
+      </View> */}
       {/* <TextInput value={livestock?.type.value} onChangeText={(text) => setLiveStock({ ...livestock, type: {value: text, error: ''}  })}  label='Peksi'/> */}
 
       <Text style={kandangStyle.Text} >Catatan</Text>
@@ -169,4 +186,13 @@ const style=StyleSheet.create({
   title:{
     color:'#000000'
   },
+  placeholder: {
+    color: 'gray',
+    fontSize: 12,
+  },
+  input:{
+    width: '100%',
+    marginVertical: 17,
+    backgroundColor:'white'
+  }
 })

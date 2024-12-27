@@ -147,7 +147,7 @@ function Dashboardkandang({ navigation }) {
 
             <View style={styles.summaryItem}>
               <Text style={styles.label}>Ternak</Text>
-              <Text style={styles.value}>{formatAmountWithDots(Dasboard.livestock)}</Text>
+              <Text style={styles.value}>{formatAmountWithDots(Dasboard.livestock)} Ekor</Text>
             </View>
 
             <View style={styles.summaryItem}>
@@ -157,7 +157,7 @@ function Dashboardkandang({ navigation }) {
 
             <View style={styles.summaryItem}>
               <Text style={styles.label}>Telur</Text>
-              <Text style={styles.value}>{formatAmountWithDots(Dasboard.egg)}</Text>
+              <Text style={styles.value}>{formatAmountWithDots(Dasboard.egg)} Butir</Text>
             </View>
 
           {/* </View> */}

@@ -10,6 +10,7 @@ import TextInput from "../../../components/TextInput";
 import { theme } from "../../../core/theme";
 import Header from "../../../components/HeaderInputKandang";
 import kandangStyle from "../../../helpers/styles/kandang.style";
+import RNPickerSelect from 'react-native-picker-select';
 
 function QuailReduction({route, navigation}){
   
@@ -56,27 +57,21 @@ function QuailReduction({route, navigation}){
       const data = {
         quantity: livestock?.quantity?.value.replace(/\./g, ''),
         date: livestock?.date?.value,
-        reason: livestock?.amount?.value,
+        reason: livestock?.reason?.value,
         type: livestock?.type?.value,
       }
-      // const ageIsValid=!isNaN(data.age)&& data.age>1;
-      // const quantityIsValid=!isNaN(data.quantity) && data.quantity>1;
-      // const amountIsValid=!isNaN(data.amount)&& data.amount>1;
-      // const typeIsvalid=data.type.trim().length>0
-  
-  
-      //   if (!ageIsValid || !quantityIsValid || !amountIsValid || !typeIsvalid){
-      //     Alert.alert ('Data Anda Salah',"Mohon Untuk Cek Kembali")
-      //     return;
-      //   }
       axiosContext.authAxios.post(`/api/v1/quailreduction`, data)
         .then(res => {
           console.log(res.data)
           console.info("succes livestock")
           //navigation.navigate('DaftarTernak', {name: 'DaftarTernak'})
-          navigation.navigate('ListQuailReduction', {itemp:res.data})
+          navigation.navigate('ListQuailReduction', {itemp:8})
         })
         .catch((error) => {
+          Alert.alert(
+            "Tidak Bisa Menambah Data",
+            "Pastikan Anda Memiliki Stok Puyuh"
+          )
           console.error(error);
         })
     }
@@ -86,7 +81,7 @@ function QuailReduction({route, navigation}){
       <ScrollView style={kandangStyle.ScrollView}>
         <View style={kandangStyle.View}>
         <BackButton goBack={navigation.goBack} />
-        <Header>Isi Kandang</Header>
+        <Header>Afkir Puyuh</Header>
   
         <Text style={kandangStyle.Text}>Jumlah</Text>
         <TextInput value={livestock?.quantity.value} onChangeText={(text) => {
@@ -98,18 +93,21 @@ function QuailReduction({route, navigation}){
         />
   
         <Text style={kandangStyle.Text} >Type</Text>
-        <View style={{ borderRadius:5,borderWidth:1,borderColor:'#708090',overflow:'hidden',}}>
-          <Picker
-          style={{backgroundColor:'#FFFAFA',width:"100%",height:50,textAlign:'center',marginTop:-8,marginBottom:7}}
-          selectedValue={livestock?.type.value}
-          onValueChange={(itemValue,itemIndex) => setLiveStock({...livestock, type:{value:itemValue,error:''}})}>
-            <Picker.Item/>
-            <Picker.Item style={kandangStyle.title} label="Peksi" value="peksi"/>
-            <Picker.Item style={kandangStyle.title} label="Blaster" value="blaster"/>
-            <Picker.Item style={kandangStyle.title} label="Albino" value="albino"/>
-          </Picker>
-        </View>
-        
+        <RNPickerSelect
+        onValueChange={(text) => {setLiveStock({...livestock, type:{value: text, error:''}})}}
+        items={[
+          { label: 'Peksi', value: 'Peksi' },
+          { label: 'Blaster', value: 'Blaster' },
+          { label: 'Albino', value: 'Albino' },
+        ]}
+        style={{
+          inputIOS: style.input,
+          inputAndroid: style.input,
+          placeholder: style.placeholder,
+        }}
+        placeholder={{ label: 'Jenis Puyuh ', value: livestock?.type.value, color: 'gray' }}
+        useNativeAndroidPickerStyle={true}
+      />
         <Text style={kandangStyle.Text}>Alasan</Text>
         <TextInput value={livestock?.reason.value} onChangeText={(text) => setLiveStock({ ...livestock, reason: {value: text, error: ''}  })}  label='Alasan Afkir' />
   
@@ -129,8 +127,6 @@ function QuailReduction({route, navigation}){
           onPress={() => navigation.navigate('ListQuailReduction', {itemp:8})}>Kembali</Button>
         </View>
       </ScrollView>
-            // </Back>
-         
     )
   }
   export default QuailReduction;
@@ -159,5 +155,14 @@ function QuailReduction({route, navigation}){
     title:{
       color:'#000000'
     },
+    placeholder: {
+      color: 'gray',
+      fontSize: 12,
+    },
+    input:{
+      width: '100%',
+      marginVertical: 17,
+      backgroundColor:'white'
+    }
 
 })

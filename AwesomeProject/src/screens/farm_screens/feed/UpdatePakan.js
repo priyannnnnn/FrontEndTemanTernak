@@ -1,157 +1,183 @@
-import { StyleSheet, View,Text } from "react-native";
-import TextInput from "../../../components/TextInput";
+import { StyleSheet, View, Text, ScrollView } from "react-native";
 import { useContext, useEffect, useState } from "react";
+import { AxiosContext } from "../../../context/AxiosContext";
 import { theme } from "../../../core/theme";
 import Button from "../../../components/Button";
-import { AxiosContext } from "../../../context/AxiosContext";
-import DateTimePicker from '@react-native-community/datetimepicker';
+import TextInput from "../../../components/TextInput";
+import DateTimePicker from "@react-native-community/datetimepicker";
+import Header from "../../../components/HeaderInputKandang";
+import kandangStyle from "../../../helpers/styles/kandang.style";
+import RNPickerSelect from 'react-native-picker-select';
 
-function UpdatePakan(props){
+function UpdatePakan({ navigation, route }) {
+  const { id } = route.params;
+  const axiosContext = useContext(AxiosContext);
 
-    const [loading, setLoading]= useState(true)
-    const [errormessage, setErrorMessage]= useState('')
-    const {navigation, route} = props;
-    const {id}  = route.params;
-    const axiosContext = useContext(AxiosContext);
+  const [feed, setFeed] = useState({
+    quantity: { value: "", error: "" },
+    type: { value: "", error: "" },
+    amount: { value: "", error: "" },
+    date: { value: "", error: "" },
+  });
 
-    // const context=useContext(getData)
-    const [feed, setfeed] = useState({
-        quantity: { value : '', error:''},
-        type:     { value : '', error: '' },
-        amount:   { value : '', error: '' },
-        date:     { value : '', error: '' },
-        
-    })
+  const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
+  const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
-    const [date, setDate] = useState(new Date());
-    const [mode, setMode] = useState('date');
-    const [show, setShow] = useState(false);
+  useEffect(() => {
+    fetchData(id);
+  }, [id]);
 
-    const onChange = (event, selectedDate) => {
-      const currentDate = selectedDate || date;
-        setShow(false);
-        setDate(currentDate);
-    
-      setfeed({
-        ...feed,
-        date: {
-          value: currentDate.toISOString().split('T')[0], // Format to YYYY-MM-DD
-          error: '',
-        }
+  const fetchData = (id) => {
+    setLoading(true);
+    axiosContext.authAxios
+      .get(`/api/v1/feed/${id}`)
+      .then((res) => {
+        const data = res.data;
+        setFeed({
+          quantity: { value: `${data.quantity}`, error: "" },
+          type: { value: `${data.type}`, error: "" },
+          amount: { value: `${data.amount}`, error: "" },
+          date: { value: `${data.date}`, error: "" },
+        });
+        setLoading(false);
+      })
+      .catch((error) => {
+        setErrorMessage("Error fetching data.");
+        console.error(error);
+        setLoading(false);
       });
+  };
+
+  const handleDateChange = (event, selectedDate) => {
+    const currentDate = selectedDate || date;
+    setShow(false);
+    setDate(currentDate);
+
+    setFeed((prev) => ({
+      ...prev,
+      date: { value: currentDate.toISOString().split("T")[0], error: "" },
+    }));
+  };
+
+  const showDatepicker = () => setShow(true);
+
+  const updateData = () => {
+    const data = {
+      amount: parseInt(feed.amount.value),
+      type: feed.type.value,
+      quantity: parseInt(feed.quantity.value),
+      date: feed.date.value,
     };
 
-      const showMode = (currentMode) => {
-        setShow(true);
-        setMode(currentMode);
-      };
-    
-      const showDatepicker = () => {
-        showMode('date');
-      };
+    axiosContext.authAxios
+      .put(`/api/v1/feed/${id}`, data)
+      .then((res) => {
+        navigation.navigate("DaftarPersediaanPakan", { item: res.data });
+      })
+      .catch((error) => {
+        console.error("Update failed:", error);
+      });
+  };
 
-    useEffect(() => {
-        getData(id)
-    }, [])
+  return (
+    <ScrollView style={kandangStyle.ScrollView}>
+      <View style={styles.container}>
+        <Header>Update Persediaan Pakan</Header>
 
-    const getData = (id) => {
-        console.log("Id = ",id)
-        setLoading(true)
-        axiosContext.authAxios.get('/api/v1/feed/'+id)
-        .then(res =>{
-            console.log(res);
-            setfeed({
-                ...feed, 
-                id:res.id,
-                quantity: {value:`${res.data.quantity}`, error:''}, 
-                type: {value:`${res.data.type}`, error:''},
-                amount: {value:`${res.data.amount}`, error:''},
-                date: {value:`${res.data.date}`, error:''}
+        <Text style={kandangStyle.Text}>Jumlah (Kg)</Text>
+        <TextInput
+          value={feed.quantity.value}
+          onChangeText={(text) =>
+            setFeed({ ...feed, quantity: { value: text, error: "" } })
+          }
+          keyboardType="numeric"
+        />
+
+        <Text style={kandangStyle.Text}>Tipe Pakan</Text>
+        <RNPickerSelect
+            onValueChange={(text) => {setFeed({...feed, type:{value: text, error:''}})}}
+            items={[
+                { label: 'PEDAGING', value: 'PEDAGING' },
+                { label: 'PETELUR', value: 'PETELUR' },
+            ]}
+            value={feed.type.value}
+            style={{
+                inputIOS: styles.input,
+                inputAndroid: styles.input,
+                placeholder: styles.placeholder,
+            }}
+            placeholder={{ label: 'Jenis Pakan ', value: null, color: 'gray' }}
+            useNativeAndroidPickerStyle={true}
+        />
+
+        <Text style={kandangStyle.Text}>Total Harga</Text>
+        <TextInput
+          value={feed.amount.value}
+          onChangeText={(text) =>
+            setFeed({ ...feed, amount: { value: text, error: "" } })
+          }
+          keyboardType="numeric"
+        />
+
+        <Text style={kandangStyle.Text}>Tanggal</Text>
+        <TextInput
+          value={feed.date.value}
+          onFocus={showDatepicker}
+          editable={false}
+        />
+        {show && (
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={date}
+            mode={mode}
+            is24Hour
+            onChange={handleDateChange}
+          />
+        )}
+
+        <Button mode="contained" style={styles.button} onPress={updateData}>
+          Simpan
+        </Button>
+        <Button
+          mode="contained"
+          onPress={() =>
+            navigation.reset({
+              index: 0,
+              routes: [{ name: "DaftarPersediaanPakan" }],
             })
-        })
-        .catch((error)=> {
-            setLoading(false)
-            console.error(error)
-        })
-        }
+          }
+        >
+          Kembali
+        </Button>
+      </View>
+    </ScrollView>
+  );
+}
 
-        const updatedata= () => {
-            console.log(id);
-            const data ={
-                amount: parseInt(feed?.amount?.value),
-                type:feed?.type?.value,
-                quantity:parseInt(feed?.quantity?.value),
-                date:feed?.date?.value,
-            }
-            axiosContext.authAxios.put('/api/v1/feed/'+id,data)
-            .then (res => {
-                console.log(res.data)
-                navigation.navigate('DaftarPersediaanPakan',{itemp:res.data})
-            })
-            .catch ((error)=>{
-                console.log(error);
-            })
-    }
-    
-    return (
-        <View style={styles.View} >
-             <Text style={styles.title}>Daftar Persediaan Pakan</Text>
-             <Text style={styles.Text}>Jumlah KG</Text>
-            <TextInput value={feed?.quantity.value} onChangeText={(text)=> setfeed({...feed, quantity:{value:text, error:''}})} keyboardType="numeric"/>
-
-            <Text style={styles.Text}>Type Pakan</Text>
-            <TextInput value={feed?.type.value} onChangeText={(text)=> setfeed({...feed, type:{value:text, error:''}})}/>
-
-            <Text style={styles.Text}>Total Harga</Text>
-            <TextInput value={feed?.amount.value} onChangeText={(text)=> setfeed({...feed, amount:{value:text, error:''}})}/>
-
-            {/* <Text style={styles.Text}>Tanggal</Text>
-            <TextInput value={feed?.date.value} onChangeText={(text)=> setfeed({...feed, date:{value:text, error:''}})} label="tanggal"/> */}
-
-            <Text style={styles.Text}>Tanggal</Text>
-            <TextInput value={feed?.date?.value} onChangeText={(text) => setLiveStock({...feed, date: {value: text, error: ''}})} onFocus={showDatepicker} />
-            {show &&(
-                <DateTimePicker
-                testID="dateTimePicker"
-                    value={date}
-                    mode={mode}
-                    is24Hour={true}
-                    onChange={onChange}/>
-                )}
-
-            <Button mode='contained' style={{ marginTop: 4 }} onPress={()=> updatedata(feed.id)} >Simpan</Button>
-            <Button mode='contained'
-                onPress={() => navigation.reset({ index: 0,
-                routes: [{ name: 'DaftarPersediaanPakan' }], })}>Kembali</Button>
-        </View>
-    )
-  }
 export default UpdatePakan;
+
 const styles = StyleSheet.create({
-    View:{
-        flex: 1,
-        width: '100%',
-        backgroundColor: theme.colors.backgroundColor,
-        padding: 20,
-        alignSelf: 'center',
-        justifyContent: 'center',
-        marginTop:20,
-        
-      },
-      container: {
-        paddingHorizontal: 20
-      },
-    title: {
-      fontWeight: "bold",
-      fontSize: 20,
-      marginBottom: 30,
-      color:'#000000'
-    },
-    Text: {
-      textAlign: 'left',
-      fontSize: 18,
-      fontWeight: 'normal',
-      marginBottom:-10,
-      color:'#000000'
-    },
-})
+  container: {
+    flex: 1,
+    width: "100%",
+    backgroundColor: theme.colors.screen,
+    padding: 20,
+    justifyContent: "center",
+    marginTop: 20,
+  },
+  button: {
+    marginTop: 4,
+  },
+  placeholder: {
+    color: 'gray',
+    fontSize: 12,
+  },
+  input:{
+    width: '100%',
+    marginVertical: 17,
+    backgroundColor:'white'
+  }
+});
