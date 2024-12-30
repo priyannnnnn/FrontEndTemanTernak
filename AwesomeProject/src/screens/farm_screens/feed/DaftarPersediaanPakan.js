@@ -15,7 +15,6 @@ import { TouchableOpacity } from "react-native";
 import { AxiosContext } from "../../../context/AxiosContext";
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import listStyle from "../../../helpers/styles/list.style";
-import Styles from "../../../helpers/styles/Styles";
 
 function DaftarPersediaanPakan({route, navigation}){
     const axiosContext = useContext(AxiosContext);
@@ -25,7 +24,6 @@ function DaftarPersediaanPakan({route, navigation}){
     const [pageCurrent, setpageCurrent]= useState(1)
     const [totalpage, settotalpage]= useState(10);
     const [search, setsearch]= useState('');
-    const [hasMoreData, setHasMoreData] = useState(true);
     console.log('router', route.params);
     const item = (route && route.params) ? route.params.item : null;
     const [isDataFinished, setIsDataFinished] = useState(false);
@@ -35,17 +33,21 @@ function DaftarPersediaanPakan({route, navigation}){
     axiosContext.authAxios
       .get(`/api/v1/feed?orders=createdAt-desc&size=${totalpage}&page=${pageCurrent}`)
       .then((res) => {
-        setLoading(false);
-        if (item !== undefined) {
-          setfeed(res.data.content);
+        const data = res.data.content || [];
+        if (data.length === 0) {
+          setIsDataFinished(true)
         } else {
-          setfeed(prevData => [...prevData, ...res.data.content]);
+          setfeed(prevData => [...prevData, ...data]);
         }
+        setLoading(false);
+        setIsDataFinished(false)
       })
       .catch((error) => {
         setLoading(false);
-        setIsPaginating(false);
-        setErrorMessage("Network Error. Please try again.");
+        Alert.alert(
+          "Error Data",
+          "Harap log out dan login kembali"
+        )
         console.error(error);
       });
   };
@@ -53,8 +55,6 @@ function DaftarPersediaanPakan({route, navigation}){
     const refreshFeedData = () => {
         axiosContext.authAxios.get(`/api/v1/feed?orders=createdAt-desc`)
           .then(res => {
-            console.log("New Get Data")
-            //console.log(res.data.content);
             setLoading(false)
             setfeed(res.data.content)
           })
@@ -140,24 +140,21 @@ function DaftarPersediaanPakan({route, navigation}){
       </View>
     )
   }
-  const renderFooter = () => (
-    isDataFinished ? (
-      <View style={listStyle.footerContainer}>
-        <Text style={listStyle.footerText}>Data sudah habis</Text>
-      </View>
-    ) : (
-      isPaginating && (
+  const renderFooter = () => {
+    if(isDataFinished){
+      return (
         <View style={listStyle.footerContainer}>
-          <ActivityIndicator size="small" />
-          <Text style={listStyle.footerText}>Memuat data...</Text>
+          <Text style={listStyle.footerText}>Data sudah habis</Text>
         </View>
-      )
-    )
-  );
+      );
+    }
+    return null
+}
 
  handleLoadMore= async()=>{
     if (!loading && !isDataFinished) {
       setpageCurrent((prevPage) => prevPage + 1);
+      return;
     }
  }
 
@@ -224,15 +221,15 @@ const emptyList = ()=>{
       {/* <ScrollView contentContainerStyle={{ flexGrow: 1 }}> */}
       <FlatList
       // data={feed}
-      data={feed || []} 
+      data={feed} 
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
       // ListEmptyComponent={emptyList}
-      ListEmptyComponent={this.renderEmptyComponent}
+      // ListEmptyComponent={this.renderEmptyComponent}
       onEndReached={this.handleLoadMore}
       onEndReachedThreshold={0.1}
       style={listStyle.container12}
-      contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
+      contentContainerStyle={{ flexGrow: 1, paddingBottom: 90 }}
       ListFooterComponent={renderFooter}
       />
       {/* </ScrollView> */}

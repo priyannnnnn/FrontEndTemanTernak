@@ -140,6 +140,7 @@ function Dashboardkandang({ navigation }) {
           {/* <View style={styles.summary}> */}
             <ScrollView style={styles.summary}>
 
+            <Text style={styles.TextSummary}>Ringkasan</Text>
             <View style={styles.summaryItem}>
               <Text style={styles.label}>Keuntungan</Text>
               <Text style={styles.value}>{formatAmountWithDots(Dasboard.profit)}</Text>
@@ -226,7 +227,7 @@ const styles = StyleSheet.create({
    summary:{
     position: 'absolute',
     width: '100%',
-    height: 270,
+    height: 320,
     left: 0,
     top: 230,
     // marginLeft: 0, 
@@ -326,5 +327,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',  // Optional: Adjust spacing between elements
     // alignItems: 'center', 
   },
+  TextSummary:{
+    color: 'green',
+    fontWeight: 'bold',
+    fontSize: 23,
+    borderBottomWidth: 2,
+    borderBottomColor: 'green',
+    marginBottom:20
+  }
 
 });

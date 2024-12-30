@@ -9,9 +9,6 @@ import {
   TouchableOpacity, 
   View 
 } from "react-native";
-import Button from "../../../components/Button";
-import { theme } from "../../../core/theme";
-import { Ionicons } from '@expo/vector-icons';
 import { useContext, useEffect, useState } from "react";
 import filter from "lodash.filter";
 import { AxiosContext } from "../../../context/AxiosContext";
@@ -26,19 +23,22 @@ function DaftarTernak({ route, navigation }) {
   const [pageCurrent, setPageCurrent] = useState(1);
   const [totalPage, setTotalPage] = useState(10);
   const [search, setSearch] = useState('');
-  const [hasMoreData, setHasMoreData] = useState(true);
   const [isDataFinished, setIsDataFinished] = useState(false);
   const itemp  = (route && route.params) ? route.params.item : null;
+  console.log("itemp = ", itemp)
 
   const getData = () => {
+    console.log("get Da")
     axiosContext.authAxios.get(`/api/v1/livestock?orders=createdAt-desc&size=${totalPage}&page=${pageCurrent}`)
       .then(res => {
-        setLoading(false);
-        if (itemp !== undefined) {
-          setEmployee(res.data.content);
+        const data = res.data.content || [];
+        if (data.length === 0) {
+          setIsDataFinished(true);
         } else {
-          setEmployee(prevData => [...prevData, ...res.data.content]);
+          setEmployee((prevFeed) => [...prevFeed, ...data]);
         }
+        setLoading(false);
+        setIsPaginating(false);
       })
       .catch((e) => {
         setLoading(false);
@@ -47,6 +47,7 @@ function DaftarTernak({ route, navigation }) {
   };
 
   const newGetData = () => {
+    console.log("New Get ")
     axiosContext.authAxios.get(`/api/v1/livestock?orders=createdAt-desc`)
       .then(res => {
         setLoading(false);
@@ -146,15 +147,11 @@ function DaftarTernak({ route, navigation }) {
   const handleLoadMore = async () => {
     if (loading) return;
     setIsDataFinished(true);
+    if(loading || isDataFinished) return;
     setPageCurrent(prevPage => prevPage + 1);
   };
 
   useEffect(() => {
-    // if (itemp !== undefined) {
-    //   newGetData();
-    // } else {
-    //   getData();
-    // }
     if (itemp == null) {
       newGetData();
     } else {

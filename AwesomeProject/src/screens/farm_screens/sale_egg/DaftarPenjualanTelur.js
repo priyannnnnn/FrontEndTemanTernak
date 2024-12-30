@@ -144,24 +144,11 @@ renderItem=({item})=>{
 };
 
 const handleLoadMore= async()=>{
-    // if(loading)return;
-    // const nextPage = pageCurrent + 1
-    // const newData = await setpageCurrent(nextPage);  
-    console.log("Pagination = ")
-      console.log("url = ")
-      console.log(`/api/v1/incomeEgg?orders=createdAt-desc?size=10&page=${pageCurrent}`)
-      if(loading)return;
-      // renderFooter()
-      // getData()
-      //if (isLoading) return;
-      //setIsLoading(true)
-      console.log("Tess = ")
-    //  await setpageCurrent(pageCurrent + 1)
-      const nextPage = pageCurrent + 1
-      setIsDataFinished(true); 
-      return;
-      const newData = await setpageCurrent(nextPage);
-      return;
+  if(loading)return;
+  renderFooter()
+  const nextPage = pageCurrent + 1
+  setIsDataFinished(true)
+  const newData = await setpageCurrent(nextPage);  
  }
 
  const handleSearch= (item) =>{

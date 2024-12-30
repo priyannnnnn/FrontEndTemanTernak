@@ -11,35 +11,35 @@ function DaftarPendapatanTelur({ route, navigation }) {
   const [pageCurrent, setPageCurrent] = useState(1);
   const [search, setSearch] = useState('');
   const axiosContext = useContext(AxiosContext);
-  // const { itemp } = route.params;
   const itemp  = (route && route.params) ? route.params.item : null;
   const [isDataFinished, setIsDataFinished] = useState(false);
   const [totalpage, settotalpage]= useState(10);
   const [isPaginating, setIsPaginating] = useState(false);
 
   const getData = () => {
+    console.log("get data")
     axiosContext.authAxios
       .get(`/api/v1/incomeEgg?orders=createdAt-desc&size=${totalpage}&page=${pageCurrent}`)
       .then(res => {
-        // setLoading(false);
-        // setIncomeEgg(prevData => itemp ? res.data.content : [...prevData, ...res.data.content]);
         const data = res.data.content || [];
-
         if (data.length === 0) {
           setIsDataFinished(true);
-        } else {
-          setIncomeEgg((prevFeed) => [...prevFeed, ...data]);
+        }  else {
+          setIncomeEgg((prevIncomeEgg) => [...prevIncomeEgg, ...data]); // Append new data
         }
         setLoading(false);
         setIsPaginating(false);
       })
-      .catch(console.error);
+      .catch((e) => {
+        setLoading(false);
+        setErrorMessage("Network Error. Please try again.");
+      });
   };
 
   const newGetData = () => {
-    setLoading(true);
+    console.log("New Get Data")
     axiosContext.authAxios
-      .get(`/api/v1/incomeEgg?orders=createdAt-desc&size=10&page=${pageCurrent}`)
+      .get(`/api/v1/incomeEgg?orders=createdAt-desc`)
       .then(res => {
         setLoading(false);
         setIncomeEgg(res.data.content);
@@ -70,10 +70,6 @@ function DaftarPendapatanTelur({ route, navigation }) {
     );
   };
 
-  // const handleLoadMore = () => {
-  //   if (loading) return;
-  //   setPageCurrent(prevPage => prevPage + 1);
-  // };
   const renderFooter = () => {
     if (isDataFinished) {
       return (
@@ -85,13 +81,12 @@ function DaftarPendapatanTelur({ route, navigation }) {
     return null; // Tidak ada footer jika data belum habis
   };
 
-  handleLoadMore= async()=>{
-    if(loading)return;
-    renderFooter()
-    const nextPage = pageCurrent + 1
-    setIsDataFinished(true); 
-    const newData = await setPageCurrent(nextPage);  
- }
+handleLoadMore= async()=>{
+  if(loading)return;
+  setIsDataFinished(true);
+  if(loading || isDataFinished) return;
+  setPageCurrent(prevPage => prevPage + 1);
+}
 
   const handleSearch = (query) => {
     setSearch(query);
@@ -105,13 +100,12 @@ function DaftarPendapatanTelur({ route, navigation }) {
   };
 
   useEffect(() => {
-    console.log("page current = ", pageCurrent)
-    // itemp ? newGetData() : getData();
     if (itemp == null) {
       newGetData();
     } else {
       getData();
     }
+    console.log(pageCurrent)
   }, [itemp, pageCurrent]);
 
    renderItem = ({ item }) => (
@@ -136,11 +130,12 @@ function DaftarPendapatanTelur({ route, navigation }) {
 
   return (
     <SafeAreaView style={listStyle.safearea}>
-        {loading?
+        {loading? (
     <View style={listStyle.loadingflatlist}>
       <ActivityIndicator size="large"/>
       <Image source={require('../../assets/logo2.png')} style={{width:100,height:100}}/>
-    </View> :
+    </View> 
+        ) : (
       <View style={{backgroundColor:'#F5EEE6'}}>
         <View style={{flexDirection:'row'}}>
           <View style={listStyle.input}>
@@ -162,20 +157,18 @@ function DaftarPendapatanTelur({ route, navigation }) {
         </View>
       {/* <ScrollView contentContainerStyle={{ flexGrow: 1 }}> */}
       <FlatList
-      // data={feed}
-      data={incomeEgg || []} 
+      data={incomeEgg} 
       renderItem={this.renderItem}
       keyExtractor={(item,index)=> index.toString()}
       ListFooterComponent={renderFooter}
-      // ListEmptyComponent={emptyList}
       ListEmptyComponent={this.renderEmptyComponent}
       onEndReached={this.handleLoadMore}
       onEndReachedThreshold={0.1}
       style={listStyle.container12}
       contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
       />
-      {/* </ScrollView> */}
-      </View>}
+      </View>
+    )}
       </SafeAreaView>
   );
 }
