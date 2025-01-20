@@ -1,5 +1,5 @@
 import React, { useState,useContext } from 'react'
-import { TouchableOpacity, StyleSheet, View, ScrollView, SafeAreaView } from 'react-native'
+import { TouchableOpacity, StyleSheet, View, ScrollView, SafeAreaView, Alert } from 'react-native'
 import { Text } from 'react-native-paper'
 import Background from '../../components/Background'
 import Logo from '../../components/Logo'
@@ -14,21 +14,25 @@ import axios from 'axios'
 import * as Keychain from 'react-native-keychain';
 import { AxiosContext } from '../../context/AxiosContext'
 import { AuthContext } from '../../context/AuthContext'
+// import {BASE_URL} from '@env'
+// import {URL} from '@env'
 import {BASE_URL} from '@env'
 import {URL} from '@env'
 import RegisterScreen from './RegisterScreen'
 import { useNavigation } from '@react-navigation/native';
 
+
 function LoginScreen() {
   const [email, setEmail] = useState({ value: '',error: '' })
   const [password, setPassword] = useState({ value: '', error: '' })
-
+  const [loading, setLoading] = useState(false);
   const authContext = useContext(AuthContext);
   const publicAxios = useContext(AxiosContext);
   const navigation = useNavigation();
 
   const onLoginPressed =async () => {
-    console.log("Login Any farm ")
+    if (loading) return; // Prevent double click
+    setLoading(true)
     try{
       const dataLogin = {
         email:email?.value,
@@ -58,10 +62,12 @@ function LoginScreen() {
           refreshToken,
         }),
         );
+        setLoading(false)
         navigation.navigate("Dashboard")
     }catch(error){
       console.error(error)
-      console.log("Url Error")
+      setLoading(false)
+      Alert.alert('Failed', 'Pastikan username dan password Benar!')
     }
   }
 
@@ -99,16 +105,10 @@ function LoginScreen() {
         errorText={password.error}
         secureTextEntry
       />
-      {/* <View style={styles.forgotPassword}>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('ListKandang')}
-        >
-          <Text style={styles.forgot}>Forgot your password?</Text>
-        </TouchableOpacity>
-      </View> */}
-      <Button mode="contained" onPress={onLoginPressed}>
+      <Button mode="contained" loading={loading} onPress={onLoginPressed}>
         Login
       </Button>
+      {/* <Button title={loading ? 'Logging in...' : 'Login'} onPress={onLoginPressed} disabled={loading} mode="contained" /> */}
       <View style={styles.row}>
         <Text>Tidak Punya Akun? </Text>
         <TouchableOpacity onPress={() => navigation.navigate('RegisterScreen')}>

@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, StyleSheet, Text } from 'react-native'
-import { TextInput as Input } from 'react-native-paper'
+import { TextInput as Input, IconButton } from 'react-native-paper'
 import { theme } from '../core/theme'
 
-export default function TextInput({ errorText, description, ...props }) {
+export default function TextInput({ errorText, description, secureTextEntry, ...props }) {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+
   return (
     <View style={styles.container}>
       <Input
@@ -11,6 +13,15 @@ export default function TextInput({ errorText, description, ...props }) {
         selectionColor={theme.colors.primary}
         underlineColor="transparent"
         mode="outlined"
+        secureTextEntry={secureTextEntry && !isPasswordVisible}  // Toggle visibility
+        right={
+          secureTextEntry ? (
+            <Input.Icon
+              icon={isPasswordVisible ? 'eye-off' : 'eye'}
+              onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+            />
+          ) : null
+        }
         {...props}
       />
       {description && !errorText ? (

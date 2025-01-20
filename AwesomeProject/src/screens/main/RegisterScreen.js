@@ -44,7 +44,7 @@ export default function RegisterScreen({ navigation }) {
     // axiosContext.authAxios.post('/api/v1/registration/password', data)
     axios.post(`${URL}/api/v1/registration/phoneNumber`,data)
     .then(res => {
-      navigation.navigate('StartScreen', {name: 'StartScreen'})
+      navigation.navigate('LoginScreen', {name: 'LoginScreen'})
     })
     .catch((error) => {
       console.error(error)
