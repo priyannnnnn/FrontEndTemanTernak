@@ -63,7 +63,11 @@ function LoginScreen() {
         }),
         );
         setLoading(false)
-        navigation.navigate("Dashboard")
+        // navigation.navigate("Dashboard")
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Dashboard' }], // Ensure it resets properly
+        });
     }catch(error){
       console.error(error)
       setLoading(false)

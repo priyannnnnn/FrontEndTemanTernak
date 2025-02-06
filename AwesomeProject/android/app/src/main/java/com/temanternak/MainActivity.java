@@ -1,4 +1,4 @@
-package com.awesomeproject;
+package com.temanternak;
 
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;

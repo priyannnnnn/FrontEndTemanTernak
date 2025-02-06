@@ -93,40 +93,40 @@ function UpdatePenjualanTelur(props){
 
     return(
       <ScrollView style={kandangStyle.ScrollView}>
-    <View style={styles.View}>
-        <Header>Update Penjualan Telur</Header>
+        <View style={styles.View}>
+          <Header>Update Penjualan Telur</Header>
 
-       <Text style={kandangStyle.Text}>Jumlah Telur</Text>
-       <TextInput value={saleEgg?.quantity.value}  
-       onChangeText={(text)=> {
-        const formatted = formatAmount(text);
-        setsaleEgg({ ...saleEgg, quantity: {value: formatted, error: ''}  })
-       }}
-       keyboardType="numeric" />
+          <Text style={kandangStyle.Text}>Jumlah Telur</Text>
+          <TextInput value={saleEgg?.quantity.value}  
+          onChangeText={(text)=> {
+            const formatted = formatAmount(text);
+            setsaleEgg({ ...saleEgg, quantity: {value: formatted, error: ''}  })
+          }}
+          keyboardType="numeric" />
 
-       <Text style={kandangStyle.Text}>Total Pendapatan Telur</Text>
-       <TextInput value={saleEgg?.amount.value}  
-       onChangeText={(text)=> {
-        const formatted = formatAmount(text);
-        setsaleEgg({ ...saleEgg, amount: {value: formatted, error: ''}  })
-       }} 
-       keyboardType="numeric" />
+          <Text style={kandangStyle.Text}>Total Pendapatan Telur</Text>
+          <TextInput value={saleEgg?.amount.value}  
+          onChangeText={(text)=> {
+            const formatted = formatAmount(text);
+            setsaleEgg({ ...saleEgg, amount: {value: formatted, error: ''}  })
+          }} 
+          keyboardType="numeric" />
 
-       <Text style={kandangStyle.Text}>Tanggal</Text>
-          <TextInput value={saleEgg?.date.value}  onChangeText={(text)=> setsaleEgg({...saleEgg, date:{value:text, error:''}})} onBlur={onChange} onChange={showDatepicker} onFocus={showDatepicker}/>
-          {show && (
-        <DateTimePicker
-          testID="dateTimePicker" value={date}
-          mode={mode} is24Hour={true} onChange={onChange}
-        />
-          )}
-        <Button mode='contained' style={{ marginTop: 4 }} onPress={()=> UpdateData(saleEgg.id)} >Simpan</Button>
-        <Button mode='contained'
-          onPress={() => navigation.reset({ index: 0,
-          routes: [{ name: 'DaftarPenjualanTelur' }], })}>
-            Kembali
-        </Button>
-    </View>
+          <Text style={kandangStyle.Text}>Tanggal</Text>
+              <TextInput value={saleEgg?.date.value}  onChangeText={(text)=> setsaleEgg({...saleEgg, date:{value:text, error:''}})} onBlur={onChange} onChange={showDatepicker} onFocus={showDatepicker}/>
+              {show && (
+            <DateTimePicker
+              testID="dateTimePicker" value={date}
+              mode={mode} is24Hour={true} onChange={onChange}
+            />
+              )}
+            <Button mode='contained' style={{ marginTop: 4 }} onPress={()=> UpdateData(saleEgg.id)} >Simpan</Button>
+            <Button mode='contained'
+              onPress={() => navigation.reset({ index: 0,
+              routes: [{ name: 'DaftarPenjualanTelur' }], })}>
+                Kembali
+            </Button>
+        </View>
     </ScrollView>
     )
 }

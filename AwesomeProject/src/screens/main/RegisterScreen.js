@@ -26,7 +26,7 @@ export default function RegisterScreen({ navigation }) {
   const onSignUpPressed = () => {
     const nameError = nameValidator(fullName.value)
     const emailError = emailValidator(email.value)
-    const passwordError = passwsupriordValidator(password.value)
+    const passwordError = passwordValidator(password.value)
     const data={
       fullName: fullName?.value,
       nickName:nickName?.value,

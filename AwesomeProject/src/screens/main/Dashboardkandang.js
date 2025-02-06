@@ -1,9 +1,15 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import BackgroundDashboard from '../../components/Backgrounddash';
 import Ionicons from 'react-native-vector-icons/MaterialIcons';
 import { AxiosContext } from '../../context/AxiosContext';
+import { Dimensions } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+
+  const { width, height } = Dimensions.get('window');
+  const cardWidth = width * 0.4; // 40% of screen width
+  const summaryWidth = width * 0.9; // 90% of screen width
 
 function Dashboardkandang({ navigation }) {
 
@@ -29,10 +35,16 @@ function Dashboardkandang({ navigation }) {
     return onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.'); // Add dots every 3 digits
   };
 
-  useEffect(() =>{
-    getData()
-    console.log("Dashboard = ", Dasboard)
-  },[])
+  // useEffect(() =>{
+  //   getData()
+  //   console.log("Dashboard = ", Dasboard)
+  // },[])
+  useFocusEffect(
+    useCallback(() => {
+      getData(); // Memanggil API saat tab difokuskan
+    }, [])
+  );
+  
   return (
     <BackgroundDashboard>
       {/* <View style={{ alignItems: 'center', width: 400,}}> */}
@@ -224,21 +236,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',  // Optional: Align items vertically
     top:-70
   },
-   summary:{
-    position: 'absolute',
-    width: '100%',
-    height: 320,
-    left: 0,
-    top: 230,
-    // marginLeft: 0, 
-    marginHorizontal:0,
-    backgroundColor: 'white',
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
-    borderBottomRightRadius:15,
-    borderBottomLeftRadius:15,
-    padding:20
-   },
    headerr: {
     marginBottom: 20,
   },
@@ -254,6 +251,16 @@ const styles = StyleSheet.create({
     color: '#F2C94C', // Yellow-ish color for the date
     marginTop: 5,
   },
+  summary: {
+    width: summaryWidth,
+    alignSelf: 'center',
+    minHeight: height * 0.2, // Adjusted height to be more dynamic
+    maxHeight: height * 0.3, // Prevent summary from filling the whole screen
+    backgroundColor: 'white',
+    borderRadius: 15,
+    padding: 20,
+    marginTop: -60, // Move it further up
+  },
   summaryItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -264,21 +271,18 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   label: {
-    width: '50%',
     fontSize: 16,
     fontWeight: 'bold',
-    color:'black'
+    color: 'black',
   },
   value: {
-    width: '50%',
-    right: 0,
     fontSize: 16,
     fontWeight: 'bold',
-    color:'black',
-    textAlign: 'right'
+    color: 'black',
+    textAlign: 'right',
   },
   card: {
-    width: 160,
+    width: cardWidth,
     height: 125,
     borderRadius: 15,
     overflow: 'hidden',
@@ -287,19 +291,17 @@ const styles = StyleSheet.create({
     shadowColor: '#000', // shadow for iOS
     shadowOpacity: 0.2,
     shadowRadius: 5,
-    left:10
   },
-  card1:{
-    width: 160,
+  card1: {
+    width: cardWidth,
     height: 125,
     borderRadius: 15,
     overflow: 'hidden',
     margin: 10,
-    elevation: 5, // shadow for Android
-    shadowColor: '#000', // shadow for iOS
+    elevation: 5,
+    shadowColor: '#000',
     shadowOpacity: 0.2,
     shadowRadius: 5,
-    right:10
   },
   gradientBackground: {
     flex: 1,
