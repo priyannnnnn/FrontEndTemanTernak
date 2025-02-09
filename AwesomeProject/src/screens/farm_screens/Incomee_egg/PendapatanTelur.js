@@ -30,23 +30,11 @@ function PendapatanTelur(props) {
 
   const onSubmit = () => {
     const data={
-            quantity:IncomeEgg?.quantity?.value,
-            date: IncomeEgg?.date?.value
-          }
-    // const amount=!isNaN(data.amount) && data.amount>1;
-    // const quantity=!isNaN(data.quantity) && data.quantity>1;
-
-      // if(!amount || !quantity){
-      //   Alert.alert('Data Anda Salah',"Mohon Untuk Cek Kembali")
-      //   return;
-      // }
-
+      quantity:IncomeEgg?.quantity?.value.replace(/\./g,''),
+      date: IncomeEgg?.date?.value
+    }
     axiosContext.authAxios.post(`/api/v1/incomeEgg`, data)
     .then(res => {
-      console.info("succes sellegg data = ")
-      console.log(res.data)
-      console.info("succes sellegg data content = ")
-      console.log(res.data.content)
       navigation.navigate('DaftarPendapatanTelur',{itemp:res.data})
     })
     .catch((error) => {
@@ -60,14 +48,7 @@ function PendapatanTelur(props) {
   const [show, setShow] = useState(false);
 
   const onChange = (event, selectedDate) => {
-    // const currentDate = selectedDate;
     setShow(false);
-    // setDate(currentDate);
-    // if (event?.type === 'dismissed') {
-      // setDate(date);
-      // return;
-  // }
-  // setDate(selectedDate);
   };
 
   const showMode = (currentMode) => {
@@ -81,14 +62,27 @@ function PendapatanTelur(props) {
     showMode('date');
   };
 
+  const formatAmount = (text) => {
+    // Remove non-numeric characters
+    const onlyNumbers = text.replace(/[^0-9]/g, '');
+    // Format number with dots after every 3 digits
+    const formatted = onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    return formatted;
+  };
+
   return (
     <ScrollView style={kandangStyle.ScrollView}>
       <View style={kandangStyle.View}>
         <BackButton goBack={navigation.goBack} />
         <Header>Telur</Header>
         <Text style={kandangStyle.Text}>Jumlah Telur</Text>
-        <TextInput value={IncomeEgg?.quantity.value} onChangeText={(text)=> setIncomeEgg({...IncomeEgg, quantity:{value: text,error:''}})} 
-          label='Masukkan Jumlah Telur' keyboardType="numeric" />
+        <TextInput value={IncomeEgg?.quantity.value} onChangeText={(text)=> {
+          const formatted = formatAmount(text); 
+          setIncomeEgg({...IncomeEgg, quantity:{value:formatted, error:''}});
+          }}
+          label='Masukkan Jumlah Telur' 
+          keyboardType="numeric" 
+        />
           
         <Text style={kandangStyle.Text}>Tanggal</Text>
         <TextInput value={IncomeEgg?.date.value} onChangeText={(text)=> setIncomeEgg({...setIncomeEgg, date:{value:text,error:''}})} onBlur={onChange} onChange={showDatepicker} onFocus={showDatepicker} label='Tanggal' />

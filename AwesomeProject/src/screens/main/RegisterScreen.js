@@ -35,7 +35,7 @@ export default function RegisterScreen({ navigation }) {
       password: password?.value
     }
     if (emailError || passwordError || nameError) {
-      setName({ ...fullName, error: nameError })
+      setFullName({ ...fullName, error: nameError })
       setEmail({ ...email, error: emailError })
       setPassword({ ...password, error: passwordError })
       return

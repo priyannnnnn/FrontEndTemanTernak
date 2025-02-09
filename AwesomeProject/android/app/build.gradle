@@ -100,8 +100,8 @@ android {
         applicationId "com.temanternak"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.0."
     }
 
     splits {
@@ -109,7 +109,8 @@ android {
             reset()
             enable enableSeparateBuildPerCPUArchitecture
             universalApk false  // If true, also generate a universal APK
-            include (*reactNativeArchitectures())
+            // include (*reactNativeArchitectures())
+            include "armeabi-v7a", "arm64-v8a", "x86", "x86_64"
         }
     }
     signingConfigs {

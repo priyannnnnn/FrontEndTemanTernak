@@ -8,8 +8,6 @@ import { theme } from "../../../core/theme";
 import { useContext, useEffect, useState } from "react";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from "moment";
-import axios from "axios";
-import { Picker } from "@react-native-picker/picker";
 import { AxiosContext } from "../../../context/AxiosContext";
 import kandangStyle from "../../../helpers/styles/kandang.style";
 import RNPickerSelect from 'react-native-picker-select';

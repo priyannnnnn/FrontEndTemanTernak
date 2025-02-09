@@ -46,7 +46,7 @@ function AmountKandang({navigation}){
                     <Image source={require('../../image/pendepatan.png')} style = {{width: 70, height:50}}/>
                     </View>
                 </TouchableOpacity>
-                <Text style={styles.text}>Pendapatan</Text>
+                <Text style={styles.text}>Telur</Text>
             </View> 
           </View>
         );
@@ -169,9 +169,10 @@ const styles= StyleSheet.create({
         alignSelf:'baseline'
     },
     text:{
-        fontSize:13,
+        fontSize:15,
+        fontWeight:'bold',
         alignSelf:'center',
-        marginLeft:20,
+        marginLeft:40,
         height: 70,
         width: 90,
     },
