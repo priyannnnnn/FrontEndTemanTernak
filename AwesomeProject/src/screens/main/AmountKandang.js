@@ -1,297 +1,458 @@
-import { FlatList, Image, SafeAreaView, ScrollView, StatusBar, StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
-import { Text } from "react-native-paper";
-import Button from '../../components/Button';
-import { theme } from "../../core/theme";
-import AntDesign from 'react-native-vector-icons/AntDesign'
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import places from "../../helpers/places";
-import places2 from "../../helpers/places2";
-import { ImageBackground } from "react-native";
-import { Dimensions } from "react-native";
-const {width} = Dimensions.get('screen')
+"use client"
 
-function AmountKandang({navigation}){
-    const categoryIcons = [
-      <Icon name="search" size={25} color={'#04555c'} />,
-      <Icon name="person" size={25} color={'#04555c'} />,
-      <Icon name="near-me" size={25} color={'#04555c'} />,
-        <Icon name="place" size={25} color={'#04555c'} />,
-        
-    ];
-      const ListCategories = () => {
-        return (
-          <View style={styles.categoryContainer}>
-            <View style={styles.viewButton}>
-                <TouchableOpacity onPress={() => navigation.navigate('DaftarTernak',{item:8})}>
-                    <View style={styles.iconContainer}>
-                        {/* <Icon name="search" size={25} color={'#04555c'} /> */}
-                        <Image source={require('../../image/ternak.png')} style = {{width: 60, height:60}}/>
-                    </View>
-                </TouchableOpacity>
-                <Text style={styles.text}>Ternak</Text>
-            </View>
-            <View style={styles.viewButton}>
-                <TouchableOpacity onPress={() => navigation.navigate('DaftarPersediaanPakan',{item:8})}>
-                    <View style={styles.iconContainer}>
-                    {/* <Icon name="beach-access" size={25} color={'#04555c'} /> */}
-                    <Image source={require('../assets/feed.png')} style = {{width: 70, height:50}}/>
-                    </View>
-                </TouchableOpacity>
-                <Text style={styles.text}>Pakan</Text>
-            </View>
-            <View style={styles.viewButton}>
-                <TouchableOpacity onPress={() => navigation.navigate('DaftarPendapatanTelur',{item:8})}>
-                    <View style={styles.iconContainer}>
-                    {/* <Icon name="near-me" size={25} color={'#04555c'} /> */}
-                    <Image source={require('../../image/pendepatan.png')} style = {{width: 70, height:50}}/>
-                    </View>
-                </TouchableOpacity>
-                <Text style={styles.text}>Telur</Text>
-            </View> 
+import {
+  Image,
+  SafeAreaView,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Dimensions,
+} from "react-native"
+import { Text } from "react-native-paper"
+import LinearGradient from "react-native-linear-gradient"
+import Icon from "react-native-vector-icons/MaterialIcons"
+import { useContext, useState, useCallback } from "react"
+import { AxiosContext } from "../../context/AxiosContext"
+import { useFocusEffect } from "@react-navigation/native"
+import * as Keychain from "react-native-keychain"
+
+const { width, height } = Dimensions.get("screen")
+
+function AmountKandang({ navigation }) {
+  const axiosContext = useContext(AxiosContext)
+  const [dashboardData, setDashboardData] = useState({})
+  const [weatherData, setWeatherData] = useState({ temp: 28, condition: "Cerah" })
+  const [user, setUser] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  const getData = () => {
+    axiosContext.authAxios
+      .get(`/api/v1/dashboard`)
+      .then((res) => {
+        console.log("data = ", res.data)
+        setDashboardData(res.data)
+      })
+      .catch((err) => {
+        console.error(err)
+      })
+  }
+
+  const formatAmountWithDots = (value) => {
+    if (!value) return "0"
+    const onlyNumbers = value.toString().replace(/[^0-9]/g, "")
+    if (value < 0) return "-" + onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+    return onlyNumbers.replace(/\B(?=(\d{3})+(?!\d))/g, ".")
+  }
+
+  const quickAccessData = [
+    {
+      title: "Kandang",
+      icon: require("../../image/kandang.png"),
+      color: ["#179574", "#20c498"],
+      onPress: () => navigation.navigate("Kandang"),
+    },
+    {
+      title: "Komunitas",
+      icon: "groups",
+      color: ["#F8CE5A", "#F3B93D"],
+      onPress: () => navigation.navigate("Community"),
+    },
+    {
+      title: "Medis",
+      icon: "medical-services",
+      color: ["#FF6B6B", "#FF5252"],
+      onPress: () => navigation.navigate("Medical"),
+    },
+  ]
+
+  const farmingTips = [
+    {
+      id: 1,
+      title: "Tips Meningkatkan Produksi Telur",
+      description: "Berikan pakan berkualitas tinggi dengan protein 20-24% untuk puyuh petelur",
+      image: require("../../image/management.jpg"),
+      category: "Produksi",
+      readTime: "3 menit",
+    },
+    {
+      id: 2,
+      title: "Cara Menjaga Kesehatan Puyuh",
+      description: "Lakukan vaksinasi rutin dan jaga kebersihan kandang untuk mencegah penyakit",
+      image: require("../../image/person.jpg"),
+      category: "Kesehatan",
+      readTime: "5 menit",
+    },
+    {
+      id: 3,
+      title: "Cara Merawat DOQ",
+      description: "Cara tepat untuk bagaimana merawat DOQ yang tepat",
+      image: require("../../image/quail.jpg"),
+      category: "DOQ",
+      readTime: "4 menit",
+    },
+  ]
+
+  const QuickAccessCard = ({ item }) => (
+    <TouchableOpacity style={styles.quickAccessCard} onPress={item.onPress}>
+      <LinearGradient colors={item.color} style={styles.quickAccessGradient}>
+        {typeof item.icon === "string" ? (
+          <Icon name={item.icon} size={32} color="#FFFFFF" />
+        ) : (
+          <Image source={item.icon} style={styles.quickAccessIcon} />
+        )}
+        <Text style={styles.quickAccessText}>{item.title}</Text>
+      </LinearGradient>
+    </TouchableOpacity>
+  )
+
+  const SummaryCard = ({ icon, image, label, value, unit, color }) => (
+    <View style={[styles.summaryCard, { borderLeftColor: color }]}>
+      <View style={styles.summaryHeader}>
+        {image ? (
+          <Image source={image} style={[styles.summaryImage, { tintColor: color }]} />
+        ) : (
+          <Icon name={icon} size={32} color={color} />
+        )}
+        <Text style={styles.summaryLabel}>{label}</Text>
+      </View>
+      <Text style={styles.summaryValue}>
+        {value} <Text style={styles.summaryUnit}>{unit}</Text>
+      </Text>
+    </View>
+  )
+
+  const TipCard = ({ tip }) => (
+    <TouchableOpacity style={styles.tipCard}>
+      <Image source={tip.image} style={styles.tipImage} />
+      <View style={styles.tipContent}>
+        <View style={styles.tipHeader}>
+          <View style={[styles.categoryBadge, { backgroundColor: getCategoryColor(tip.category) }]}>
+            <Text style={styles.categoryText}>{tip.category}</Text>
           </View>
-        );
-      };
-      const ListCategories2 = () => {
-        return (
-          <View style={styles.categoryContainer2}>
-            <View style={styles.viewButton}>
-                <TouchableOpacity onPress={() => navigation.navigate('DaftarPersediaanPakan',{item:8})}>
-                    <View style={styles.iconContainer}>
-                    {/* <Icon name="alarm" size={25} color={'#04555c'} /> */}
-                    <Image source={require('../../image/pakan12.png')} style = {{width:65, height:65}}/>
-                    </View>
-                </TouchableOpacity>
-                <Text style={styles.text}>Persediaan Pakan</Text>
-            </View>
-            <View style={styles.viewButton}>
-                <TouchableOpacity onPress={() => navigation.navigate('DaftarOperasional',{item:8})}>
-                    <View style={styles.iconContainer}>
-                    {/* <Icon name="beach-access" size={25} color={'#04555c'} /> */}
-                    <Image source={require('../../image/date.png')} style = {{marginLeft:5,width:63, height:63}}/>
-                    </View>
-                </TouchableOpacity>
-                <Text style={styles.text}>Operasional</Text>
-            </View> 
+          {/* <Text style={styles.readTime}>{tip.readTime}</Text> */}
+        </View>
+        <Text style={styles.tipTitle}>{tip.title}</Text>
+        <Text style={styles.tipDescription}>{tip.description}</Text>
+      </View>
+    </TouchableOpacity>
+  )
+
+  const getCategoryColor = (category) => {
+    switch (category) {
+      case "Produksi":
+        return "#179574"
+      case "Kesehatan":
+        return "#FF6B6B"
+      case "Pakan":
+        return "#F8CE5A"
+      case "DOQ":
+        return "#9C27B0"
+      default:
+        return "#179574"
+    }
+  }
+
+  const fetchUserData = useCallback(async () => {
+    console.log("Fetching user data...")
+    setLoading(true)
+    try {
+      const value = await Keychain.getGenericPassword()
+      if (value) {
+        const jwt = JSON.parse(value.password)
+        const userData = jwt.accessToken.userr
+        setUser(userData)
+        console.log("User data:", userData)
+      }
+    } catch (error) {
+      console.error("Error fetching user data:", error)
+    } finally {
+      setLoading(false)
+    }
+  }, [])
+
+  useFocusEffect(
+    useCallback(() => {
+      getData()
+      fetchUserData()
+    }, [fetchUserData]),
+  )
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <StatusBar backgroundColor="#179574" barStyle="light-content" />
+
+      {/* Header */}
+      <LinearGradient colors={["#179574", "#20c498"]} style={styles.header}>
+        <View style={styles.headerContent}>
+          <View>
+            <Text style={styles.headerGreeting}>Selamat Datang!</Text>
+            <Text style={styles.headerTitle}>{loading ? "Loading..." : user?.fullName || "Teman Ternak"}</Text>
           </View>
-        );
-      };
-      
-    const RecommendedCard = ({place}) => {
-        return (
-          <ImageBackground style={styles.rmCardImage} source={place.image}>
-            <Text
-              style={{
-                color: '#FFFFFF',
-                fontSize: 22,
-                fontWeight: 'bold',
-                marginTop: 10,
-              }}>
-              {place.name}
-            </Text>
-            <View
-              style={{
-                flex: 1,
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-              }}>
-              <View style={{width: '100%', flexDirection: 'row', marginTop: 10}}>
-                <View style={{flexDirection: 'row'}}>
-                  <Icon name="place" size={22} color={'#FFFFFF'} />
-                  <Text style={{color: '#FFFFFF', marginLeft: 5}}>
-                    {place.location}
-                  </Text>
-                </View>
-                <View style={{flexDirection: 'row'}}>
-                  <Icon name="star" size={22} color={'#FFFFFF'} />
-                  <Text style={{color: '#FFFFFF', marginLeft: 5}}>5.0</Text>
-                </View>
-              </View>
-              <Text style={{color: '#FFFFFF', fontSize: 13}}>
-                {place.details}
-              </Text>
-            </View>
-          </ImageBackground>
-        );
-      };
-    return(
-        <SafeAreaView style={{flex: 1, backgroundColor : "#A7D397"}} >
-            <StatusBar translucent={false} backgroundColor="#b3ecb3"/>
-            
-            <ScrollView>
-                <View 
-                style={{
-                 backgroundColor: '#F2F597',
-                 height: 22,
-                 paddingHorizontal: 20,
-                }}>
-                <View style={{flex: 1,height:0}}>
-                <View style={styles.inputContainer}>
-                {/* <TextInput
-                    placeholder="Search place"
-                    style={{color:'#dddedd',height:80}}/> */}
-                </View>
-                </View>
-                </View>
-                <ListCategories/>
-                {/* <ListCategories2/> */}
-                <View style = {{marginTop: 60}}>
-                    <Text style={styles.sectionTitle}>Recommended</Text>
-                    <FlatList
-                    snapToInterval={width - 20}
-                    contentContainerStyle={{paddingLeft: 20, paddingBottom: 20}}
-                    showsHorizontalScrollIndicator={false}
-                    horizontal
-                    data={places}
-                    renderItem={({item}) => <RecommendedCard place={item} />}
-                    />
-                </View>
-                <View style = {{marginTop: 30}}>
-                    <FlatList
-                    snapToInterval={width - 20}
-                    contentContainerStyle={{paddingLeft: 20, paddingBottom: 95}}
-                    showsHorizontalScrollIndicator={false}
-                    horizontal
-                    data={places2}
-                    renderItem={({item}) => <RecommendedCard place={item} />}
-                    />
-                </View>
-            </ScrollView> 
-        </SafeAreaView>
-    )
+          <View style={styles.weatherContainer}>
+            <Icon name="wb_sunny" size={24} color="#F8CE5A" />
+            <Text style={styles.weatherText}>{weatherData.temp}°C</Text>
+            <Text style={styles.weatherCondition}>{weatherData.condition}</Text>
+          </View>
+        </View>
+      </LinearGradient>
+
+      <ScrollView 
+        style={styles.content} 
+        showsVerticalScrollIndicator={false} 
+        contentContainerStyle={{ paddingBottom: 100 }} >
+        {/* Quick Access */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Akses Cepat</Text>
+          <View style={styles.quickAccessContainer}>
+            {quickAccessData.map((item, index) => (
+              <QuickAccessCard key={index} item={item} />
+            ))}
+          </View>
+        </View>
+
+        {/* Farm Summary */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Ringkasan Peternakan</Text>
+          <View style={styles.summaryContainer}>
+            <SummaryCard
+              icon="account-balance-wallet"
+              label="Pendapatan"
+              value={formatAmountWithDots(dashboardData.profit)}
+              unit="Rupiah"
+              color="#4CAF50"
+            />
+            <SummaryCard
+              image={require("../../image/income.png")}
+              label="Biaya"
+              value={formatAmountWithDots(dashboardData.cost)}
+              unit="Rupiah"
+              color="#FF5722"
+            />
+            <SummaryCard
+              image={require("../../image/quail.png")}
+              label="Ternak"
+              value={formatAmountWithDots(dashboardData.livestock)}
+              unit="Ekor"
+              color="#179574"
+            />
+            <SummaryCard
+              image={require("../../image/pakan12.png")}
+              label="Pakan"
+              value={formatAmountWithDots(dashboardData.feed)}
+              unit="Kg"
+              color="#F8CE5A"
+            />
+            <SummaryCard
+              image={require("../../image/pendepatan.png")}
+              label="Telur"
+              value={formatAmountWithDots(dashboardData.egg)}
+              unit="Butir"
+              color="#FF9800"
+            />
+          </View>
+        </View>
+
+        {/* Farming Tips - Back to Vertical Layout */}
+        <View style={styles.section}>
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Tips & Panduan</Text>
+            <TouchableOpacity>
+              <Text style={styles.seeAllText}>Lihat Semua</Text>
+            </TouchableOpacity>
+          </View>
+          {farmingTips.map((tip) => (
+            <TipCard key={tip.id} tip={tip} />
+          ))}
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  )
 }
-export default AmountKandang;
-const styles= StyleSheet.create({
-    image:{
-        width:250,
-        height:250,
-        alignItems:'center',
-        justifyContent:'center',
-        alignSelf:'baseline'
-    },
-    text:{
-        fontSize:15,
-        fontWeight:'bold',
-        alignSelf:'center',
-        marginLeft:40,
-        height: 70,
-        width: 90,
-    },
-    view:{
-        flex:1,
-        backgroundColor:'#b3ecb3'
-    },
-    text1:{
-        alignItems:'center',
-        alignContent:'center',
-        alignSelf:'center',
-        textAlign:'center',
-        fontSize:18,
-        fontWeight: 'bold',
-        color:'#32CD32'
-    },
-    View12:{
-        width: '100%',
-        height:'20%',
-        backgroundColor: theme.colors.error,
-        padding: 20,
-        alignSelf: 'center',
-        justifyContent: 'center',
-    },
-    button: {
-        borderRadius: 5,
-        marginVertical: 20,
-        alignSelf: 'flex-start',
-        backgroundColor: "gray",
-    },
-    buttonContainer: {
-        marginTop: 200,
-        alignItems:'center',
-        alignContent:'center',
-        alignSelf:'center',
-    },
-    header: {
-        paddingVertical: 20,
-        paddingHorizontal: 20,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        // backgroundColor: '#04555c'
-      },
-      inputContainer: {
-        height: 150,
-        width: '100%',
-        backgroundColor: '#F2F597',
-        borderRadius: 30,
-        position: 'absolute',
-        top: 50,
-        flexDirection: 'row',
-        paddingHorizontal: 20,
-        alignItems: 'center',
-        elevation: 12,
-      },
-      categoryContainer: {
-        marginTop: 55,
-        marginHorizontal: 5,
-        flexDirection: 'row',
-        justifyContent:'space-evenly',
-      },
-      iconContainer: {
-        height: 72,
-        width: 72,
-        backgroundColor: '#0D9276',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 10,
-      },
-      cardImage: {
-        height: 220,
-        width: width / 2,
-        marginRight: 20,
-        padding: 10,
-        overflow: 'hidden',
-        borderRadius: 10,
-      },
-      rmCardImage: {
-        width: width - 40,
-        height: 200,
-        marginRight: 20,
-        borderRadius: 10,
-        overflow: 'hidden',
-        padding: 10,
-      },
-      sectionTitle: {
-        marginHorizontal: 20,
-        marginVertical: 20,
-        fontWeight: 'bold',
-        fontSize: 20,
-      },
-      categoryContainer2: {
-        marginTop: 30,
-        marginHorizontal: 40,
-        flexDirection: 'row',
-        justifyContent:'space-evenly',
-      },
-      iconContainertext: {
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
-      categoryContainertext :{
-        marginTop: 10,
-        marginHorizontal: 0,
-        flexDirection: 'row',
-        justifyContent:'space-evenly',
-      },
-      viewButton: {
-        flexDirection:'column',
-        height: 70,
-        width: 70,
-      }, 
-      dasboard: {
-        marginLeft:120,
-        fontSize : 20
-      },
-      textdashboard: {
-        fontSize : 17,
-        fontWeight: 'bold',
-        color : '#124076'
-      }    
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#F8F9FA",
+  },
+  header: {
+    paddingTop: 20,
+    paddingBottom: 30,
+    paddingHorizontal: 20,
+  },
+  headerContent: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  headerGreeting: {
+    fontSize: 16,
+    color: "rgba(255, 255, 255, 0.9)",
+    marginBottom: 4,
+  },
+  headerTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+  },
+  weatherContainer: {
+    alignItems: "center",
+  },
+  weatherText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#FFFFFF",
+    marginTop: 4,
+  },
+  weatherCondition: {
+    fontSize: 12,
+    color: "rgba(255, 255, 255, 0.8)",
+  },
+  content: {
+    flex: 1,
+    paddingHorizontal: 20,
+  },
+  section: {
+    marginVertical: 16,
+  },
+  sectionHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    fontSize: 22,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 16,
+  },
+  seeAllText: {
+    fontSize: 14,
+    color: "#179574",
+    fontWeight: "600",
+  },
+  quickAccessContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  quickAccessCard: {
+    flex: 1,
+    marginHorizontal: 4,
+  },
+  quickAccessGradient: {
+    padding: 20,
+    borderRadius: 16,
+    alignItems: "center",
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  quickAccessIcon: {
+    width: 32,
+    height: 32,
+    tintColor: "#FFFFFF",
+    marginBottom: 8,
+  },
+  quickAccessText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#FFFFFF",
+    textAlign: "center",
+  },
+  summaryContainer: {
+    gap: 16,
+  },
+  summaryCard: {
+    backgroundColor: "#FFFFFF",
+    padding: 20,
+    borderRadius: 16,
+    borderLeftWidth: 5,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  summaryHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+  },
+  summaryImage: {
+    width: 32,
+    height: 32,
+    marginRight: 12,
+  },
+  summaryLabel: {
+    fontSize: 18,
+    color: "#333",
+    marginLeft: 8,
+    fontWeight: "700",
+  },
+  summaryValue: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  summaryUnit: {
+    fontSize: 16,
+    color: "#666",
+    fontWeight: "normal",
+  },
+  tipCard: {
+    backgroundColor: "#FFFFFF",
+    borderRadius: 12,
+    marginBottom: 12,
+    elevation: 2,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+    overflow: "hidden",
+  },
+  tipImage: {
+    width: "100%",
+    height: 120,
+    resizeMode: "cover",
+  },
+  tipContent: {
+    padding: 16,
+  },
+  tipHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  categoryBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  categoryText: {
+    fontSize: 10,
+    color: "#FFFFFF",
+    fontWeight: "600",
+  },
+  readTime: {
+    fontSize: 12,
+    color: "#666",
+  },
+  tipTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 8,
+  },
+  tipDescription: {
+    fontSize: 14,
+    color: "#666",
+    lineHeight: 20,
+  },
 })
+
+export default AmountKandang
