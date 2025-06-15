@@ -153,9 +153,9 @@ function Account({ navigation }) {
         <Text style={styles.logoutText}>Keluar</Text>
       </TouchableOpacity>
 
-      <View style={styles.footer}>
+      {/* <View style={styles.footer}>
         <Text style={styles.versionText}>Version 1.0.0</Text>
-      </View>
+      </View> */}
     </ScrollView>
   )
 }

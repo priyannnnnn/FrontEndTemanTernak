@@ -142,8 +142,8 @@ const Medical = ({ navigation }) => {
       producer: "Medion",
       type: "Suplemen",
       usage: "Meningkatkan daya tahan tubuh dan mengatasi stress",
-      image: require("../../image/pakan12.png"),
-      price: "Rp 25.000",
+      image: require("../../image/vitastress.png"),
+      // price: "Rp 25.000",
       diseases: ["Newcastle Disease", "Avian Influenza"],
     },
     {
@@ -152,8 +152,8 @@ const Medical = ({ navigation }) => {
       producer: "Mensana",
       type: "Antibiotik",
       usage: "Pengobatan infeksi bakteri spektrum luas",
-      image: require("../../image/pakan12.png"),
-      price: "Rp 45.000",
+      image: require("../../image/Therapy.png"),
+      // price: "Rp 45.000",
       diseases: ["Infectious Coryza", "Quail Enteritis"],
     },
     {
@@ -162,8 +162,8 @@ const Medical = ({ navigation }) => {
       producer: "Medion",
       type: "Antibiotik",
       usage: "Pengobatan infeksi bakteri dan enteritis",
-      image: require("../../image/pakan12.png"),
-      price: "Rp 35.000",
+      image: require("../../image/Neo-Meditril.jpg"),
+      // price: "Rp 35.000",
       diseases: ["Infectious Coryza", "Quail Enteritis"],
     },
     {
@@ -172,8 +172,8 @@ const Medical = ({ navigation }) => {
       producer: "Sanbe",
       type: "Antibiotik",
       usage: "Pengobatan salmonellosis dan infeksi bakteri",
-      image: require("../../image/pakan12.png"),
-      price: "Rp 40.000",
+      image: require("../../image/Trimezyn.jpg"),
+      // price: "Rp 40.000",
       diseases: ["Infectious Coryza", "Salmonellosis"],
     },
     {
@@ -182,8 +182,8 @@ const Medical = ({ navigation }) => {
       producer: "Romindo",
       type: "Antibiotik",
       usage: "Pengobatan infeksi saluran pernapasan dan pencernaan",
-      image: require("../../image/pakan12.png"),
-      price: "Rp 38.000",
+      image: require("../../image/Doctril.png"),
+      // price: "Rp 38.000",
       diseases: ["Infectious Coryza", "Salmonellosis"],
     },
     {
@@ -192,8 +192,8 @@ const Medical = ({ navigation }) => {
       producer: "Medion",
       type: "Vaksin",
       usage: "Pencegahan Newcastle Disease",
-      image: require("../../image/pakan12.png"),
-      price: "Rp 15.000",
+      image: require("../../image/ND.png"),
+      // price: "Rp 15.000",
       diseases: ["Newcastle Disease"],
     },
     {
@@ -202,27 +202,24 @@ const Medical = ({ navigation }) => {
       producer: "Medion",
       type: "Vaksin",
       usage: "Pencegahan Avian Influenza",
-      image: require("../../image/pakan12.png"),
-      price: "Rp 20.000",
+      image: require("../../image/AI.jpg"),
+      // price: "Rp 20.000",
       diseases: ["Avian Influenza"],
     },
-    {
-      id: 8,
-      name: "Coccidiostat",
-      producer: "Medion",
-      type: "Anti Koksidiosis",
-      usage: "Pencegahan dan pengobatan koksidiosis",
-      image: require("../../image/pakan12.png"),
-      price: "Rp 30.000",
-      diseases: ["Koksidiosis"],
-    },
+    // {
+    //   id: 8,
+    //   name: "Coccidiostat",
+    //   producer: "Medion",
+    //   type: "Anti Koksidiosis",
+    //   usage: "Pencegahan dan pengobatan koksidiosis",
+    //   image: require("../../image/pakan12.png"),
+    //   price: "Rp 30.000",
+    //   diseases: ["Koksidiosis"],
+    // },
   ]
 
   const producers = [
-    { id: 1, name: "Medion", logo: require("../../image/pakan12.png"), products: 15 },
-    { id: 2, name: "Mensana", logo: require("../../image/pakan12.png"), products: 12 },
-    { id: 3, name: "Sanbe", logo: require("../../image/pakan12.png"), products: 8 },
-    { id: 4, name: "Romindo", logo: require("../../image/pakan12.png"), products: 10 },
+    { id: 1, name: "Medion", logo: require("../../image/Medition.png")},
   ]
 
   const DiseaseCard = ({ disease }) => {
@@ -251,7 +248,7 @@ const Medical = ({ navigation }) => {
               </View>
             </View>
           </View>
-          <Icon name={isExpanded ? "expand_less" : "expand_more"} size={24} color="#666" />
+          <Icon name={isExpanded ? "expand-less" : "expand-more"} size={24} color="#666" />
         </View>
 
         <Text style={styles.causeText}>
@@ -371,9 +368,9 @@ const Medical = ({ navigation }) => {
           value={searchText}
           onChangeText={setSearchText}
         />
-        <TouchableOpacity style={styles.scanButton}>
-          <Icon name="camera_alt" size={20} color="#179574" />
-        </TouchableOpacity>
+        {/* <TouchableOpacity style={styles.scanButton}>
+          <Icon name="camera-alt" size={20} color="#179574" />
+        </TouchableOpacity> */}
       </View>
 
       {/* Tab Navigation */}
@@ -389,7 +386,7 @@ const Medical = ({ navigation }) => {
           style={[styles.tab, activeTab === "medicines" && styles.activeTab]}
           onPress={() => setActiveTab("medicines")}
         >
-          <Icon name="medication" size={18} color={activeTab === "medicines" ? "#FFFFFF" : "#666"} />
+          <Icon name="medical-services" size={18} color={activeTab === "medicines" ? "#FFFFFF" : "#666"} />
           <Text style={[styles.tabText, activeTab === "medicines" && styles.activeTabText]}>Obat-obatan</Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -402,7 +399,7 @@ const Medical = ({ navigation }) => {
       </View>
 
       {/* Quick Actions */}
-      <View style={styles.quickActions}>
+      {/* <View style={styles.quickActions}>
         <TouchableOpacity style={styles.quickActionButton}>
           <LinearGradient colors={["#F8CE5A", "#F3B93D"]} style={styles.quickActionGradient}>
             <Icon name="emergency" size={24} color="#FFFFFF" />
@@ -421,10 +418,13 @@ const Medical = ({ navigation }) => {
           </LinearGradient>
           <Text style={styles.quickActionText}>Tips Sehat</Text>
         </TouchableOpacity>
-      </View>
+      </View> */}
 
       {/* Content */}
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+      <ScrollView 
+        style={styles.content} 
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ paddingBottom: 100 }}>
         {activeTab === "diseases" && (
           <View>
             <Text style={styles.sectionTitle}>Penyakit Umum Puyuh ({filteredDiseases.length})</Text>
@@ -461,7 +461,7 @@ const Medical = ({ navigation }) => {
       {/* Emergency Button */}
       <TouchableOpacity style={styles.emergencyFab}>
         <LinearGradient colors={["#FF6B6B", "#FF5252"]} style={styles.emergencyGradient}>
-          <Icon name="local_hospital" size={28} color="#FFFFFF" />
+          <Icon name="local-hospital" size={28} color="#FFFFFF" />
         </LinearGradient>
       </TouchableOpacity>
     </SafeAreaView>

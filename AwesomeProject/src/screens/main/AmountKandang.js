@@ -31,7 +31,6 @@ function AmountKandang({ navigation }) {
     axiosContext.authAxios
       .get(`/api/v1/dashboard`)
       .then((res) => {
-        console.log("data = ", res.data)
         setDashboardData(res.data)
       })
       .catch((err) => {
@@ -155,7 +154,6 @@ function AmountKandang({ navigation }) {
   }
 
   const fetchUserData = useCallback(async () => {
-    console.log("Fetching user data...")
     setLoading(true)
     try {
       const value = await Keychain.getGenericPassword()
@@ -163,7 +161,6 @@ function AmountKandang({ navigation }) {
         const jwt = JSON.parse(value.password)
         const userData = jwt.accessToken.userr
         setUser(userData)
-        console.log("User data:", userData)
       }
     } catch (error) {
       console.error("Error fetching user data:", error)
@@ -190,11 +187,11 @@ function AmountKandang({ navigation }) {
             <Text style={styles.headerGreeting}>Selamat Datang!</Text>
             <Text style={styles.headerTitle}>{loading ? "Loading..." : user?.fullName || "Teman Ternak"}</Text>
           </View>
-          <View style={styles.weatherContainer}>
+          {/* <View style={styles.weatherContainer}>
             <Icon name="wb_sunny" size={24} color="#F8CE5A" />
             <Text style={styles.weatherText}>{weatherData.temp}°C</Text>
             <Text style={styles.weatherCondition}>{weatherData.condition}</Text>
-          </View>
+          </View> */}
         </View>
       </LinearGradient>
 

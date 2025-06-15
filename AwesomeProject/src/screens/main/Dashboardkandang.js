@@ -17,7 +17,6 @@ function Dashboardkandang({ navigation }) {
     axiosContext.authAxios
       .get(`/api/v1/dashboard`)
       .then((res) => {
-        console.log("data = ", res.data)
         setDashboardData(res.data)
       })
       .catch((err) => {
