@@ -87,7 +87,7 @@ function AmountKandang({ navigation }) {
       id: 3,
       title: "Cara Merawat DOQ",
       description: "Cara tepat untuk bagaimana merawat DOQ yang tepat",
-      image: require("../../image/quail.jpg"),
+      image: require("../../image/quaill.jpg"),
       category: "DOQ",
       readTime: "4 menit",
     },
@@ -159,7 +159,7 @@ function AmountKandang({ navigation }) {
       const value = await Keychain.getGenericPassword()
       if (value) {
         const jwt = JSON.parse(value.password)
-        const userData = jwt.accessToken.userr
+        const userData = jwt.user
         setUser(userData)
       }
     } catch (error) {

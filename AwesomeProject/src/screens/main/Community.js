@@ -1,105 +1,279 @@
 "use client"
 
-import { useState } from "react"
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Image, SafeAreaView } from "react-native"
+import { useState, useContext, useCallback } from "react"
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  Image,
+  SafeAreaView,
+  Alert,
+  RefreshControl,
+  ActivityIndicator,
+} from "react-native"
+import { TextInput as PaperTextInput } from "react-native-paper"
 import LinearGradient from "react-native-linear-gradient"
 import Icon from "react-native-vector-icons/MaterialIcons"
+import { AxiosContext } from "../../context/AxiosContext"
+import { useFocusEffect } from "@react-navigation/native"
 
 const Community = ({ navigation }) => {
-  const [activeTab, setActiveTab] = useState("groups")
+  const axiosContext = useContext(AxiosContext)
+  const [posts, setPosts] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
   const [searchText, setSearchText] = useState("")
+  const [expandedComments, setExpandedComments] = useState({})
+  const [commentText, setCommentText] = useState({})
+  const [likedPosts, setLikedPosts] = useState(new Set())
 
-  const communityGroups = [
-    {
-      id: 1,
-      name: "Peternak Puyuh Jawa Timur",
-      members: 1250,
-      lastMessage: "Tips pemberian pakan saat musim hujan",
-      time: "2 jam lalu",
-      image: require("../../image/ternak.png"),
-      isActive: true,
-    },
-    {
-      id: 2,
-      name: "Komunitas Telur Puyuh",
-      members: 890,
-      lastMessage: "Harga telur hari ini bagaimana?",
-      time: "5 jam lalu",
-      image: require("../../image/pendepatan.png"),
-      isActive: true,
-    },
-    {
-      id: 3,
-      name: "Peternak Pemula",
-      members: 456,
-      lastMessage: "Cara mengatasi puyuh yang tidak bertelur",
-      time: "1 hari lalu",
-      image: require("../../image/ternak.png"),
-      isActive: false,
-    },
-  ]
+  // Fetch all posts
+  const fetchPosts = async () => {
+    try {
+      setLoading(true)
+      const response = await axiosContext.authAxios.get("/api/v1/community/posts")
+      setPosts(response.data.content || [])
+    } catch (error) {
+      console.error("Error fetching posts:", error)
+      Alert.alert("Error", "Gagal memuat postingan")
+    } finally {
+      setLoading(false)
+    }
+  }
 
-  const discussions = [
-    {
-      id: 1,
-      title: "Tips Meningkatkan Produksi Telur",
-      author: "Pak Budi",
-      replies: 23,
-      time: "3 jam lalu",
-      category: "Tips & Trik",
-    },
-    {
-      id: 2,
-      title: "Penyakit Puyuh dan Cara Mengatasinya",
-      author: "Dr. Sari",
-      replies: 45,
-      time: "6 jam lalu",
-      category: "Kesehatan",
-    },
-    {
-      id: 3,
-      title: "Harga Pakan Naik, Bagaimana Solusinya?",
-      author: "Ibu Ani",
-      replies: 67,
-      time: "1 hari lalu",
-      category: "Ekonomi",
-    },
-  ]
+  // Navigate to create post screen
+  const navigateToCreatePost = () => {
+    navigation.navigate("CreatePost")
+  }
 
-  const GroupCard = ({ group }) => (
-    <TouchableOpacity style={styles.groupCard}>
-      <View style={styles.groupHeader}>
-        <Image source={group.image} style={styles.groupImage} />
-        <View style={styles.groupInfo}>
-          <Text style={styles.groupName}>{group.name}</Text>
-          <Text style={styles.groupMembers}>{group.members} anggota</Text>
-        </View>
-        <View style={styles.groupStatus}>
-          <View style={[styles.statusDot, { backgroundColor: group.isActive ? "#4CAF50" : "#FFC107" }]} />
-        </View>
-      </View>
-      <Text style={styles.lastMessage}>{group.lastMessage}</Text>
-      <Text style={styles.messageTime}>{group.time}</Text>
-    </TouchableOpacity>
+  // Like/Unlike post
+  const toggleLike = async (postId) => {
+    const isCurrentlyLiked = likedPosts.has(postId)
+
+    try {
+      const endpoint = isCurrentlyLiked ? "/api/v1/community/unlike" : "/api/v1/community/like"
+      await axiosContext.authAxios.post(endpoint, { postId })
+
+      // Update local state immediately for better UX
+      setLikedPosts((prev) => {
+        const newSet = new Set(prev)
+        if (isCurrentlyLiked) {
+          newSet.delete(postId)
+        } else {
+          newSet.add(postId)
+        }
+        return newSet
+      })
+
+      // Update posts state
+      setPosts((prevPosts) =>
+        prevPosts.map((post) =>
+          post.id === postId
+            ? { ...post, likeCount: isCurrentlyLiked ? post.likeCount - 1 : post.likeCount + 1 }
+            : post,
+        ),
+      )
+    } catch (error) {
+      console.error("Error toggling like:", error)
+      // Revert the optimistic update
+      setLikedPosts((prev) => {
+        const newSet = new Set(prev)
+        if (isCurrentlyLiked) {
+          newSet.add(postId)
+        } else {
+          newSet.delete(postId)
+        }
+        return newSet
+      })
+    }
+  }
+
+  // Add comment
+  const addComment = async (postId) => {
+    const content = commentText[postId]?.trim()
+    if (!content) return
+
+    try {
+      await axiosContext.authAxios.post("/api/v1/community/comment", {
+        postId,
+        content,
+      })
+
+      setCommentText((prev) => ({ ...prev, [postId]: "" }))
+      fetchPosts() // Refresh to get updated comments
+    } catch (error) {
+      console.error("Error adding comment:", error)
+      Alert.alert("Error", "Gagal menambahkan komentar")
+    }
+  }
+
+  // Format time
+  const formatTime = (dateString) => {
+    const date = new Date(dateString)
+    const now = new Date()
+    const diffInHours = Math.floor((now - date) / (1000 * 60 * 60))
+
+    if (diffInHours < 1) return "Baru saja"
+    if (diffInHours < 24) return `${diffInHours} jam lalu`
+    if (diffInHours < 48) return "1 hari lalu"
+    return `${Math.floor(diffInHours / 24)} hari lalu`
+  }
+
+  // Refresh posts
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true)
+    await fetchPosts()
+    setRefreshing(false)
+  }, [])
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchPosts()
+    }, []),
   )
 
-  const DiscussionCard = ({ discussion }) => (
-    <TouchableOpacity style={styles.discussionCard}>
-      <View style={styles.discussionHeader}>
-        <Text style={styles.discussionTitle}>{discussion.title}</Text>
-        <View style={styles.categoryBadge}>
-          <Text style={styles.categoryText}>{discussion.category}</Text>
+  // Custom TextInput Component for search and comments
+  const CommunityTextInput = ({ value, onChangeText, placeholder, multiline = false, style, ...props }) => (
+    <View style={[styles.inputContainer, style]}>
+      <PaperTextInput
+        style={[styles.paperInput, multiline && styles.multilineInput]}
+        value={value}
+        onChangeText={onChangeText}
+        placeholder={placeholder}
+        mode="outlined"
+        multiline={multiline}
+        numberOfLines={multiline ? 3 : 1}
+        outlineColor="#E0E0E0"
+        activeOutlineColor="#179574"
+        theme={{
+          colors: {
+            background: "#FFFFFF",
+            placeholder: "#999",
+            text: "#333",
+          },
+        }}
+        {...props}
+      />
+    </View>
+  )
+
+  const PostCard = ({ post }) => {
+    const isCommentsExpanded = expandedComments[post.id]
+    const isLiked = likedPosts.has(post.id)
+
+    return (
+      <View style={styles.postCard}>
+        {/* Post Header */}
+        <View style={styles.postHeader}>
+          <View style={styles.userInfo}>
+            <LinearGradient colors={["#179574", "#20c498"]} style={styles.avatar}>
+              <Icon name="person" size={20} color="#FFFFFF" />
+            </LinearGradient>
+            <View>
+              <Text style={styles.userName}>{post.userFullName}</Text>
+              <Text style={styles.postTime}>{formatTime(post.createdAt)}</Text>
+            </View>
+          </View>
+          <TouchableOpacity style={styles.moreButton}>
+            <Icon name="more-vert" size={20} color="#666" />
+          </TouchableOpacity>
         </View>
-      </View>
-      <View style={styles.discussionFooter}>
-        <Text style={styles.authorText}>oleh {discussion.author}</Text>
-        <View style={styles.discussionStats}>
-          <Icon name="chat-bubble-outline" size={16} color="#666" />
-          <Text style={styles.repliesText}>{discussion.replies}</Text>
-          <Text style={styles.timeText}>{discussion.time}</Text>
+
+        {/* Post Topic */}
+        {post.topic && (
+          <View style={styles.topicContainer}>
+            <Text style={styles.postTopic}>{post.topic}</Text>
+          </View>
+        )}
+
+        {/* Post Content */}
+        <Text style={styles.postDescription}>{post.description}</Text>
+
+        {/* Post Image */}
+        {post.imageUrl && (
+          <TouchableOpacity onPress={() => Alert.alert("Image", "Full screen view coming soon!")}>
+            <Image source={{ uri: post.imageUrl }} style={styles.postImage} resizeMode="cover" />
+          </TouchableOpacity>
+        )}
+
+        {/* Post Actions */}
+        <View style={styles.postActions}>
+          <TouchableOpacity
+            style={[styles.actionButton, isLiked && styles.likedButton]}
+            onPress={() => toggleLike(post.id)}
+          >
+            <Icon name={isLiked ? "favorite" : "favorite-border"} size={20} color={isLiked ? "#FF6B6B" : "#666"} />
+            <Text style={[styles.actionText, isLiked && styles.likedText]}>{post.likeCount}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.actionButton}
+            onPress={() => setExpandedComments((prev) => ({ ...prev, [post.id]: !prev[post.id] }))}
+          >
+            <Icon name="chat-bubble-outline" size={20} color="#179574" />
+            <Text style={styles.actionText}>{post.comments.length}</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.actionButton}>
+            <Icon name="share" size={20} color="#F8CE5A" />
+            <Text style={styles.actionText}>Bagikan</Text>
+          </TouchableOpacity>
         </View>
+
+        {/* Comments Section */}
+        {isCommentsExpanded && (
+          <View style={styles.commentsSection}>
+            {/* Existing Comments */}
+            {post.comments.length > 0 ? (
+              post.comments.map((comment) => (
+                <View key={comment.id} style={styles.commentItem}>
+                  <LinearGradient colors={["#179574", "#20c498"]} style={styles.commentAvatar}>
+                    <Icon name="person" size={12} color="#FFFFFF" />
+                  </LinearGradient>
+                  <View style={styles.commentContent}>
+                    <Text style={styles.commentUser}>{comment.userFullName}</Text>
+                    <Text style={styles.commentText}>{comment.content}</Text>
+                    <Text style={styles.commentTime}>{formatTime(comment.createdAt)}</Text>
+                  </View>
+                </View>
+              ))
+            ) : (
+              <Text style={styles.noCommentsText}>Belum ada komentar. Jadilah yang pertama!</Text>
+            )}
+
+            {/* Add Comment */}
+            <View style={styles.addCommentContainer}>
+              <LinearGradient colors={["#179574", "#20c498"]} style={styles.commentAvatar}>
+                <Icon name="person" size={12} color="#FFFFFF" />
+              </LinearGradient>
+              <CommunityTextInput
+                value={commentText[post.id] || ""}
+                onChangeText={(text) => setCommentText((prev) => ({ ...prev, [post.id]: text }))}
+                placeholder="Tulis komentar..."
+                multiline
+                style={styles.commentInputContainer}
+              />
+              <TouchableOpacity
+                style={styles.sendCommentButton}
+                onPress={() => addComment(post.id)}
+                disabled={!commentText[post.id]?.trim()}
+              >
+                <Icon name="send" size={16} color="#FFFFFF" />
+              </TouchableOpacity>
+            </View>
+          </View>
+        )}
       </View>
-    </TouchableOpacity>
+    )
+  }
+
+  const filteredPosts = posts.filter(
+    (post) =>
+      post.description.toLowerCase().includes(searchText.toLowerCase()) ||
+      post.userFullName.toLowerCase().includes(searchText.toLowerCase()) ||
+      (post.topic && post.topic.toLowerCase().includes(searchText.toLowerCase())),
   )
 
   return (
@@ -112,66 +286,59 @@ const Community = ({ navigation }) => {
       {/* Search Bar */}
       <View style={styles.searchContainer}>
         <Icon name="search" size={20} color="#666" style={styles.searchIcon} />
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Cari grup atau diskusi..."
+        <CommunityTextInput
           value={searchText}
           onChangeText={setSearchText}
+          placeholder="Cari postingan..."
+          style={styles.searchInputContainer}
         />
       </View>
 
-      {/* Tab Navigation */}
-      <View style={styles.tabContainer}>
-        <TouchableOpacity
-          style={[styles.tab, activeTab === "groups" && styles.activeTab]}
-          onPress={() => setActiveTab("groups")}
-        >
-          <Icon name="groups" size={20} color={activeTab === "groups" ? "#FFFFFF" : "#666"} />
-          <Text style={[styles.tabText, activeTab === "groups" && styles.activeTabText]}>Grup Saya</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.tab, activeTab === "discussions" && styles.activeTab]}
-          onPress={() => setActiveTab("discussions")}
-        >
-          <Icon name="forum" size={20} color={activeTab === "discussions" ? "#FFFFFF" : "#666"} />
-          <Text style={[styles.tabText, activeTab === "discussions" && styles.activeTabText]}>Diskusi</Text>
-        </TouchableOpacity>
-      </View>
+      {/* Create Post Button */}
+      <TouchableOpacity style={styles.createPostButton} onPress={navigateToCreatePost}>
+        <View style={styles.createPostContent}>
+          <LinearGradient colors={["#179574", "#20c498"]} style={styles.avatar}>
+            <Icon name="person" size={20} color="#FFFFFF" />
+          </LinearGradient>
+          <Text style={styles.createPostText}>Bagikan pengalaman ternak Anda...</Text>
+          <Icon name="chevron-right" size={20} color="#179574" />
+        </View>
+      </TouchableOpacity>
 
-      {/* Content */}
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {activeTab === "groups" ? (
-          <View>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Grup Aktif</Text>
-              <TouchableOpacity style={styles.addButton}>
-                <Icon name="add" size={20} color="#179574" />
-                <Text style={styles.addButtonText}>Buat Grup</Text>
-              </TouchableOpacity>
-            </View>
-            {communityGroups.map((group) => (
-              <GroupCard key={group.id} group={group} />
-            ))}
+      {/* Posts Feed */}
+      <ScrollView
+        style={styles.content}
+        showsVerticalScrollIndicator={false}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        keyboardShouldPersistTaps="handled"
+      >
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size="large" color="#179574" />
+            <Text style={styles.loadingText}>Memuat postingan...</Text>
+          </View>
+        ) : filteredPosts.length === 0 ? (
+          <View style={styles.emptyContainer}>
+            <Icon name="forum" size={64} color="#E0E0E0" />
+            <Text style={styles.emptyText}>Belum ada postingan</Text>
+            <Text style={styles.emptySubtext}>Jadilah yang pertama berbagi pengalaman!</Text>
+            <TouchableOpacity style={styles.createFirstPostButton} onPress={navigateToCreatePost}>
+              <LinearGradient colors={["#179574", "#20c498"]} style={styles.createFirstPostGradient}>
+                <Icon name="add" size={20} color="#FFFFFF" />
+                <Text style={styles.createFirstPostText}>Buat Postingan Pertama</Text>
+              </LinearGradient>
+            </TouchableOpacity>
           </View>
         ) : (
-          <View>
-            <View style={styles.sectionHeader}>
-              <Text style={styles.sectionTitle}>Diskusi Terbaru</Text>
-              <TouchableOpacity style={styles.addButton}>
-                <Icon name="add" size={20} color="#179574" />
-                <Text style={styles.addButtonText}>Buat Topik</Text>
-              </TouchableOpacity>
-            </View>
-            {discussions.map((discussion) => (
-              <DiscussionCard key={discussion.id} discussion={discussion} />
-            ))}
-          </View>
+          filteredPosts.map((post) => <PostCard key={post.id} post={post} />)
         )}
       </ScrollView>
 
       {/* Floating Action Button */}
-      <TouchableOpacity style={styles.fab}>
-        <Icon name="chat" size={24} color="#FFFFFF" />
+      <TouchableOpacity style={styles.fab} onPress={navigateToCreatePost}>
+        <LinearGradient colors={["#179574", "#20c498"]} style={styles.fabGradient}>
+          <Icon name="add" size={24} color="#FFFFFF" />
+        </LinearGradient>
       </TouchableOpacity>
     </SafeAreaView>
   )
@@ -214,198 +381,268 @@ const styles = StyleSheet.create({
   searchIcon: {
     marginRight: 10,
   },
-  searchInput: {
+  searchInputContainer: {
     flex: 1,
-    paddingVertical: 12,
-    fontSize: 16,
-    color: "#333",
+    marginVertical: 0,
   },
-  tabContainer: {
-    flexDirection: "row",
-    marginHorizontal: 16,
+  inputContainer: {
+    width: "100%",
+    marginVertical: 8,
+  },
+  paperInput: {
     backgroundColor: "#FFFFFF",
+    fontSize: 16,
+  },
+  multilineInput: {
+    minHeight: 80,
+  },
+  commentInputContainer: {
+    flex: 1,
+    marginVertical: 0,
+    marginHorizontal: 8,
+  },
+  createPostButton: {
+    backgroundColor: "#FFFFFF",
+    marginHorizontal: 16,
+    marginBottom: 8,
     borderRadius: 12,
-    padding: 4,
     elevation: 2,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  tab: {
-    flex: 1,
+  createPostContent: {
     flexDirection: "row",
     alignItems: "center",
+    padding: 16,
+  },
+  avatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
     justifyContent: "center",
-    paddingVertical: 12,
-    borderRadius: 8,
+    alignItems: "center",
+    marginRight: 12,
   },
-  activeTab: {
-    backgroundColor: "#179574",
-  },
-  tabText: {
-    marginLeft: 8,
-    fontSize: 14,
-    fontWeight: "600",
-    color: "#666",
-  },
-  activeTabText: {
-    color: "#FFFFFF",
+  createPostText: {
+    flex: 1,
+    fontSize: 16,
+    color: "#999",
   },
   content: {
     flex: 1,
-    padding: 16,
+    paddingHorizontal: 16,
   },
-  sectionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#333",
-  },
-  addButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#F8CE5A",
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  addButtonText: {
-    marginLeft: 4,
-    fontSize: 12,
-    fontWeight: "600",
-    color: "#179574",
-  },
-  groupCard: {
+  postCard: {
     backgroundColor: "#FFFFFF",
     borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
+    marginBottom: 16,
     elevation: 2,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
   },
-  groupHeader: {
+  postHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    padding: 16,
+    paddingBottom: 8,
+  },
+  userInfo: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 12,
   },
-  groupImage: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 12,
-  },
-  groupInfo: {
-    flex: 1,
-  },
-  groupName: {
+  userName: {
     fontSize: 16,
     fontWeight: "bold",
     color: "#333",
-    marginBottom: 4,
   },
-  groupMembers: {
+  postTime: {
     fontSize: 12,
     color: "#666",
+    marginTop: 2,
   },
-  groupStatus: {
-    alignItems: "center",
+  moreButton: {
+    padding: 4,
   },
-  statusDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-  },
-  lastMessage: {
-    fontSize: 14,
-    color: "#333",
+  topicContainer: {
+    paddingHorizontal: 16,
     marginBottom: 8,
   },
-  messageTime: {
-    fontSize: 12,
-    color: "#999",
-  },
-  discussionCard: {
-    backgroundColor: "#FFFFFF",
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    elevation: 2,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  discussionHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 12,
-  },
-  discussionTitle: {
-    flex: 1,
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
-    marginRight: 12,
-  },
-  categoryBadge: {
-    backgroundColor: "#F8CE5A",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  categoryText: {
-    fontSize: 10,
+  postTopic: {
+    fontSize: 14,
     fontWeight: "600",
     color: "#179574",
+    backgroundColor: "#E8F5E8",
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 16,
+    alignSelf: "flex-start",
   },
-  discussionFooter: {
+  postDescription: {
+    fontSize: 15,
+    color: "#333",
+    lineHeight: 22,
+    paddingHorizontal: 16,
+    marginBottom: 12,
+  },
+  postImage: {
+    width: "92%",
+    height: 250,
+    marginBottom: 12,
+    borderRadius: 8,
+    alignSelf: "center",
+  },
+  postActions: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderTopWidth: 1,
+    borderTopColor: "#F0F0F0",
   },
-  authorText: {
-    fontSize: 12,
-    color: "#666",
-  },
-  discussionStats: {
+  actionButton: {
     flexDirection: "row",
     alignItems: "center",
+    marginRight: 24,
+    paddingVertical: 8,
+    paddingHorizontal: 8,
+    borderRadius: 20,
   },
-  repliesText: {
-    fontSize: 12,
+  likedButton: {
+    backgroundColor: "rgba(255, 107, 107, 0.1)",
+  },
+  actionText: {
+    fontSize: 14,
     color: "#666",
-    marginLeft: 4,
-    marginRight: 12,
+    marginLeft: 6,
+    fontWeight: "500",
   },
-  timeText: {
+  likedText: {
+    color: "#FF6B6B",
+  },
+  commentsSection: {
+    paddingHorizontal: 16,
+    paddingBottom: 16,
+    borderTopWidth: 1,
+    borderTopColor: "#F0F0F0",
+  },
+  commentItem: {
+    flexDirection: "row",
+    marginTop: 12,
+  },
+  commentAvatar: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    justifyContent: "center",
+    alignItems: "center",
+    marginRight: 8,
+  },
+  commentContent: {
+    flex: 1,
+    backgroundColor: "#F8F9FA",
+    borderRadius: 12,
+    padding: 10,
+  },
+  commentUser: {
     fontSize: 12,
+    fontWeight: "bold",
+    color: "#179574",
+    marginBottom: 2,
+  },
+  commentText: {
+    fontSize: 14,
+    color: "#333",
+    lineHeight: 18,
+  },
+  commentTime: {
+    fontSize: 10,
     color: "#999",
+    marginTop: 4,
+  },
+  noCommentsText: {
+    fontSize: 14,
+    color: "#999",
+    textAlign: "center",
+    fontStyle: "italic",
+    marginTop: 12,
+  },
+  addCommentContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 12,
+    backgroundColor: "#F8F9FA",
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+  },
+  sendCommentButton: {
+    padding: 6,
+    backgroundColor: "#179574",
+    borderRadius: 15,
+  },
+  loadingContainer: {
+    padding: 40,
+    alignItems: "center",
+  },
+  loadingText: {
+    fontSize: 16,
+    color: "#666",
+    marginTop: 12,
+  },
+  emptyContainer: {
+    padding: 40,
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#666",
+    marginTop: 16,
+  },
+  emptySubtext: {
+    fontSize: 14,
+    color: "#999",
+    marginTop: 8,
+    textAlign: "center",
+  },
+  createFirstPostButton: {
+    marginTop: 20,
+    borderRadius: 25,
+  },
+  createFirstPostGradient: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 25,
+  },
+  createFirstPostText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "bold",
+    marginLeft: 8,
   },
   fab: {
     position: "absolute",
     bottom: 90,
     right: 20,
-    width: 56,
-    height: 56,
     borderRadius: 28,
-    backgroundColor: "#179574",
-    justifyContent: "center",
-    alignItems: "center",
     elevation: 8,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
+  },
+  fabGradient: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    justifyContent: "center",
+    alignItems: "center",
   },
 })
 

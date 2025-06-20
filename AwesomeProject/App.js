@@ -57,6 +57,7 @@ import UpdateQuailReduction from './src/screens/farm_screens/quail_reduction/Upd
 import Account from './src/screens/main/account';
 import Medical from './src/screens/main/Medical';
 import Community from './src/screens/main/Community';
+import CreatePostScreen from './src/screens/main/CreatePostScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator()
@@ -114,6 +115,7 @@ export default function App() {
               <Stack.Screen name='Account' component={Account}/>
               <Stack.Screen name='Medical' component={Medical}/>
               <Stack.Screen name='Community' component={Community}/>
+              <Stack.Screen name='CreatePost' component={CreatePostScreen}/>
 
               <Stack.Screen
                 name="ResetPasswordScreen"

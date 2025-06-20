@@ -18,6 +18,7 @@ function Account({ navigation }) {
       authContext.setAuthState({
         authenticated: false,
         refreshToken: null,
+        user: null,
         accessToken: null,
       })
       navigation.navigate("LoginScreen")
@@ -51,7 +52,7 @@ function Account({ navigation }) {
       const value = await Keychain.getGenericPassword()
       if (value) {
         const jwt = JSON.parse(value.password)
-        const userData = jwt.accessToken.userr
+        const userData = jwt.user
         setUser(userData)
       }
     } catch (error) {
@@ -86,7 +87,7 @@ function Account({ navigation }) {
           <Icon name="user" size={50} color="#FFFFFF" />
         </View>
         <View style={styles.profileInfo}>
-          <Text style={styles.profileName}>{user?.fullName || "User Name"}</Text>
+          <Text style={styles.profileName}>{ user?.fullName || "User Name"}</Text>
           <Text style={styles.profilePhone}>{user?.phoneNumber || "+62 XXX-XXXX-XXXX"}</Text>
         </View>
       </LinearGradient>
