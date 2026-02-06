@@ -3,24 +3,24 @@ import { ImageBackground, StyleSheet, KeyboardAvoidingView, View } from 'react-n
 import { theme } from '../core/theme';
 import { Image, } from 'react-native';
 
-const warna={
-  primary:'#EBF4',
-  primary1:'#'
+const warna = {
+  primary: '#EBF4',
+  primary1: '#'
 }
 export default function Background({ children }) {
   return (
     <View style={styles.ff}>
-    <ImageBackground
-      resizeMode="cover"
-      source={require('../assets/1234.jpg')}
-      style={styles.background}
-      imageStyle={styles.r}
-    >
-      <KeyboardAvoidingView style={styles.container}>
-        {children}
-      </KeyboardAvoidingView>
-      
-    </ImageBackground>
+      <ImageBackground
+        resizeMode="cover"
+        source={require('../assets/1234.jpg')}
+        style={styles.background}
+        imageStyle={styles.r}
+      >
+        <KeyboardAvoidingView style={styles.container}>
+          {children}
+        </KeyboardAvoidingView>
+
+      </ImageBackground>
     </View>
   )
 }
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     backgroundColor: theme.colors.backgroundColor,
-    
+
   },
   container: {
     flex: 1,
@@ -41,13 +41,13 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
     justifyContent: 'center',
   },
-  ff:{
-    color:'#EBF4FA',
-    flex:1,
-    backgroundColor:theme.colors.backgroundColor
+  ff: {
+    color: '#EBF4FA',
+    flex: 1,
+    backgroundColor: theme.colors.backgroundColor
   },
-  r:{
-    opacity:0.85
+  r: {
+    opacity: 0.85
   }
 
 })
